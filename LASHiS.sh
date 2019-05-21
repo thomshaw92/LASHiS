@@ -120,8 +120,7 @@ echoParameters() {
       image dimension         = ${DIMENSION}
       anatomical image        = ${ANATOMICAL_IMAGES[@]}
       output prefix           = ${OUTPUT_PREFIX}
-      output image suffix     = ${OUTPUT_SUFFIX}
-     
+           
     Other parameters:
       run quick               = ${RUN_QUICK}
       debug mode              = ${DEBUG_MODE}
@@ -129,7 +128,7 @@ echoParameters() {
       denoise                 = ${DENOISE}
       number of cores         = ${CORES}
       control type            = ${DOQSUB}
-      
+      N4 Bias Correction      = ${N4_BIAS_CORRECTION}
 PARAMETERS
 }
 
@@ -190,7 +189,7 @@ USE_SST_CORTICAL_THICKNESS_PRIOR=0
 REGISTRATION_TEMPLATE=""
 DO_REGISTRATION_TO_TEMPLATE=0
 DENOISE=0
-
+N4_BIAS_CORRECTION=0
 
 DOQSUB=0
 CORES=2
@@ -212,10 +211,15 @@ else
     while getopts "a:b:c:d:e:f:g:h:j:k:l:m:n:o:p:q:r:s:t:u:v:x:w:y:z:" OPT
     do
 	case $OPT in
-            a)
+            a)  #ASHS_atlas directory
 		ASHS_ATLAS=$OPTARG
-		;;
-            b)
+		if [[ ! -d $ASHS_ATLAS ]];
+		then
+		    echo "You must specify the full path to the ASHS atlas directory"
+		    exit 1
+		fi
+	        ;;
+	    b)
 		KEEP_TMP_IMAGES=$OPTARG
 		;;
             c)
@@ -325,12 +329,12 @@ fi
 
 if [[ $RUN_QUICK -gt 1 ]];
 then
-    RUN_FAST_MALF_COOKING=1
+    RUN_FAST_JLF=1
 fi
 
 if [[ $RUN_QUICK -gt 2 ]];
 then
-    RUN_FAST_ANTSCT_TO_GROUP_TEMPLATE=1
+    RUN_DIET=1
 fi
 
 ################################################################################
@@ -376,12 +380,10 @@ echo "--------------------------------------------------------------------------
 echo
 
 TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
-for(( i=1; i < 2; i++ ))
+for(( i=1; i < 2 ; i++ ))
 do
     TEMPLATE_MODALITY_WEIGHT_VECTOR="${TEMPLATE_MODALITY_WEIGHT_VECTOR}x1"
-    echo "$TEMPLATE_MODALITY_WEIGHT_VECTOR TEMPLATE_MODALITY_WEIGHT_VECTOR"
 done
-
 TEMPLATE_Z_IMAGES=''
 
 OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
@@ -389,7 +391,7 @@ OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTempl
 logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
 
 # Pad initial template image to avoid problems with SST drifting out of FOV
-for(( i=0; i < '2'; i++ ))
+for(( i=0; i < 2 ; i++ ))
 do
     TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
 
@@ -413,16 +415,16 @@ then
            -i 4 \
            -c ${DOQSUB} \
            -j ${CORES} \
-           -k '2' \
+           -k 2 \
            -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
            -m 100x70x30x3  \
            -n ${N4_BIAS_CORRECTION} \
            -r 1 \
            -s CC \
            -t GR \
-           -y ${AFFINE_UPDATE_FULL} \
-           -r 1
-    ${ANATOMICAL_IMAGES[@]}
+           -r 1 \
+	   ${TEMPLATE_Z_IMAGES} \
+	   ${ANATOMICAL_IMAGES[@]}
 fi
 
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
@@ -431,21 +433,20 @@ then
     exit 1
 fi
 
-# clean up
-
 SINGLE_SUBJECT_ANTSCT_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template
+
 ###############################
 ##  Label the SST with ASHS  ##
 ###############################
 
 logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-       -a /data/lfs2/software/ubuntu14/ashs/ashs_atlas_umcutrecht_7t_20170810/ \
        -a ${ASHS_ATLAS} \
        -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0.nii.gz \
        -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1.nii.gz \
        -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS
 #FIXME-other options to be included
 
+#CLEAN UP
 
 logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.sh
 logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.txt
@@ -457,9 +458,14 @@ logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0Affine.tx
 logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templatewarplog.txt
 logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality*.nii.gz
 
-# Also remove the warp files but we have to be careful to not remove the affine and
-# warp files generated in subsequent steps (specifically from running the SST through
-# the cortical thickness pipeline if somebody has to re-run the longitudinal pipeline
+
+
+if [[ $RUN_DIET == 1 ]] ; then #FIXME
+    #create a folder
+    #antsApplyTransforms of The labelled SST to timepoint space.
+    #measure the volumes
+fi
+
 
 if [[ -f ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate1Warp.nii.gz ]];
 then
@@ -542,7 +548,7 @@ do
     ANATOMICAL_REFERENCE_IMAGE=${ANATOMICAL_IMAGES[$i]}
     
     SUBJECT_ANATOMICAL_IMAGES=''
-        
+    
     let k=$i+$NUMBER_OF_MODALITIES
     for (( j=$i; j < $k; j++ ))
     do
@@ -553,27 +559,25 @@ do
     
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
 
-     
-	    logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-		   -a /data/lfs2/software/ubuntu14/ashs/ashs_atlas_umcutrecht_7t_20170810/ \
-		   -a ${ASHS_ATLAS} \
-		   -g ${ANATOMICAL_REFERENCE_IMAGE} \
-		   -f ${SUBJECT_TSE} \
-		   -w ${OUTPUT_LOCAL_PREFIX} \
-		   	    
-	    #-other options to be included
+    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz ]] ;
+    then
+	logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
+	       -a ${ASHS_ATLAS} \
+	       -g ${ANATOMICAL_REFERENCE_IMAGE} \
+	       -f ${SUBJECT_TSE} \
+	       -w ${OUTPUT_LOCAL_PREFIX} 
+	
+	#-other options to be included
 
-	    #cleanup
-	    logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/affine_t1_to_template
-	    logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/antse_t1_to_temp
-	    logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/bootstrap
-	    logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/dump
-	    logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/flirt_t2_to_t1
-	done
-done    
-
-
+	#cleanup
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/affine_t1_to_template
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/antse_t1_to_temp
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/bootstrap
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/dump
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/flirt_t2_to_t1
+    fi
 done
+
 
 time_end_ashs=`date +%s`
 time_elapsed_ashs=$((time_end_ashs - time_start_ashs))
@@ -596,117 +600,101 @@ echo
 
 time_start_jlf=`date +%s`
 
-SUBJECT_COUNT=0
-for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
-do
-    
-    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-    BASENAME_ID=${BASENAME_ID/\.nii/}
+OUTPUT_DIRECTORY_FOR_LASHiS=${OUTPUT_DIR}/LASHiS
+OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS=${OUTPUT_DIRECTORY_FOR_LASHiS}/posteriors
+OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output
+XS_ASHS_DIR=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}
 
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-    OUTPUT_DIRECTORY_FOR_JLF=${OUTPUT_DIR}/${BASENAME_ID}
-    OUTPUT_DIRECTORY_FOR_JLF=${OUTPUT_DIR}_LASHiS
-    XS_ASHS_DIR=$OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
-    logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_JLF}
+logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS}
+logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}
+logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}
 
-    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
 
-    for(( i=0; i < '2'; i++ ))
+for side in left right ; do
+    SUBJECT_COUNT=0
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
     do
-	JLF_step=`date +%s`
-	for side in left right ; do
-	    
+	
+	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+	BASENAME_ID=${BASENAME_ID/\.nii/}
+	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+        
+	let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+	
+	for(( i=0; i < '2'; i++ ))
+	do
 	    JLF_ATLAS_LABEL_OPTIONS=""
 	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
 	    do
-		JLF_ATLAS_LABEL_OPTIONS="$JLF_ATLAS_LABEL_OPTIONS -g ${XS_ASHS_DIR}${i}/tse_native_chunk_${side}.nii.gz -l ${XS_ASHS_DIR}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz \ "
+		JLF_ATLAS_LABEL_OPTIONS="$JLF_ATLAS_LABEL_OPTIONS -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz \ "
 	    done
-
-	    if [[ ! -f $SOME_FILE ]] ;
-	    then
-		for(( i=0; i < ${#ANATOMICAL_IMAGES}; i++ )) ; do
-		    JLF_ATLAS_LABEL_OPTIONS="$JLF_ATLAS_LABEL_OPTIONS -g ${XS_ASHS_DIR}${i}/tse_native_chunk_${side}.nii.gz -l ${XS_ASHS_DIR}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz \ "
-		done
-
-		echo"                                                                   "                                                    
-		echo "Your JLF Atlas inputs and labels were:"
-		echo "$JLF_ATLAS_LABEL_OPTIONS"
-		echo"                                                                   "
-		
-    		logCmd $ANTSPATH/antsJointLabelFusion2.sh \
-		       -d 3 \
-		       -c ${DOQSUB} \
-		       -j ${CORES} \
-		       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz \
-		   ${JLF_ATLAS_LABEL_OPTIONS} \
-		   -o ${OUTPUT_DIRECTORY_FOR_JLF}/output_${side} \
-		   -p ${OUTPUT_DIRECTORY_FOR_JLF}/posterior%04d.nii.gz \
-		   -k 1 \
-		   -z $MEMORY_PARAM_jlf \
-		   -v $registration_memory_limit \
-		   -u $JLF_walltime_param \
-		   -w $registration_walltime_param 
-	fi
+	done
+    done
+    
+    if [[  ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz ]] ;
+    then
+	echo"                                                                   "                                                    
+	echo "Your JLF Atlas inputs and labels were:"
+	echo "$JLF_ATLAS_LABEL_OPTIONS"
+	echo"                                                                   "
 	
-	if [[ ! -f ${OUTPUT_DIRECTORY_FOR_JLF}/output_${side}Labels.nii.gz ]] ; then
+    	logCmd $ANTSPATH/antsJointLabelFusion2.sh \
+	       -d 3 \
+	       -c ${DOQSUB} \
+	       -j ${CORES} \
+	       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz \
+	       ${JLF_ATLAS_LABEL_OPTIONS} \
+	       -o ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_ \
+	       -p  ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}/${i}_${side}%04d.nii.gz \
+	       -k 1 \
+	       -z $MEMORY_PARAM_jlf \
+	       -v $registration_memory_limit \
+	       -u $JLF_walltime_param \
+	       -w $registration_walltime_param 
+    fi
+    
+    SUBJECT_COUNT=0
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
+    do
+	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+	BASENAME_ID=${BASENAME_ID/\.nii/}
+	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+	let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+	for(( i=0; i < '2'; i++ ))	
+	do
+	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
+	    do
+		JLF_ATLAS_LABEL_OPTIONS="$JLF_ATLAS_LABEL_OPTIONS -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz \ "
+	    done
+	done
+	
+	if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ]] ;
+	then
 	    logCmd ${ANTSPATH}/antsApplyTransforms \
 		   -d 3 \
-		   -i ${OUTPUT_DIRECTORY_FOR_JLF/output_${side}Labels \
-		   -o [${OUTPUT_DIRECTORY_FOR_JLF}GroupTemplateToSubjectWarp.nii.gz,1] \
-		   -t ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate1Warp.nii.gz \
-		   -t ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate0GenericAffine.mat \
-		   -t ${OUTPUT_LOCAL_PREFIX}SubjectToTemplate1Warp.nii.gz \
-		   -t ${OUTPUT_LOCAL_PREFIX}SubjectToTemplate0GenericAffine.mat \
-		   -n MultiLabel
-	    
+		   -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
+		   -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz \
+		   -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz \
+		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/${i}*Affine.txt \  
+	           -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/${i}*InverseWarp.nii.gz \
+		      -n MultiLabel  
 	fi
+	
+	if [[ -e ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ]] ; then
+	    SUBJECT_STATS=${OUTPUT_LOCAL_PREFIX}LabelVolume.csv
+	    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz
+	fi
+	
+
     done
 done
-
-WarpImageMultiTransform 3 /data/fasttemp/uqtshaw/tomcat/data/derivatives/4_long_ashs/${subjName}_long_ashs_JLF_${TP}/${subjName}_long_ashs_JLF_${TP}_${side}Labels.nii.gz /data/fasttemp/uqtshaw/tomcat/data/derivatives/4_long_ashs/${subjName}_long_ashs_JLF_${TP}/${subjName}_ashs_${TP}_SST_${side}_lfseg_corr_usegray_warped_to_ses-03.nii.gz -R /data/fasttemp/uqtshaw/tomcat/data/derivatives/preprocessing/${subjName}/${subjName}_ses-03_7T_T2w_NlinMoCo_res-iso.3_N4corrected_denoised_brain_preproc.nii.gz -i /data/fasttemp/uqtshaw/tomcat/data/derivatives/4_long_ashs/SST_creation/${subjName}_${TP}/${subjName}_${TP}_${subjName}_ses-03*Affine.txt /data/fasttemp/uqtshaw/tomcat/data/derivatives/4_long_ashs/SST_creation/${subjName}_${TP}/${subjName}_${TP}_${subjName}_ses-03_*InverseWarp.nii.gz --use-NN 
-
+exit 0
 
 
-if [[ ! -f ${OUTPUT_LOCAL_PREFIX}GroupTemplateToSubjectWarp.nii.gz ]];
-    then
-        logCmd ${ANTSPATH}/antsApplyTransforms \
-               -d ${DIMENSION} \
-               -r ${ANATOMICAL_REFERENCE_IMAGE} \
-               -o [${OUTPUT_LOCAL_PREFIX}GroupTemplateToSubjectWarp.nii.gz,1] \
-               -t ${OUTPUT_LOCAL_PREFIX}TemplateToSubject1GenericAffine.mat \
-               -t ${OUTPUT_LOCAL_PREFIX}TemplateToSubject0Warp.nii.gz \
-               -t ${SINGLE_SUBJECT_ANTSCT_PREFIX}TemplateToSubject1GenericAffine.mat \
-               -t ${SINGLE_SUBJECT_ANTSCT_PREFIX}TemplateToSubject0Warp.nii.gz
-    fi
-
-    if [[ -f ${CORTICAL_LABEL_IMAGE} ]];
-    then
-
-        SUBJECT_CORTICAL_LABELS=${OUTPUT_LOCAL_PREFIX}CorticalLabels.${OUTPUT_SUFFIX}
-        SUBJECT_ASHS=${OUTPUT_LOCAL_PREFIX}CorticalThickness.${OUTPUT_SUFFIX}
-        SUBJECT_TMP=${OUTPUT_LOCAL_PREFIX}Tmp.${OUTPUT_SUFFIX}
-        SUBJECT_STATS=${OUTPUT_LOCAL_PREFIX}LabelThickness.csv
-
-        if [[ ! -f ${SUBJECT_CORTICAL_LABELS} ]];
-        then
-            logCmd ${ANTSPATH}/antsApplyTransforms \
-                   -d ${DIMENSION} \
-                   -i ${CORTICAL_LABEL_IMAGE} \
-                   -r ${ANATOMICAL_REFERENCE_IMAGE} \
-                   -o ${SUBJECT_CORTICAL_LABELS} \
-                   -n MultiLabel \
-                   -t ${OUTPUT_LOCAL_PREFIX}GroupTemplateToSubjectWarp.nii.gz
-
-            logCmd ${ANTSPATH}/ThresholdImage ${DIMENSION} ${OUTPUT_LOCAL_PREFIX}BrainSegmentation.${OUTPUT_SUFFIX} ${SUBJECT_TMP} 2 2 1 0
-            logCmd ${ANTSPATH}/ImageMath ${DIMENSION} ${SUBJECT_CORTICAL_LABELS} m ${SUBJECT_TMP} ${SUBJECT_CORTICAL_LABELS}
-            logCmd ${ANTSPATH}/ImageMath ${DIMENSION} ${SUBJECT_STATS} LabelStats ${SUBJECT_CORTICAL_LABELS} ${SUBJECT_ASHS}
-        fi
-
-        logCmd rm -f $SUBJECT_TMP
-    fi
-fi
 if [[ ! -f ${} ]]; #JLF_FILES
 then
     echo "Error:  The JLF files were not created.  Exiting."
