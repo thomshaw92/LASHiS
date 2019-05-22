@@ -5,8 +5,6 @@
 # ASHS compatible manually labelled atlas.
 # Thomas Shaw 1/5/2019
 
-VERSION="0.0"
-
 # Check dependencies
 
 PROGRAM_DEPENDENCIES=( 'antsApplyTransforms' 'N4BiasFieldCorrection' )
@@ -103,18 +101,19 @@ Optional arguments:
                                                   4 = PBS qsub
                                                   5 = SLURM
 
-     -d  OPTS                                   Pass in additional options to SGE's qsub for ASHS. Requires -c 1
+     -d:  OPTS                                  Pass in additional options to SGE's qsub for ASHS. Requires -c 1
  
-     -e   ASHS file                             ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
+     -e:  ASHS file                             ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
+     -f:  Diet LASHiS                           Diet LASHiS (reverse normalise the SST only) then exit.
      
      -g:  denoise anatomical images             Denoise anatomical images (default = 0).
      -j:  number of cpu cores                   Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
     
-     -q:  Use quick ("Diet") LASHiS             If 'yes' then we use antsRegistrationSyNQuick.sh as the basis for registration.
+     -q:  Use quick JLF                         If '1' then we use quicker registration and JLF parameters.
                                                 Otherwise use antsRegistrationSyN.sh.  The options are as follows:
                                                 '-q 0' = antsRegistrationSyN for everything (default), fast ANTs for SST
-                                                '-q 1' = Fast JLF
-                                                '-q 2' = Diet LASHiS (reverse normalise the SST only) then exit.
+                                                '-q 1' = Fast JLF with 
+                                                
                                                 
      -n:  N4 Bias Correction                    If yes, Bias correct the input images before template creation.
                                                 0 = No
@@ -149,6 +148,7 @@ echoParameters() {
       N4 Bias Correction      = ${N4_BIAS_CORRECTION}
       SGE script for ASHS     = ${ASHS_SGE_OPTS}
       ASHS config file        = ${ASHS_CONFIG}
+      Diet LASHiS             = ${DIET_LASHIS}
 PARAMETERS
 }
 
@@ -158,7 +158,7 @@ DEBUG_MODE=0
 
 function logCmd() {
     cmd="$*"
-    echo "BEGIN >>>>>>>>>>>>>>>>>>>>"
+    echo "Start command:"
     echo $cmd
     $cmd
 
@@ -175,7 +175,7 @@ function logCmd() {
         fi
     fi
 
-    echo "END   <<<<<<<<<<<<<<<<<<<<"
+    echo "Command finished without error!"
     echo
     echo
 
@@ -210,6 +210,7 @@ REGISTRATION_TEMPLATE=""
 DO_REGISTRATION_TO_TEMPLATE=0
 DENOISE=0
 N4_BIAS_CORRECTION=0
+DIET_LASHIS=0
 
 DOQSUB=0
 CORES=2
@@ -256,6 +257,9 @@ else
 	    e) #ASHS Config file
 		ASHS_CONFIG="-C $OPTARG"
 		;;
+	    f) #Diet LASHiS
+		DIET_LASHIS=$OPTARG
+		;;
             g) #denoise
 		DENOISE=$OPTARG
 		;;
@@ -290,8 +294,7 @@ fi
 if [[ ${DOQSUB} == '1' ]] ;
 then ASHS_QSUBOPTS="-Q"
 elif [[ ${DOQSUB} == '2' ]]; then
-     export OMP_NUM_THREADS=$openmp_variable
-     ASHS_QSUBOPTS="-P" ;
+    export OMP_NUM_THREADS=$openmp_variable ;     
 else ASHS_QSUBOPTS=""  ;
 fi
 
@@ -315,9 +318,9 @@ then
     echo "Error:  no anatomical images specified."
     exit 1
 fi
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " ASHS cross-sectional using the following ${NUMBER_OF_MODALITIES}-tuples:  "
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
 do
     IMAGEMETRICSET=""
@@ -330,20 +333,13 @@ do
     echo $IMAGEMETRICSET
     
 done
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 
 
-
-# Set up various things related to RUN_QUICK
-
-# Can't do everything fast and still get good results if there is large deformation.
-# Initiate levels of fast:
-
+#DIET LASHiS and fast parameters.
 # 0 - Fast SST (old ANTS) but everything else slower for quality
 # 1 - + FAST JLF
 # 2 - + Diet LASHiS
-
-
 RUN_OLD_ANTS_SST_CREATION=1
 RUN_ANTSCT_TO_SST_QUICK=0
 RUN_FAST_MALF_COOKING=0
@@ -401,9 +397,9 @@ time_start=`date +%s`
 ################################################################################
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " Creating single-subject template                                                     "
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo
 
 TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
@@ -439,12 +435,12 @@ then
            -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
            -b 0 \
            -g 0.25 \
-           -i 2 \
+           -i 3 \
            -c ${DOQSUB} \
            -j ${CORES} \
            -k 2 \
            -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
-           -m 10x5x1x0 \
+           -m 100x70x30x3 \
            -n ${N4_BIAS_CORRECTION} \
            -r 1 \
            -s CC \
@@ -452,7 +448,7 @@ then
            -r 1 \
 	   ${TEMPLATE_Z_IMAGES} \
 	   ${ANATOMICAL_IMAGES[@]}
-     #-m 100x70x30x3 
+    
 fi
 
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
@@ -466,17 +462,18 @@ SINGLE_SUBJECT_ANTSCT_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_t
 ###############################
 ##  Label the SST with ASHS  ##
 ###############################
-
-logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-       -a ${ASHS_ATLAS} \
-       -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0.nii.gz \
-       -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1.nii.gz \
-       -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
-       ${ASHS_QSUBOPTS} \
-       -T \
-       ${ASHS_CONFIG} \
-       ${ASHS_SGE_OPTS}
-
+if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_corr_usegray_volumes.txt ]] ;
+then
+    logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
+	   -a ${ASHS_ATLAS} \
+	   -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0.nii.gz \
+	   -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1.nii.gz \
+	   -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
+	   ${ASHS_QSUBOPTS} \
+	   -T \
+	   ${ASHS_CONFIG} \
+	   ${ASHS_SGE_OPTS}
+fi
 #CLEAN UP
 
 logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.sh
@@ -491,53 +488,38 @@ logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality
 
 
 
-if [[ $RUN_DIET == 1 ]] ; then #FIXME
+if [[ ${DIET_LASHIS} == 1 ]] ;
+then
+    echo "hi" ;
+    #FIXME
     #create a folder
     #antsApplyTransforms of The labelled SST to timepoint space.
     #measure the volumes
 fi
 
 
-if [[ -f ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate1Warp.nii.gz ]];
-then
 
-    logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/TmpFiles/
-    logCmd mv -f ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate1*Warp.nii.gz \
-           ${SINGLE_SUBJECT_ANTSCT_PREFIX}SubjectToTemplate0GenericAffine.mat \
-           ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/TmpFiles/
-    logCmd mv -f ${SINGLE_SUBJECT_ANTSCT_PREFIX}TemplateToSubject0*Warp.nii.gz \
-           ${SINGLE_SUBJECT_ANTSCT_PREFIX}TemplateToSubject1GenericAffine.mat \
-           ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/TmpFiles/
-    
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/antse_t1_to_temp
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
-    
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Warp.nii.gz
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Affine.txt
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*GenericAffine*
 
-    logCmd mv -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/TmpFiles/* ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
-    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/TmpFiles/
 
-else
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/antse_t1_to_temp
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
 
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Warp.nii.gz
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Affine.txt
-    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*GenericAffine*
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Warp.nii.gz
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*Affine.txt
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_*GenericAffine*
 
-fi
 
 
 time_end_sst_creation=`date +%s`
 time_elapsed_sst_creation=$((time_end_sst_creation - time_start_sst_creation))
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " Done with single subject template:  $(( time_elapsed_sst_creation / 3600 ))h $(( time_elapsed_sst_creation %3600 / 60 ))m $(( time_elapsed_sst_creation % 60 ))s"
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo
 
 ################################################################################
@@ -547,9 +529,9 @@ echo
 ################################################################################
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " Run each individual through ASHS                                                     "
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo
 
 time_start_ashs=`date +%s`
@@ -590,7 +572,7 @@ do
     
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
 
-    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz ]] ;
+    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/${BASENAME_ID}_${side}_lfseg_corr_usegray.nii.gz ]] ;
     then
 	logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
 	       -a ${ASHS_ATLAS} \
@@ -601,11 +583,6 @@ do
 	       ${ASHS_QSUBOPTS} \
 	       ${ASHS_CONFIG} \
 	       ${ASHS_SGE_OPTS} 
-	
-	
-	
-	#-other options to be included
-
 	#cleanup
 	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/affine_t1_to_template
 	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/antse_t1_to_temp
@@ -620,9 +597,9 @@ time_end_ashs=`date +%s`
 time_elapsed_ashs=$((time_end_ashs - time_start_ashs))
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " Done with individual ASHS:  $(( time_elapsed_ashs / 3600 ))h $(( time_elapsed_ashs %3600 / 60 ))m $(( time_elapsed_ashs % 60 ))s"
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo
 
 ################################
@@ -630,9 +607,9 @@ echo
 ################################
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " JLF the ASHS results to the SST                                                      "
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo
 
 time_start_jlf=`date +%s`
@@ -745,10 +722,10 @@ time_end=`date +%s`
 time_elapsed=$((time_end - time_start))
 
 echo
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 echo " Done with LASHiS pipeline! "
 echo " Script executed in $time_elapsed seconds"
 echo " $(( time_elapsed / 3600 ))h $(( time_elapsed %3600 / 60 ))m $(( time_elapsed % 60 ))s"
-echo "--------------------------------------------------------------------------------------"
+echo "###########################################################################################"
 
 exit 0
