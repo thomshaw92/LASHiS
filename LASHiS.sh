@@ -1,4 +1,9 @@
 #!/bin/bash
+# Longitudinal Automatic Segmentation of Hippocampus Subfields (LASHiS).
+# Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
+# Requires ANTs and ASHS https://sites.google.com/site/hipposubfields/home including
+# ASHS compatible manually labelled atlas.
+# Thomas Shaw 1/5/2019
 
 VERSION="0.0"
 
@@ -45,6 +50,15 @@ function Usage {
   3. Using the Cross-sectional inputs as priors, label the hippocampi of the SST.
   4. Segmentation results are reverse normalised to the individual time-point. 
 
+# Environment Variables:
+  ASHS_ROOT         Path to the ASHS root directory
+  ANTSPATH          Path to the ANTs root directory
+
+Misc Notes:
+  The ASHS_TSE image slice direction should be z. In other words, the dimension
+  of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400
+
+
 Usage:
 
 `basename $0` -a atlas selection for ashs
@@ -84,10 +98,14 @@ Optional arguments:
      -c:  control type                          Control for parallel computation for ANTs steps (JLF,SST creation)  (default 0):
                                                   0 = run serially
                                                   1 = SGE qsub
-                                                  2 = use PEXEC (localhost)
+                                                  2 = use PEXEC (localhost) (remember to define cores in -j)
                                                   3 = Apple XGrid
                                                   4 = PBS qsub
                                                   5 = SLURM
+
+     -d  OPTS                                   Pass in additional options to SGE's qsub for ASHS. Requires -c 1
+ 
+     -e   ASHS file                             ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
      
      -g:  denoise anatomical images             Denoise anatomical images (default = 0).
      -j:  number of cpu cores                   Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
@@ -129,6 +147,8 @@ echoParameters() {
       number of cores         = ${CORES}
       control type            = ${DOQSUB}
       N4 Bias Correction      = ${N4_BIAS_CORRECTION}
+      SGE script for ASHS     = ${ASHS_SGE_OPTS}
+      ASHS config file        = ${ASHS_CONFIG}
 PARAMETERS
 }
 
@@ -222,13 +242,19 @@ else
 	    b)
 		KEEP_TMP_IMAGES=$OPTARG
 		;;
-            c)
+            c) # QSUBOPTS
 		DOQSUB=$OPTARG
 		if [[ $DOQSUB -gt 5 ]];
 		then
 		    echo " DOQSUB must be an integer value (0=serial, 1=SGE qsub, 2=try pexec, 3=XGrid, 4=PBS qsub, 5=SLURM ) you passed  -c $DOQSUB "
 		    exit 1
 		fi
+		;;
+	    d) #ASHS SGE options
+		ASHS_SGE_OPTS="-q $OPTARG"
+		;;
+	    e) #ASHS Config file
+		ASHS_CONFIG="-C $OPTARG"
 		;;
             g) #denoise
 		DENOISE=$OPTARG
@@ -242,6 +268,7 @@ else
 		;;
             j) #number of cpu cores to use (default = 2)
 		CORES=$OPTARG
+		openmp_variable=$OPTARG
 		;;
             o) #output prefix
 		OUTPUT_PREFIX=$OPTARG
@@ -249,13 +276,7 @@ else
             q) # run quick
 		RUN_QUICK=$OPTARG
 		;;
-	    #ASHS PARAMETERS:
-
-	    ###########################
-	    ###########################
-
-	    
-            z) #debug mode
+	    z) #debug mode
 		DEBUG_MODE=$OPTARG
 		;;
             *) # getopts issues an error message
@@ -266,7 +287,13 @@ else
     done
 fi
 
-MAXNUMBER=1000
+if [[ ${DOQSUB} == '1' ]] ;
+then ASHS_QSUBOPTS="-Q"
+elif [[ ${DOQSUB} == '2' ]]; then
+     export OMP_NUM_THREADS=$openmp_variable
+     ASHS_QSUBOPTS="-P" ;
+else ASHS_QSUBOPTS=""  ;
+fi
 
 
 # Shiftsize is calculated because a variable amount of arguments can be used on the command line.
@@ -412,12 +439,12 @@ then
            -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
            -b 0 \
            -g 0.25 \
-           -i 4 \
+           -i 2 \
            -c ${DOQSUB} \
            -j ${CORES} \
            -k 2 \
            -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
-           -m 100x70x30x3  \
+           -m 10x5x1x0 \
            -n ${N4_BIAS_CORRECTION} \
            -r 1 \
            -s CC \
@@ -425,6 +452,7 @@ then
            -r 1 \
 	   ${TEMPLATE_Z_IMAGES} \
 	   ${ANATOMICAL_IMAGES[@]}
+     #-m 100x70x30x3 
 fi
 
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
@@ -443,8 +471,11 @@ logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
        -a ${ASHS_ATLAS} \
        -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0.nii.gz \
        -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1.nii.gz \
-       -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS
-#FIXME-other options to be included
+       -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
+       ${ASHS_QSUBOPTS} \
+       -T \
+       ${ASHS_CONFIG} \
+       ${ASHS_SGE_OPTS}
 
 #CLEAN UP
 
@@ -565,7 +596,13 @@ do
 	       -a ${ASHS_ATLAS} \
 	       -g ${ANATOMICAL_REFERENCE_IMAGE} \
 	       -f ${SUBJECT_TSE} \
-	       -w ${OUTPUT_LOCAL_PREFIX} 
+	       -w ${OUTPUT_LOCAL_PREFIX} \
+	       -T \
+	       ${ASHS_QSUBOPTS} \
+	       ${ASHS_CONFIG} \
+	       ${ASHS_SGE_OPTS} 
+	
+	
 	
 	#-other options to be included
 
@@ -668,27 +705,24 @@ for side in left right ; do
 	do
 	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
 	    do
-		JLF_ATLAS_LABEL_OPTIONS="$JLF_ATLAS_LABEL_OPTIONS -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/final/*_${side}_lfseg_corr_usegray.nii.gz \ "
-	    done
-	done
 	
-	if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ]] ;
+		if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ;
 	then
 	    logCmd ${ANTSPATH}/antsApplyTransforms \
 		   -d 3 \
 		   -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
-		   -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz \
+		   -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz \
 		   -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz \
-		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/${i}*Affine.txt \  
-	           -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/${i}*InverseWarp.nii.gz \
+		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}GenericAffine.txt \  
+	           -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}Warp.nii.gz \
 		      -n MultiLabel  
 	fi
 	
-	if [[ -e ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ]] ; then
+	if [[ -e  ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ; then
 	    SUBJECT_STATS=${OUTPUT_LOCAL_PREFIX}LabelVolume.csv
-	    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${i}_${side}_labels_warped.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz
+	    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz
 	fi
-	
+#	  C3D Command#$ASHS_ROOT/ext/Linux/bin/c3d ${subjName}_ses-01_7T_T2w_NlinMoCo_res-iso.3_N4corrected_denoised_brain_preproc.nii.gz ${subjName}_long_ashs_JLF_${TP}/${subjName}_ashs_${TP}_SST_${side}_lfseg_corr_usegray_warped_to_ses-01.nii.gz -lstat >> /${subjName}_ashs_${TP}_SST_${side}_lfseg_corr_usegray_warped_to_ses-01.csv
 
     done
 done
@@ -702,9 +736,6 @@ then
 fi
 
 # clean up##FIXME
-
-
-
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
