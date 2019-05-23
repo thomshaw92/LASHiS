@@ -13,22 +13,24 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
   3. Using the Cross-sectional inputs as priors, label the hippocampi of the SST.
   4. Segmentation results are reverse normalised to the individual time-point. 
   
-Environment Variables: 
+# Environment Variables: 
 
-  ASHS_ROOT         Path to the ASHS root directory \
-  ANTSPATH          Path to the ANTs root directory \
-Misc Notes: \
-  The ASHS_TSE image slice direction should be z. In other words, the dimension \
-  of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400 \
-# Usage: \
-
-../LASHiS.sh -a atlas selection for ashs
-              <OPTARGS>
-              -o outputPrefix
-              \${anatomicalImages[@]}
-Example:
-  bash LASHiS.sh -a /some/path/ashs_atlas_umcutrecht_7t_20170810/ -o output \${anatomicalImages[@]}
-Required arguments:
+  ASHS_ROOT         Path to the ASHS root directory 
+  
+  ANTSPATH          Path to the ANTs root directory 
+  
+# Misc Notes: 
+ The ASHS_TSE image slice direction should be z. In other words, the dimension 
+ of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400 
+# Usage: 
+		/path/to/LASHiS.sh -a atlas selection for ashs \
+        	<OPTARGS> \
+              	-o outputPrefix \
+                \${anatomicalImages[@]} \
+# Example:
+ 
+ 	LASHiS.sh -a /some/path/ashs_atlas_umcutrecht_7t_20170810/ -o output \${anatomicalImages[@]}
+# Required arguments:
      
      -o:  Output prefix                         The following subdirectory and images are created for the single
                                                 subject template
