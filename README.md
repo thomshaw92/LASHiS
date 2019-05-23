@@ -23,13 +23,11 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
  The ASHS_TSE image slice direction should be z. In other words, the dimension 
  of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400 
 # Usage: 
-		/path/to/LASHiS.sh -a atlas selection for ashs \
+	/path/to/LASHiS.sh -a atlas selection for ashs \
         	<OPTARGS> \
-              	-o outputPrefix \
-                \${anatomicalImages[@]} \
-# Example:
- 
- 	LASHiS.sh -a /some/path/ashs_atlas_umcutrecht_7t_20170810/ -o output \${anatomicalImages[@]}
+		-o outputPrefix \
+		\${anatomicalImages[@]} \
+
 # Required arguments:
      
      -o:  Output prefix                         The following subdirectory and images are created for the single
