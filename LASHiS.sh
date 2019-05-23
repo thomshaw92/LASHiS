@@ -1,9 +1,27 @@
 #!/bin/bash
 # Longitudinal Automatic Segmentation of Hippocampus Subfields (LASHiS).
+#
 # Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
 # Requires ANTs and ASHS https://sites.google.com/site/hipposubfields/home including
 # ASHS compatible manually labelled atlas.
 # Thomas Shaw 1/5/2019
+# Language:  BASH Shell Script
+# Copyright (c) 2019 Thomas B Shaw
+#  
+# 
+#
+# LASHiS is free software and comprised of free software 
+# : you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details. 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Check dependencies
 
@@ -125,7 +143,6 @@ Optional arguments:
                                                 in the antsCorticalThickness.sh script (i.e., no random seeding).
                                                 Requires single thread computation for complete reproducibility.
 
-     -k: Options for ASHS
 USAGE
     exit 1
 }
@@ -613,6 +630,16 @@ logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}
 logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}
 
 
+#first get the labels ready
+cat $ASHS_ATLAS/snap/snaplabels.txt | \
+    awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
+	> ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt
+
+LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $1}'))
+LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'))
+
+#Then do the JLF and reverse normalisation
+
 for side in left right ; do
     
     SUBJECT_COUNT=0
@@ -670,9 +697,9 @@ for side in left right ; do
 	BASENAME_ID=${BASENAME_ID/\.nii/}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-	#let SUBJECT_COUNT=${SUBJECT_COUNT}+1
-
-
+	
+	#Reverse Norm
+	
 	for(( i=0; i < '2'; i++ ))	
 	do
 	    
@@ -693,65 +720,42 @@ for side in left right ; do
 		echo "Error:  The JLF files were not created.  Exiting."
 		exit 1
 	    fi
+
+	    #Collect the Seg Stats
 	    
-	    SUBJECT_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${i}_stats.csv
+	    SUBJECT_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${i}_stats.txt
 	    if [[ ! -e ${SUBJECT_STATS}  ]] ; then
 		
 		logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz
 	    fi
-	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2
+	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2	    
 	done
-
     done
-done
-
-cat $ASHS_ATLAS/snap/snaplabels.txt | \
-  awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
-  > ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt
-
-LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $1}'))
-LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'))
-
-# Names of segmentations
-
-  for side in left right ; do
-
-    SBC=$ASHS_WORK/bootstrap/fusion/lfseg_${segtype}_${side}.nii.gz
-    if [[ -f $SBC ]]; then
-
-      # Get voxel volume
-      VVOX=$(voxel_size $SBC)
-
-      # Create an output file
-      FNBODYVOL=$WSTAT/${ASHS_SUBJID}_${side}_${segtype}_volumes.txt 
-      rm -rf $FNBODYVOL
-
-      # Dump volumes into that file
-      SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
-      for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
-
-        # The id of the label
-        i=${LABIDS[ilab]};
-        SUB=${LABNAMES[ilab]};
-
-       
-        # Get the volume of this subfield
-        VOLUME=$(| awk {'print $3'})
-
-        # Get the volume of this subfield
-        VSUB=$(echo "$VVOX $VOLUME" | awk '{print $1*$2}')
-
-        # Write the volume information to output file
-        echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
-
-      done
-
-    fi
-  done
 done
 
 # clean up##FIXME
 
+	    #while IFS="," read volume count ; do echo $volume, $count ; done < $SUBJECT_STATS
+
+	    # Dump volumes into that file
+#	    SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
+#	    for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+
+		# The id of the label
+#		i=${LABIDS[ilab]};
+#		SUB=${LABNAMES[ilab]};
+
+		# Get voxel volume
+#		VVOX=$(cat ${SUBJECT_STATS} | awk -F "\"*,\"*" '{print $8}' )
+#		echo $VVOX
+		# Get the volume of this subfield
+#		VOLUME=$(cat ${SUBJECT_STATS} | awk -F "\"*,\"*" '{print $7}' )
+		
+		# Get the volume of this subfield
+		#VSUB=$(echo "$VVOX $VOLUME" )
+
+		# Write the volume information to output file
+#		echo $BASENAME_ID $side $SUB $VSUB >> $SUBJECT_STATS
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
