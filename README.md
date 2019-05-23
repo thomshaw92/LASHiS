@@ -1,9 +1,11 @@
 # LASHiS
 Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using multi-contrast MRI.
-Requirements:
+
+#Requirements:
+
  Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
-# Requires ANTs  https://github.com/ANTsX/ANTs/
-# Requires ASHS https://sites.google.com/site/hipposubfields/home 
+ Requires ANTs  https://github.com/ANTsX/ANTs/
+ Requires ASHS https://sites.google.com/site/hipposubfields/home 
 
 LASHiS performs a longitudinal estimation of hippoocampus subfields.  The following steps are performed:
   1. Run Cross-sectional ASHS on all timepoints
@@ -11,7 +13,7 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
   3. Using the Cross-sectional inputs as priors, label the hippocampi of the SST.
   4. Segmentation results are reverse normalised to the individual time-point. 
   
-# Environment Variables:
+Environment Variables:
   ASHS_ROOT         Path to the ASHS root directory
   ANTSPATH          Path to the ANTs root directory
 Misc Notes:
