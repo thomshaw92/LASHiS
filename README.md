@@ -1,7 +1,7 @@
 # LASHiS
 Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using multi-contrast MRI.
 
-#Requirements:
+Requirements:
 
  Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
  Requires ANTs  https://github.com/ANTsX/ANTs/
