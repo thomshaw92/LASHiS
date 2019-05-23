@@ -45,8 +45,10 @@ Required arguments:
                                                   .
                                                    \${timeN_T1w} \${timeN_T2w} ...
 					
-Optional arguments:
-     -s:  image file suffix                     Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd
+
+# Optional arguments:
+    
+         
      -c:  control type                          Control for parallel computation for ANTs steps (JLF,SST creation)  (default 0):
                                                   0 = run serially
                                                   1 = SGE qsub
@@ -54,6 +56,7 @@ Optional arguments:
                                                   3 = Apple XGrid
                                                   4 = PBS qsub
                                                   5 = SLURM
+     
      -d:  OPTS                                  Pass in additional options to SGE's qsub for ASHS. Requires -c 1
  
      -e:  ASHS file                             ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
