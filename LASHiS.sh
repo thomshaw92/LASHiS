@@ -435,7 +435,7 @@ then
            -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
            -b 0 \
            -g 0.25 \
-           -i 3 \
+           -i 4 \
            -c ${DOQSUB} \
            -j ${CORES} \
            -k 2 \
@@ -445,8 +445,7 @@ then
            -r 1 \
            -s CC \
            -t GR \
-           -r 1 \
-	   ${TEMPLATE_Z_IMAGES} \
+           ${TEMPLATE_Z_IMAGES} \
 	   ${ANATOMICAL_IMAGES[@]}
     
 fi
@@ -662,7 +661,7 @@ for side in left right ; do
 	       -u $JLF_walltime_param \
 	       -w $registration_walltime_param 
     fi
-    
+  
     SUBJECT_COUNT=0
     for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
     do
@@ -671,44 +670,88 @@ for side in left right ; do
 	BASENAME_ID=${BASENAME_ID/\.nii/}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-	let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+	#let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+
+
 	for(( i=0; i < '2'; i++ ))	
 	do
-	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
-	    do
-		
-		if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ;
-		then
-		    logCmd ${ANTSPATH}/antsApplyTransforms \
-			   -d 3 \
-			   -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
-			   -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz \
-			   -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/tse.nii.gz \
-			   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}GenericAffine.txt \  
-	            -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}Warp.nii.gz \
+	    
+	    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ;
+	    then
+		logCmd ${ANTSPATH}/antsApplyTransforms \
+		       -d 3 \
+		       -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
+		       -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz \
+		       -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz \
+		       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}Affine.txt \
+		       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}InverseWarp.nii.gz \
 		       -n MultiLabel  
-		fi
-		
-		if [[ -e  ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ; then
-		    SUBJECT_STATS=${OUTPUT_LOCAL_PREFIX}LabelVolume.csv
-		    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}${i}/tse.nii.gz
-		fi
-		#	  C3D Command#$ASHS_ROOT/ext/Linux/bin/c3d ${subjName}_ses-01_7T_T2w_NlinMoCo_res-iso.3_N4corrected_denoised_brain_preproc.nii.gz ${subjName}_long_ashs_JLF_${TP}/${subjName}_ashs_${TP}_SST_${side}_lfseg_corr_usegray_warped_to_ses-01.nii.gz -lstat >> /${subjName}_ashs_${TP}_SST_${side}_lfseg_corr_usegray_warped_to_ses-01.csv
+	    fi
 
-	    done
+	    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]]; #JLF_FILES
+	    then
+		echo "Error:  The JLF files were not created.  Exiting."
+		exit 1
+	    fi
+	    
+	    SUBJECT_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${i}_stats.csv
+	    if [[ ! -e ${SUBJECT_STATS}  ]] ; then
+		
+		logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz
+	    fi
+	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2
 	done
 
-	exit 0
-
-
-	if [[ ! -f ${} ]]; #JLF_FILES
-	then
-	    echo "Error:  The JLF files were not created.  Exiting."
-	    exit 1
-	fi
     done
 done
+
+cat $ASHS_ATLAS/snap/snaplabels.txt | \
+  awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
+  > ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt
+
+LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $1}'))
+LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'))
+
+# Names of segmentations
+
+  for side in left right ; do
+
+    SBC=$ASHS_WORK/bootstrap/fusion/lfseg_${segtype}_${side}.nii.gz
+    if [[ -f $SBC ]]; then
+
+      # Get voxel volume
+      VVOX=$(voxel_size $SBC)
+
+      # Create an output file
+      FNBODYVOL=$WSTAT/${ASHS_SUBJID}_${side}_${segtype}_volumes.txt 
+      rm -rf $FNBODYVOL
+
+      # Dump volumes into that file
+      SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
+      for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+
+        # The id of the label
+        i=${LABIDS[ilab]};
+        SUB=${LABNAMES[ilab]};
+
+       
+        # Get the volume of this subfield
+        VOLUME=$(| awk {'print $3'})
+
+        # Get the volume of this subfield
+        VSUB=$(echo "$VVOX $VOLUME" | awk '{print $1*$2}')
+
+        # Write the volume information to output file
+        echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
+
+      done
+
+    fi
+  done
+done
+
 # clean up##FIXME
+
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
