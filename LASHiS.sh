@@ -462,6 +462,7 @@ then
            -r 1 \
            -s CC \
            -t GR \
+	   -y 1 \
            ${TEMPLATE_Z_IMAGES} \
 	   ${ANATOMICAL_IMAGES[@]}
     
@@ -473,7 +474,10 @@ then
     exit 1
 fi
 
-SINGLE_SUBJECT_ANTSCT_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template
+#Rescale the images because ASHS can't handle float for some reason
+logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage T_template1.nii.gz 0 1000 
+logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage T_template0.nii.gz 0 1000
+SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 
 ###############################
 ##  Label the SST with ASHS  ##
@@ -482,8 +486,8 @@ if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASH
 then
     logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
 	   -a ${ASHS_ATLAS} \
-	   -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0.nii.gz \
-	   -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1.nii.gz \
+	   -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0_rescaled.nii.gz \
+	   -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1_rescaled.nii.gz \
 	   -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
 	   ${ASHS_QSUBOPTS} \
 	   -T \
