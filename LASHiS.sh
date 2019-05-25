@@ -475,8 +475,8 @@ then
 fi
 
 #Rescale the images because ASHS can't handle float for some reason
-logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage T_template1.nii.gz 0 1000 
-logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage T_template0.nii.gz 0 1000
+logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000 
+logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 
 ###############################
@@ -508,10 +508,14 @@ logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality
 
 
 logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/antse_t1_to_temp
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/ants_t1_to_temp
 logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
 logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
 logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_raw.nii.gz
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_raw.nii.gz
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_to_chunk*
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/*regmask
 
 
 if [[ ${DIET_LASHIS} == 1 ]] ;
@@ -594,11 +598,16 @@ do
 	       ${ASHS_CONFIG} \
 	       ${ASHS_SGE_OPTS} 
 	#cleanup
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/affine_t1_to_template
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/antse_t1_to_temp
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/bootstrap
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/dump
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/SST_ASHS/flirt_t2_to_t1
+
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/affine_t1_to_template
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/ants_t1_to_temp
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/bootstrap
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/dump
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/flirt_t2_to_t1
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_raw.nii.gz
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/tse_raw.nii.gz
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_to_chunk*
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/*regmask
     fi
 done
 
@@ -647,7 +656,7 @@ LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'
 for side in left right ; do
     
     SUBJECT_COUNT=0
-    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
     do
 	
 	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
@@ -665,7 +674,7 @@ for side in left right ; do
 	    do
 		JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_corr_usegray.nii.gz "
 	    done
-	  
+	    
 	done
     done
     
@@ -677,7 +686,7 @@ for side in left right ; do
 	echo "Your JLF Atlas inputs and labels were:"
 	echo "$JLF_ATLAS_LABEL_OPTIONS"
 	echo "                                                                   "
-	 
+	
     	logCmd $ANTSPATH/antsJointLabelFusion2.sh \
 	       -d 3 \
 	       -c ${DOQSUB} \
@@ -692,74 +701,68 @@ for side in left right ; do
 	       -u $JLF_walltime_param \
 	       -w $registration_walltime_param 
     fi
-  
+    
     SUBJECT_COUNT=0
-    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
+    TIMEPOINTS_COUNT=0
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]} ; i+=$NUMBER_OF_MODALITIES )) 
     do
 	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
 	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
 	BASENAME_ID=${BASENAME_ID/\.nii/}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${TIMEPOINTS_COUNT}
 	
 	#Reverse Norm
 	
-	for(( i=0; i < '2'; i++ ))	
-	do
+	logCmd ${ANTSPATH}/antsApplyTransforms \
+	       -d 3 \
+	       -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
+	       -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
+	       -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz \
+	       -t [${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_0GenericAffine.mat,1] \
+	       -t ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_1InverseWarp.nii.gz \
+	       -n GenericLabel[Linear]
+	#-t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}Affine.txt,1] \
+	#-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}InverseWarp.nii.gz \
+	
+	#copy the tse in for easy reference
+	cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz ${OUTPUT_DIRECTORY_FOR_LASHiS}/tse_${TIMEPOINTS_COUNT}.nii.gz
+	
+	if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz ]]; #JLF_FILES
+	then
+	    echo "Error:  The JLF files were not created.  Exiting."
+	    exit 1
+	fi
+
+	#Collect the Seg Stats in a pretty way
+	
+	SUBJECT_STATS_DUMP=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
+	VOL_COUNT=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_noheader.txt
+	FINAL_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+	
+	if [[ ! -e ${FINAL_STATS} ]] ; then
 	    
-	    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]] ;
-	    then
-		logCmd ${ANTSPATH}/antsApplyTransforms \
-		       -d 3 \
-		       -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
-		       -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz \
-		       -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz \
-		       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}Affine.txt \
-		       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}InverseWarp.nii.gz \
-		       -n MultiLabel  
-	    fi
-
-	    if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ]]; #JLF_FILES
-	    then
-		echo "Error:  The JLF files were not created.  Exiting."
-		exit 1
-	    fi
-
-	    #Collect the Seg Stats
-	    
-	    SUBJECT_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${i}_stats.txt
-	    if [[ ! -e ${SUBJECT_STATS}  ]] ; then
-		
-		logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${i}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz
-	    fi
-	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2	    
-	done
-    done
-done
-
-# clean up##FIXME
-
-	    #while IFS="," read volume count ; do echo $volume, $count ; done < $SUBJECT_STATS
-
-	    # Dump volumes into that file
-#	    SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
-#	    for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
-
+	    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS_DUMP} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz 
+	    awk 'FNR>1{print}' ${SUBJECT_STATS_DUMP} > $VOL_COUNT
+	    # Dump volumes into a file
+	    SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
+	    for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
 		# The id of the label
-#		i=${LABIDS[ilab]};
-#		SUB=${LABNAMES[ilab]};
-
-		# Get voxel volume
-#		VVOX=$(cat ${SUBJECT_STATS} | awk -F "\"*,\"*" '{print $8}' )
-#		echo $VVOX
-		# Get the volume of this subfield
-#		VOLUME=$(cat ${SUBJECT_STATS} | awk -F "\"*,\"*" '{print $7}' )
-		
-		# Get the volume of this subfield
-		#VSUB=$(echo "$VVOX $VOLUME" )
+		j=${LABIDS[ilab]}
+		SUB=${LABNAMES[ilab]};
+		VOL=`head -n ${j} ${VOL_COUNT} | tail -n 1  | awk -F "\"*,\"*" '{print $7,$8}'`
 
 		# Write the volume information to output file
-#		echo $BASENAME_ID $side $SUB $VSUB >> $SUBJECT_STATS
+		echo $BASENAME_ID $side $SUB $VOL >> $FINAL_STATS		    
+	    done
+	    
+	    #rm ${SUBJECT_STATS_DUMP}
+	    rm ${VOL_COUNT} 
+	fi
+	let SUBJECT_COUNT=${SUBJECT_COUNT}+2
+	let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
+    done
+done
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
