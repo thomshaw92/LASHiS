@@ -722,9 +722,7 @@ for side in left right ; do
 	       -t [${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_0GenericAffine.mat,1] \
 	       -t ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_1InverseWarp.nii.gz \
 	       -n GenericLabel[Linear]
-	#-t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}Affine.txt,1] \
-	#-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${SUBJECT_COUNT}InverseWarp.nii.gz \
-	
+
 	#copy the tse in for easy reference
 	cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz ${OUTPUT_DIRECTORY_FOR_LASHiS}/tse_${TIMEPOINTS_COUNT}.nii.gz
 	
@@ -734,35 +732,45 @@ for side in left right ; do
 	    exit 1
 	fi
 
+	SBC=${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
+
 	#Collect the Seg Stats in a pretty way
-	
-	SUBJECT_STATS_DUMP=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
-	VOL_COUNT=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_noheader.txt
-	FINAL_STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
-	
-	if [[ ! -e ${FINAL_STATS} ]] ; then
-	    
-	    logCmd ${ANTSPATH}/ImageMath 3 ${SUBJECT_STATS_DUMP} LabelStats ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz 
-	    awk 'FNR>1{print}' ${SUBJECT_STATS_DUMP} > $VOL_COUNT
-	    # Dump volumes into a file
-	    SUB=("bkg" "CA1" "CA2" "DG" "CA3" "HEAD" "TAIL" "misc" "SUB" "ERC" "PHG")
+
+	if [[ -f $SBC ]]; then
+
+	    # Generate the voxel and extent statistics
+	    STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
+	    $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
+	    # Create an output file
+	    FNBODYVOL=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+	    rm -rf $FNBODYVOL
+
+	    # Dump volumes into that file
 	    for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+
 		# The id of the label
-		j=${LABIDS[ilab]}
+		j=${LABIDS[ilab]};
 		SUB=${LABNAMES[ilab]};
-		VOL=`head -n ${j} ${VOL_COUNT} | tail -n 1  | awk -F "\"*,\"*" '{print $7,$8}'`
+
+		# Get the extent along z axis
+		NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
+
+		# Get the volume of this subfield
+		VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
 
 		# Write the volume information to output file
-		echo $BASENAME_ID $side $SUB $VOL >> $FINAL_STATS		    
+		if [[ $NBODY ]]; then
+		    echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
+		fi
+
 	    done
-	    
-	    #rm ${SUBJECT_STATS_DUMP}
-	    rm ${VOL_COUNT} 
 	fi
 	let SUBJECT_COUNT=${SUBJECT_COUNT}+2
 	let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
     done
 done
+
+
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
