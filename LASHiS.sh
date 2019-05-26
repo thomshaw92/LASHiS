@@ -518,16 +518,7 @@ logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_to
 logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/*regmask
 
 
-if [[ ${DIET_LASHIS} == 1 ]] ;
-then
-    echo "hi" ;
-    #FIXME
-    #create a folder
-    #antsApplyTransforms of The labelled SST to timepoint space.
-    #measure the volumes
-fi
-
-me_end_sst_creation=`date +%s`
+time_end_sst_creation=`date +%s`
 time_elapsed_sst_creation=$((time_end_sst_creation - time_start_sst_creation))
 
 echo
@@ -536,6 +527,83 @@ echo " Done with single subject template:  $(( time_elapsed_sst_creation / 3600 
 echo "###########################################################################################"
 echo
 
+################################################################################
+#
+#  DIET LASHiS
+#
+################################################################################
+
+if [[ ${DIET_LASHIS} == 1 ]] ;
+then
+    echo
+    echo "###########################################################################################"
+    echo "   DIET LASHiS                                              "
+    echo "###########################################################################################"
+    echo
+
+    time_start_DL=`date +%s`
+    
+    mkdir ${OUTPUT_DIR}/Diet_LASHiS
+    for side in left right ; do
+	TIMEPOINTS_COUNT=1
+	SUBJECT_COUNT=0
+	for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
+	do   
+	    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+	    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+	    BASENAME_ID=${BASENAME_ID/\.nii/}
+	    OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/${BASENAME_ID}
+	    OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIRECTORY_FOR_DL}_${SUBJECT_COUNT}
+	    echo $OUTPUT_DIRECTORY_FOR_DL
+	    logCmd ${ANTSPATH}/antsApplyTransforms \
+		   -d 3 \
+		   -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_corr_usegray.nii.gz \
+		   -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
+		   -r ${ANTATOMICAL_IMAGES}[${TIMEPOINTS_COUNT}] \
+		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}GenericAffine.txt,1] \
+		   -t  ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}Warp.nii.gz \
+		   -n GenericLabel[Linear]
+	    #measure the volumes
+	    SBC=${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
+	    #Collect the Seg Stats in a pretty way
+	    if [[ -f $SBC ]]; then
+		# Generate the voxel and extent statistics
+		STATS=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
+		$ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
+		# Create an output file
+		FNBODYVOL=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+		rm -rf $FNBODYVOL
+		# Dump volumes into that file
+		for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+		    # The id of the label
+		    j=${LABIDS[ilab]};
+		    SUB=${LABNAMES[ilab]};
+		    # Get the extent along z axis
+		    NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
+		    # Get the volume of this subfield
+		    VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
+		    # Write the volume information to output file
+		    if [[ $NBODY ]]; then
+			echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
+		    fi
+		    rm $STATS
+		done
+	    fi	    
+	    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+2	    
+	done
+    done
+    
+    time_end_DL=`date +%s`
+    time_elapsed_DL=$((time_end_DL - time_start_DL))
+
+    echo
+    echo "###########################################################################################"
+    echo " Done with Diet LASHiS:  $(( time_elapsed_DL / 3600 ))h $(( time_elapsed_DL %3600 / 60 ))m $(( time_elapsed_DL % 60 ))s"
+    echo "###########################################################################################"
+    echo
+    exit 0
+fi
 ################################################################################
 #
 #  Run each individual subject through ASHS
