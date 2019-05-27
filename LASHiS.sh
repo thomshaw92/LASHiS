@@ -2,16 +2,17 @@
 # Longitudinal Automatic Segmentation of Hippocampus Subfields (LASHiS).
 #
 # Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
-# Requires ANTs and ASHS https://sites.google.com/site/hipposubfields/home including
-# ASHS compatible manually labelled atlas.
+# and stats export from ASHS https://sites.google.com/site/hipposubfields/home
+# Requires ANTs and ASHS
+# Requires ASHS compatible manually labelled atlas (available at ASHS website).
 # Thomas Shaw 1/5/2019
 # Language:  BASH Shell Script
 # Copyright (c) 2019 Thomas B Shaw
 #  
 # 
 #
-# LASHiS is free software and comprised of free software 
-# : you can redistribute it and/or modify
+# LASHiS is free software. Its composite parts are freely available.
+# You can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -540,28 +541,31 @@ then
     echo "   DIET LASHiS                                              "
     echo "###########################################################################################"
     echo
-
     time_start_DL=`date +%s`
+    #first get the labels ready
+    OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/Diet_LASHiS
+    logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_DL}
+    cat $ASHS_ATLAS/snap/snaplabels.txt | \
+	awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
+	    > ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt
+    LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt | awk '{print $1}'))
+    LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt | awk '{print $2}'))
     
-    mkdir ${OUTPUT_DIR}/Diet_LASHiS
     for side in left right ; do
-	TIMEPOINTS_COUNT=1
-	SUBJECT_COUNT=0
+	TIMEPOINTS_COUNT=0
+	SUBJECT_COUNT=1
 	for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
 	do   
 	    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
 	    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
 	    BASENAME_ID=${BASENAME_ID/\.nii/}
-	    OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/${BASENAME_ID}
-	    OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIRECTORY_FOR_DL}_${SUBJECT_COUNT}
-	    echo $OUTPUT_DIRECTORY_FOR_DL
 	    logCmd ${ANTSPATH}/antsApplyTransforms \
 		   -d 3 \
 		   -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_corr_usegray.nii.gz \
 		   -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
-		   -r ${ANTATOMICAL_IMAGES}[${TIMEPOINTS_COUNT}] \
-		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}GenericAffine.txt,1] \
-		   -t  ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_TemplateToSubject${i}Warp.nii.gz \
+		   -r ${ANATOMICAL_IMAGES[${SUBJECT_COUNT}]} \
+		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${TIMEPOINTS_COUNT}Affine.txt,1] \
+		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${TIMEPOINTS_COUNT}InverseWarp.nii.gz \
 		   -n GenericLabel[Linear]
 	    #measure the volumes
 	    SBC=${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
@@ -584,14 +588,15 @@ then
 		    VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
 		    # Write the volume information to output file
 		    if [[ $NBODY ]]; then
-			echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
+			echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
 		    fi
-		    rm $STATS
 		done
-	    fi	    
-	    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
-	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+2	    
+	    fi
+	    rm $STATS
+	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2
+	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+2
 	done
+	   
     done
     
     time_end_DL=`date +%s`
