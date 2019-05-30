@@ -483,7 +483,7 @@ SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templat
 ###############################
 ##  Label the SST with ASHS  ##
 ###############################
-if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_corr_usegray_volumes.txt ]] ;
+if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_heur_volumes.txt ]] ;
 then
     logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
 	   -a ${ASHS_ATLAS} \
@@ -553,7 +553,7 @@ then
     
     for side in left right ; do
 	TIMEPOINTS_COUNT=0
-	SUBJECT_COUNT=1
+	WARP_COUNT=0
 	for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
 	do   
 	    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
@@ -561,11 +561,11 @@ then
 	    BASENAME_ID=${BASENAME_ID/\.nii/}
 	    logCmd ${ANTSPATH}/antsApplyTransforms \
 		   -d 3 \
-		   -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_corr_usegray.nii.gz \
+		   -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz \
 		   -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
-		   -r ${ANATOMICAL_IMAGES[${SUBJECT_COUNT}]} \
-		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${TIMEPOINTS_COUNT}Affine.txt,1] \
-		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${TIMEPOINTS_COUNT}InverseWarp.nii.gz \
+		   -r ${ANATOMICAL_IMAGES[${TIMEPOINTS_COUNT}]} \
+		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}Affine.txt,1] \
+		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}InverseWarp.nii.gz \
 		   -n GenericLabel[Linear]
 	    #measure the volumes
 	    SBC=${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
@@ -593,8 +593,8 @@ then
 		done
 	    fi
 	    rm $STATS
-	    let SUBJECT_COUNT=${SUBJECT_COUNT}+2
-	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+2
+	    let WARP_COUNT=${WARP_COUNT}+2
+	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
 	done
 	   
     done
@@ -659,7 +659,7 @@ do
     
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
 
-    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/final/${BASENAME_ID}_right_lfseg_corr_usegray.nii.gz ]] ;
+    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/final/${BASENAME_ID}_right_lfseg_heur.nii.gz ]] ;
     then
 	logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
 	       -a ${ASHS_ATLAS} \
@@ -745,7 +745,7 @@ for side in left right ; do
 	    JLF_ATLAS_LABEL_OPTIONS=""
 	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
 	    do
-		JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_corr_usegray.nii.gz "
+		JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_heur.nii.gz "
 	    done
 	    
 	done
@@ -754,7 +754,7 @@ for side in left right ; do
     if [[  ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz ]] ;
     then
 
-	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l  ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_corr_usegray.nii.gz"
+	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l  ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz"
 	echo "                                                                   "                                                    
 	echo "Your JLF Atlas inputs and labels were:"
 	echo "$JLF_ATLAS_LABEL_OPTIONS"
