@@ -3,7 +3,6 @@ Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using mult
 
 # Requirements:
 
- Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
  Requires ANTs  https://github.com/ANTsX/ANTs/
  Requires ASHS https://sites.google.com/site/hipposubfields/home 
 
@@ -20,6 +19,7 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
   ANTSPATH          Path to the ANTs root directory 
   
 # Misc Notes: 
+ LASHiS was loosely adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
  The ASHS_TSE image slice direction should be z. In other words, the dimension 
  of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400 
 # Usage: 
