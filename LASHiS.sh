@@ -430,20 +430,18 @@ TEMPLATE_Z_IMAGES=''
 OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
 
 logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
-
-# Pad initial template image to avoid problems with SST drifting out of FOV
-for(( i=0; i < 2 ; i++ ))
-do
-    TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
-
-    logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
-
-    TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
-done
-
-
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
+# Pad initial template image to avoid problems with SST drifting out of FOV
+if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
+    for(( i=0; i < 2 ; i++ ))
+    do
+	TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
 
+	logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
+
+	TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
+    done
+fi
 time_start_sst_creation=`date +%s`
 
 if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
@@ -465,8 +463,7 @@ then
            -t GR \
 	   -y 1 \
            ${TEMPLATE_Z_IMAGES} \
-	   ${ANATOMICAL_IMAGES[@]}
-    
+	   ${ANATOMICAL_IMAGES[@]}  
 fi
 
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
@@ -474,12 +471,13 @@ then
     echo "Error:  The single subject template was not created.  Exiting."
     exit 1
 fi
-
-#Rescale the images because ASHS can't handle float for some reason
-logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000 
-logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
-
+if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then 
+    #Rescale the images because ASHS can't handle float for some reason
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000 
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
+    
+fi
 ###############################
 ##  Label the SST with ASHS  ##
 ###############################
@@ -727,7 +725,7 @@ LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'
 #Then do the JLF and reverse normalisation
 
 for side in left right ; do
-    
+    JLF_ATLAS_LABEL_OPTIONS=""
     SUBJECT_COUNT=0
     for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
     do
@@ -737,24 +735,17 @@ for side in left right ; do
 	BASENAME_ID=${BASENAME_ID/\.nii/}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
 	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-        
-	let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+        let SUBJECT_COUNT=${SUBJECT_COUNT}+1
 	
-	for(( i=0; i < '2'; i++ ))
-	do
-	    JLF_ATLAS_LABEL_OPTIONS=""
-	    for(( i=0; i < (( ${#ANATOMICAL_IMAGES[@]} / 2 | bc )) ; i++ )) ;
-	    do
-		JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_heur.nii.gz "
-	    done
-	    
-	done
+	
+	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_heur.nii.gz "
+	
     done
     
     if [[  ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz ]] ;
     then
 
-	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l  ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz"
+	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz"
 	echo "                                                                   "                                                    
 	echo "Your JLF Atlas inputs and labels were:"
 	echo "$JLF_ATLAS_LABEL_OPTIONS"
