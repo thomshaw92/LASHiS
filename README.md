@@ -1,7 +1,7 @@
 # LASHiS
 Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using multi-contrast MRI.
 
-# Requirements:
+## Requirements:
 
  Requires ANTs  https://github.com/ANTsX/ANTs/
  Requires ASHS https://sites.google.com/site/hipposubfields/home 
@@ -12,23 +12,23 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
   3. Using the Cross-sectional inputs as priors, label the hippocampi of the SST.
   4. Segmentation results are reverse normalised to the individual time-point. 
   
-# Environment Variables: 
+## Environment Variables: 
 
   ASHS_ROOT         Path to the ASHS root directory 
   
   ANTSPATH          Path to the ANTs root directory 
   
-# Misc Notes: 
+## Misc Notes: 
  LASHiS was loosely adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
  The ASHS_TSE image slice direction should be z. In other words, the dimension 
  of ASHS_TSE image should be 400x400x30 or something like that, not 400x30x400 
-# Usage: 
+## Usage: 
 	/path/to/LASHiS.sh -a atlas selection for ashs \
         	<OPTARGS> \
 		-o outputPrefix \
 		\${anatomicalImages[@]} \
 
-# Required arguments:
+## Required arguments:
      
      -o:  Output prefix                         The following subdirectory and images are created for the single
                                                 subject template
@@ -46,7 +46,7 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
                                                    \${timeN_T1w} \${timeN_T2w} ...
 					
 
-# Optional arguments:
+## Optional arguments:
     
          
      -c:  control type                          Control for parallel computation for ANTs steps (JLF,SST creation)  (default 0):
@@ -64,20 +64,19 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
      
      -g:  denoise anatomical images             Denoise anatomical images (default = 0).
      -j:  number of cpu cores                   Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
-    
-     -q:  Use quick JLF                         If '1' then we use quicker registration and JLF parameters.
-                                                Otherwise use antsRegistrationSyN.sh.  The options are as follows:
-                                                '-q 0' = antsRegistrationSyN for everything (default), fast ANTs for SST
-                                                '-q 1' = Fast JLF with 
-                                                
-                                                
+                                           
      -n:  N4 Bias Correction                    If yes, Bias correct the input images before template creation.
                                                 0 = No
                                                 1 = Yes
      
      -b:  keep temporary files                  Keep brain extraction/segmentation warps, etc (default = 0).
-     
-     -z:  Test / debug mode                     If > 0, runs a faster version of the script. Only for testing. Implies -u 0
-                                                in the antsCorticalThickness.sh script (i.e., no random seeding).
-                                                Requires single thread computation for complete reproducibility.
-    
+   
+   ## Data structure if you have already created an SST: 
+.
++-- Base_Dir
+|   +-- Subject_name_LASHiS
+|   +--
+|   +-- on-simplicity-in-technology.markdown
++-- Subject_nameSingleSubjectTemplate
+|   +-- footer.html
+|   +-- header.html
