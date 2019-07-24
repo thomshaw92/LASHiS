@@ -125,7 +125,7 @@ Optional arguments:
      -e:  ASHS file                             ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
      -f:  Diet LASHiS                           Diet LASHiS (reverse normalise the SST only) then exit.
      
-     -g:  denoise anatomical images             Denoise anatomical images (default = 0).
+     -g:  denoise anatomical images             Denoise anatomical (both T1w and TSE) images (default = 0).
      -j:  number of cpu cores                   Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
     
      -q:  Use quick JLF                         If '1' then we use quicker registration and JLF parameters.
@@ -337,7 +337,7 @@ then
     exit 1
 fi
 echo "###########################################################################################"
-echo " ASHS cross-sectional using the following ${NUMBER_OF_MODALITIES}-tuples:  "
+echo " Performing LASHiS cross-sectional using the following ${NUMBER_OF_MODALITIES}-tuples:  "
 echo "###########################################################################################"
 for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
 do
@@ -413,13 +413,47 @@ time_start=`date +%s`
 # Single-subject template creation
 #
 ################################################################################
+##########################
+##  Do denoising if on  ##
+##########################
 
+if [[ ${DENOISE} == 1 ]] ; then
+    echo
+    echo "###########################################################################################"
+    echo " Denoising                                                                                 "
+    echo "###########################################################################################"
+    echo
+    DENOISED_ANATOMICAL_IMAGES=''
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i++ )) 
+    do
+	if [[ ! -e ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz ]] ; then 
+	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+	BASENAME_ID=${BASENAME_ID/\.nii/}
+	logCmd ${ANTSPATH}/DenoiseImage \
+	       -d 3 \
+	       -i ${ANATOMICAL_IMAGES[$i]} \
+	       -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
+	       -n Rician \
+	       -v
+	fi
+	DENOISED_ANATOMICAL_IMAGES="${DENOISED_ANATOMICAL_IMAGES}"' '"${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz"
+    done
+    unset ANATOMICAL_IMAGES
+    #ANATOMICAL_IMAGES=${DENOISED_ANATOMICAL_IMAGES}
+    
+    for IMG in $DENOISED_ANATOMICAL_IMAGES
+    do
+	ANATOMICAL_IMAGES[${#ANATOMICAL_IMAGES[@]}]=$IMG
+    done
+    echo  "new anat images are: ${ANATOMICAL_IMAGES[@]}"
+fi
+echo 
 echo
 echo "###########################################################################################"
-echo " Creating single-subject template                                                     "
+echo " Creating single-subject template                                                          "
 echo "###########################################################################################"
 echo
-
 TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
 for(( i=1; i < 2 ; i++ ))
 do
