@@ -70,13 +70,47 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
                                                 1 = Yes
      
      -b:  keep temporary files                  Keep brain extraction/segmentation warps, etc (default = 0).
-   
+
    ## Data structure if you have already created an SST: 
-.
-+-- Base_Dir
-|   +-- Subject_name_LASHiS
-|   +--
-|   +-- on-simplicity-in-technology.markdown
-+-- Subject_nameSingleSubjectTemplate
-|   +-- footer.html
-|   +-- header.html
+
+```
+project_base_dir   
+│
+└───SubjectName_LASHiSSingleSubjectTemplate
+│   │
+│   │   T_subjectname_fiename0Affine.txt
+│   │   T_subjectname_fiename0InverseWarp.nii.gz
+│   │   T_subjectname_fiename0Warp.nii.gz
+│   │   T_subjectname_fiename2Affine.txt
+│   │   T_subjectname_fiename2InverseWarp.nii.gz
+│   │   T_subjectname_fiename2Warp.nii.gz
+│   │   T_template0.nii.gz
+│   │   T_template0_rescaled.nii.gz
+│   │   T_template1.nii.gz
+│   │   T_template1_rescaled.nii.gz #rescaled to have intensity range of 0-1000
+│   │   
+│   └───SST_ASHS
+│   |	| SST ASHS FILES
+|   |	| ...
+|   |	
+|   │   file021.txt
+|   │   file022.txt
+|    
+|    
+└───SubjectName_LASHiS
+│   │
+│   └───Timepoint_1_0
+│   |	│
+│   |	└───Timepoint_1_XS_ASHS
+│   │
+│   └───Timepoint_n_0
+│   |	│
+│   |	└───Timepoint_n_XS_ASHS
+│   │
+│   └───LASHiS
+│       │   stats.txt 
+│       │   labels.nii.gz
+│       │   ...
+  
+
+```
