@@ -38,12 +38,12 @@ LASHiS performs a longitudinal estimation of hippoocampus subfields.  The follow
                                                 labelling of ASHS and the SST. Can be made in ASHS_train
      anatomical images                          Set of multimodal (T1w or gradient echo, followed by T2w FSE/TSE input)
                                                 data. Data must be in the format specified by ASHS & ordered as follows:
-                                                  \${time1_T1w} \${time1_T2w} \\
-                                                  \${time2_T1w} \${time2_T2w} ...
+                                                  ${time1_T1w} ${time1_T2w} \
+                                                  ${time2_T1w} ${time2_T2w} \
                                                   .
                                                   .
                                                   .
-                                                   \${timeN_T1w} \${timeN_T2w} ...
+                                                  ${timeN_T1w} ${timeN_T2w} ...
 					
 
 ## Optional arguments:
