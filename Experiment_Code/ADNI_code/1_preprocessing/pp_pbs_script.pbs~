@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# 
+
+#PBS -A UQ-CAI
+
+#PBS -l select=1:ncpus=4:mem=16GB:vmem=16GB,walltime=10:00:00
+
+#PBS -m n
+
+#PBS -N tsepp
+
+#PBS -V 
+
+#Now do some things
+
+source ~/.bashrc 
+
+~/scripts/TOMCAT/1_preprocessing/pp_script.sh $SUBJNAME
+
+  

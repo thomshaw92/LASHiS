@@ -1,0 +1,16 @@
+2019-10-31 00:35:42 - bidscoin - INFO 
+2019-10-31 00:35:42 - bidscoin - INFO -------------- START BIDSeditor ------------
+2019-10-31 00:35:42 - bidscoin - INFO Reading: /data/home/uqtshaw/miniconda3/lib/python3.6/site-packages/heuristics/bidsmap_template.yaml
+2019-10-31 00:35:42 - bidscoin - INFO Reading: /data/fasttemp/uqtshaw/ADNI_data/ADNI_BIDS/code/bidscoin/bidsmap.yaml
+2019-10-31 00:35:43 - bidscoin - INFO Source: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test
+2019-10-31 10:29:33 - bidscoin - INFO 
+2019-10-31 10:29:33 - bidscoin - INFO -------------- START BIDSeditor ------------
+2019-10-31 10:29:33 - bidscoin - INFO Reading: /data/home/uqtshaw/miniconda3/lib/python3.6/site-packages/heuristics/bidsmap_template.yaml
+2019-10-31 10:29:33 - bidscoin - INFO Reading: /data/fasttemp/uqtshaw/ADNI_data/ADNI_BIDS/code/bidscoin/bidsmap.yaml
+2019-10-31 10:29:34 - bidscoin - INFO Source: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test
+2019-10-31 10:31:26 - bidscoin - INFO -------------- FINISHED! -------------------
+2019-10-31 10:31:26 - bidscoin - INFO 
+2019-10-31 10:31:26 - bidscoin - INFO No BIDScoin errors or warnings were reported
+2019-10-31 10:31:26 - bidscoin - INFO 
+2019-10-31 10:31:26 - bidscoin - INFO For the complete log see: /data/fasttemp/uqtshaw/ADNI_data/ADNI_BIDS/code/bidscoin/bidseditor.log
+2019-10-31 10:31:26 - bidscoin - INFO NB: logfiles may contain identifiable information, e.g. from pathnames

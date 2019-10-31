@@ -1,0 +1,392 @@
+2019-10-30 23:59:18 - bidscoin - INFO 
+2019-10-30 23:59:18 - bidscoin - INFO -------------- START BIDSmapper ------------
+2019-10-30 23:59:18 - bidscoin - INFO No bidsmap file found: /data/home/uqtshaw/miniconda3/lib/python3.6/site-packages/heuristics/bidsmap.yaml
+2019-10-30 23:59:18 - bidscoin - INFO Reading: /data/home/uqtshaw/miniconda3/lib/python3.6/site-packages/heuristics/bidsmap_template.yaml
+2019-10-30 23:59:18 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-01 (subject 1/128)
+2019-10-30 23:59:18 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-01/MPRAGE/ADNI_002_S_0413_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170622131413667_34_S574065_I863056.dcm
+2019-10-30 23:59:18 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-01/hippo_scan/ADNI_002_S_0413_MR_HighResHippocampus_br_raw_20170622131416825_15_S574070_I863061.dcm
+2019-10-30 23:59:18 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-02 (subject 1/128)
+2019-10-30 23:59:18 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-02/MPRAGE/ADNI_002_S_0413_MR_Accelerated_Sagittal_MPRAGE__br_raw_20190828115108286_87_S868726_I1221051.dcm
+2019-10-30 23:59:19 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-02/hippo_scan/ADNI_002_S_0413_MR_HighResHippocampus_br_raw_20190828115108320_3_S868732_I1221059.dcm
+2019-10-30 23:59:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1155/ses-01 (subject 2/128)
+2019-10-30 23:59:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1155/ses-02 (subject 2/128)
+2019-10-30 23:59:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1261/ses-01 (subject 3/128)
+2019-10-30 23:59:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1261/ses-02 (subject 3/128)
+2019-10-30 23:59:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1280/ses-01 (subject 4/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_1280/ses-02 (subject 4/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4213/ses-01 (subject 5/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4213/ses-02 (subject 5/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4229/ses-01 (subject 6/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4229/ses-02 (subject 6/128)
+2019-10-30 23:59:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4654/ses-01 (subject 7/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4654/ses-02 (subject 7/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4799/ses-01 (subject 8/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_4799/ses-02 (subject 8/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_5230/ses-01 (subject 9/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_5230/ses-02 (subject 9/128)
+2019-10-30 23:59:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_0908/ses-01 (subject 10/128)
+2019-10-30 23:59:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_0908/ses-02 (subject 10/128)
+2019-10-30 23:59:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_1122/ses-01 (subject 11/128)
+2019-10-30 23:59:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_1122/ses-02 (subject 11/128)
+2019-10-30 23:59:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_1122/ses-03 (subject 11/128)
+2019-10-30 23:59:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4288/ses-01 (subject 12/128)
+2019-10-30 23:59:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4288/ses-02 (subject 12/128)
+2019-10-30 23:59:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4354/ses-01 (subject 13/128)
+2019-10-30 23:59:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4354/ses-02 (subject 13/128)
+2019-10-30 23:59:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4354/ses-03 (subject 13/128)
+2019-10-30 23:59:24 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4644/ses-01 (subject 14/128)
+2019-10-30 23:59:24 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-003_S_4644/ses-02 (subject 14/128)
+2019-10-30 23:59:24 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-01 (subject 15/128)
+2019-10-30 23:59:25 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-01/MPRAGE/ADNI_005_S_4185_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20170922111621212_194_S611490_I907427.dcm
+2019-10-30 23:59:25 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-01/hippo_scan/ADNI_005_S_4185_MR_HighResHippo_br_raw_20170922111651104_27_S611492_I907429.dcm
+2019-10-30 23:59:25 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-02 (subject 15/128)
+2019-10-30 23:59:26 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-02/hippo_scan/ADNI_005_S_4185_MR_HighResHippo_br_raw_20180928102628640_3_S731169_I1053468.dcm
+2019-10-30 23:59:26 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-01 (subject 16/128)
+2019-10-30 23:59:27 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-01/MPRAGE/ADNI_006_S_0731_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170919093704366_209_S609740_I905360.dcm
+2019-10-30 23:59:27 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-01/hippo_scan/ADNI_006_S_0731_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20170919093637940_4_S609744_I905365.dcm
+2019-10-30 23:59:27 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-02 (subject 16/128)
+2019-10-30 23:59:28 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-02/MPRAGE/ADNI_006_S_0731_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20181010125820860_2_S734872_I1058014.dcm
+2019-10-30 23:59:28 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-02/hippo_scan/ADNI_006_S_0731_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20181010130114727_10_S734879_I1058026.dcm
+2019-10-30 23:59:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-01 (subject 17/128)
+2019-10-30 23:59:29 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-01/MPRAGE/ADNI_009_S_0751_MR_Accelerated_Sag_IR-FSPGR_br_raw_20170719075122786_195_S585522_I876555.dcm
+2019-10-30 23:59:29 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-01/hippo_scan/ADNI_009_S_0751_MR_HighResHippo_br_raw_20170719075122459_5_S585524_I876557.dcm
+2019-10-30 23:59:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-02 (subject 17/128)
+2019-10-30 23:59:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-03 (subject 17/128)
+2019-10-30 23:59:31 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-03/MPRAGE/ADNI_009_S_0751_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190712175958293_165_S840935_I1186516.dcm
+2019-10-30 23:59:31 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-03/hippo_scan/ADNI_009_S_0751_MR_HighResHippo_br_raw_20190712180126299_9_S840937_I1186518.dcm
+2019-10-30 23:59:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_4324/ses-01 (subject 18/128)
+2019-10-30 23:59:32 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_4324/ses-01/hippo_scan/ADNI_009_S_4324_MR_HighResHippo_br_raw_20180713114557025_15_S704286_I1020619.dcm
+2019-10-30 23:59:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_4324/ses-02 (subject 18/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-011_S_4278/ses-01 (subject 19/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-011_S_4278/ses-02 (subject 19/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-012_S_4643/ses-01 (subject 20/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-012_S_4643/ses-02 (subject 20/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-012_S_6073/ses-01 (subject 21/128)
+2019-10-30 23:59:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-012_S_6073/ses-02 (subject 21/128)
+2019-10-30 23:59:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_2308/ses-01 (subject 22/128)
+2019-10-30 23:59:34 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_2308/ses-01/MPRAGE/ADNI_014_S_2308_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170902083709918_137_S604746_I899456.dcm
+2019-10-30 23:59:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_2308/ses-02 (subject 22/128)
+2019-10-30 23:59:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_2308/ses-03 (subject 22/128)
+2019-10-30 23:59:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4401/ses-01 (subject 23/128)
+2019-10-30 23:59:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4401/ses-02 (subject 23/128)
+2019-10-30 23:59:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4576/ses-01 (subject 24/128)
+2019-10-30 23:59:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4576/ses-02 (subject 24/128)
+2019-10-30 23:59:35 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4576/ses-02/MPRAGE/ADNI_014_S_4576_MR_Accelerated_Sagittal_MPRAGE__br_raw_20181113111537828_121_S746718_I1072377.dcm
+2019-10-30 23:59:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4576/ses-03 (subject 24/128)
+2019-10-30 23:59:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-01 (subject 25/128)
+2019-10-30 23:59:35 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-01/MPRAGE/ADNI_016_S_4951_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170216194954740_67_S537530_I820302.dcm
+2019-10-30 23:59:35 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-01/hippo_scan/ADNI_016_S_4951_MR_HighResHippocampus_br_raw_20170216195042538_9_S537535_I820307.dcm
+2019-10-30 23:59:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-02 (subject 25/128)
+2019-10-30 23:59:36 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-02/hippo_scan/ADNI_016_S_4951_MR_HighResHippocampus_br_raw_20190605135331171_8_S830319_I1173066.dcm
+2019-10-30 23:59:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4952/ses-01 (subject 26/128)
+2019-10-30 23:59:36 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4952/ses-01/hippo_scan/ADNI_016_S_4952_MR_HighResHippocampus_br_raw_20170216200748029_35_S537549_I820322.dcm
+2019-10-30 23:59:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4952/ses-02 (subject 26/128)
+2019-10-30 23:59:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-01 (subject 27/128)
+2019-10-31 00:00:39 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-01/MPRAGE/ADNI_018_S_2133_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180111122109066_1_S649539_I952527.dcm
+2019-10-31 00:00:50 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-01/hippo_scan/ADNI_018_S_2133_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180111122141396_1_S649544_I952532.dcm
+2019-10-31 00:00:50 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-02 (subject 27/128)
+2019-10-31 00:00:50 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-02/MPRAGE/ADNI_018_S_2133_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20190212134645607_16_S796183_I1129657.dcm
+2019-10-31 00:00:51 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-02/hippo_scan/ADNI_018_S_2133_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190212134523310_1_S796188_I1129665.dcm
+2019-10-31 00:00:51 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-01 (subject 28/128)
+2019-10-31 00:02:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-02 (subject 28/128)
+2019-10-31 00:03:17 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-02/MPRAGE/ADNI_018_S_2155_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180828152819566_1_S723052_I1043303.dcm
+2019-10-31 00:03:29 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-02/hippo_scan/ADNI_018_S_2155_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180828152757286_1_S723057_I1043308.dcm
+2019-10-31 00:03:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2180/ses-01 (subject 29/128)
+2019-10-31 00:04:44 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2180/ses-02 (subject 29/128)
+2019-10-31 00:06:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-01 (subject 30/128)
+2019-10-31 00:06:07 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-01/MPRAGE/ADNI_019_S_4293_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170608151340176_199_S571710_I860224.dcm
+2019-10-31 00:06:08 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-01/hippo_scan/ADNI_019_S_4293_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20170608151340597_10_S571715_I860232.dcm
+2019-10-31 00:06:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-02 (subject 30/128)
+2019-10-31 00:06:08 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-02/MPRAGE/ADNI_019_S_4293_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180618154716659_46_S696761_I1011352.dcm
+2019-10-31 00:06:09 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-02/hippo_scan/ADNI_019_S_4293_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180618154345248_23_S696766_I1011361.dcm
+2019-10-31 00:06:09 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4835/ses-01 (subject 31/128)
+2019-10-31 00:06:10 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4835/ses-02 (subject 31/128)
+2019-10-31 00:06:10 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4835/ses-02/hippo_scan/ADNI_019_S_4835_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180712164224799_30_S704076_I1020365.dcm
+2019-10-31 00:06:10 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-020_S_5203/ses-01 (subject 32/128)
+2019-10-31 00:06:10 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-020_S_5203/ses-02 (subject 32/128)
+2019-10-31 00:06:11 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-020_S_5203/ses-03 (subject 32/128)
+2019-10-31 00:06:11 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-01 (subject 33/128)
+2019-10-31 00:06:11 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-01/MPRAGE/ADNI_021_S_0178_MR_Accelerated_Sag_IR-FSPGR_br_raw_20170428121500579_64_S559429_I844772.dcm
+2019-10-31 00:06:11 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-01/hippo_scan/ADNI_021_S_0178_MR_HighResHippo_br_raw_20170428121519533_10_S559434_I844777.dcm
+2019-10-31 00:06:11 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-02 (subject 33/128)
+2019-10-31 00:06:12 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-02/hippo_scan/ADNI_021_S_0178_MR_HighResHippo_br_raw_20190606120156541_22_S830623_I1173505.dcm
+2019-10-31 00:06:12 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-01 (subject 34/128)
+2019-10-31 00:06:13 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-01/hippo_scan/ADNI_021_S_0337_MR_HighResHippo_br_raw_20170608121654334_13_S571524_I859996.dcm
+2019-10-31 00:06:13 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-02 (subject 34/128)
+2019-10-31 00:06:13 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-02/MPRAGE/ADNI_021_S_0337_MR_Accelerated_Sag_IR-FSPGR_br_raw_20190520170935042_108_S825450_I1167048.dcm
+2019-10-31 00:06:14 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-02/hippo_scan/ADNI_021_S_0337_MR_HighResHippo_br_raw_20190520170943523_9_S825451_I1167049.dcm
+2019-10-31 00:06:14 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-01 (subject 35/128)
+2019-10-31 00:06:14 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-01/hippo_scan/ADNI_021_S_4254_MR_HighResHippo_br_raw_20170406094026019_20_S552175_I836645.dcm
+2019-10-31 00:06:14 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-02 (subject 35/128)
+2019-10-31 00:06:15 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-02/hippo_scan/ADNI_021_S_4254_MR_HighResHippo_br_raw_20190409150303472_4_S813957_I1152449.dcm
+2019-10-31 00:06:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-01 (subject 36/128)
+2019-10-31 00:06:16 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-01/hippo_scan/ADNI_021_S_4276_MR_HighResHippo_br_raw_20170412122516356_1_S553681_I838416.dcm
+2019-10-31 00:06:16 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-02 (subject 36/128)
+2019-10-31 00:06:17 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-02/hippo_scan/ADNI_021_S_4276_MR_HighResHippo_br_raw_20190415160223355_28_S815775_I1154747.dcm
+2019-10-31 00:06:17 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-01 (subject 37/128)
+2019-10-31 00:06:17 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-02 (subject 37/128)
+2019-10-31 00:06:18 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-02/hippo_scan/ADNI_021_S_5194_MR_HighResHippo_br_raw_20180802161244144_21_S712167_I1030386.dcm
+2019-10-31 00:06:18 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-03 (subject 37/128)
+2019-10-31 00:06:19 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-03/hippo_scan/ADNI_021_S_5194_MR_HighResHippo_br_raw_20190723155530150_9_S843468_I1189913.dcm
+2019-10-31 00:06:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_2379/ses-01 (subject 38/128)
+2019-10-31 00:06:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_2379/ses-02 (subject 38/128)
+2019-10-31 00:06:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_5004/ses-01 (subject 39/128)
+2019-10-31 00:06:19 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_5004/ses-01/MPRAGE/ADNI_022_S_5004_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170322112912730_151_S547805_I831854.dcm
+2019-10-31 00:06:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_5004/ses-02 (subject 39/128)
+2019-10-31 00:06:19 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_0031/ses-01 (subject 40/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_0031/ses-02 (subject 40/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_1190/ses-01 (subject 41/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_1190/ses-02 (subject 41/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_4115/ses-01 (subject 42/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-023_S_4115/ses-02 (subject 42/128)
+2019-10-31 00:06:20 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_2239/ses-01 (subject 43/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_2239/ses-02 (subject 43/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_4084/ses-01 (subject 44/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_4084/ses-02 (subject 44/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_4674/ses-01 (subject 45/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_4674/ses-02 (subject 45/128)
+2019-10-31 00:06:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_4674/ses-03 (subject 45/128)
+2019-10-31 00:06:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_5290/ses-01 (subject 46/128)
+2019-10-31 00:06:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_5290/ses-02 (subject 46/128)
+2019-10-31 00:06:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_5290/ses-03 (subject 46/128)
+2019-10-31 00:06:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_6033/ses-01 (subject 47/128)
+2019-10-31 00:06:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-024_S_6033/ses-02 (subject 47/128)
+2019-10-31 00:06:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-01 (subject 48/128)
+2019-10-31 00:06:23 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-01/MPRAGE/ADNI_029_S_2395_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190927125832181_101_S669270_I976478.dcm
+2019-10-31 00:06:23 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-01/hippo_scan/ADNI_029_S_2395_MR_HighResHippo_br_raw_20190927130529713_8_S669272_I976480.dcm
+2019-10-31 00:06:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-02 (subject 48/128)
+2019-10-31 00:06:24 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-02/MPRAGE/ADNI_029_S_2395_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190418135045465_63_S817067_I1156476.dcm
+2019-10-31 00:06:24 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-02/hippo_scan/ADNI_029_S_2395_MR_HighResHippo_br_raw_20190418134645900_13_S817069_I1156478.dcm
+2019-10-31 00:06:24 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-01 (subject 49/128)
+2019-10-31 00:06:25 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-01/hippo_scan/ADNI_029_S_4290_MR_HighResHippo_br_raw_20190418103829482_30_S799645_I1133907.dcm
+2019-10-31 00:06:25 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-02 (subject 49/128)
+2019-10-31 00:06:26 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-02/MPRAGE/ADNI_029_S_4290_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190401102925953_169_S811411_I1149150.dcm
+2019-10-31 00:06:26 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-02/hippo_scan/ADNI_029_S_4290_MR_HighResHippo_br_raw_20190401103313673_29_S811413_I1149152.dcm
+2019-10-31 00:06:26 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4384/ses-01 (subject 50/128)
+2019-10-31 00:06:27 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4384/ses-01/hippo_scan/ADNI_029_S_4384_MR_HighResHippo_br_raw_20180427094126743_30_S680231_I990075.dcm
+2019-10-31 00:06:27 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4384/ses-02 (subject 50/128)
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-032_S_4277/ses-01 (subject 51/128)
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-032_S_4277/ses-02 (subject 51/128)
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-032_S_5289/ses-01 (subject 52/128)
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-032_S_5289/ses-02 (subject 52/128)
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_0734/ses-01 (subject 53/128)
+2019-10-31 00:06:28 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_0734/ses-01/hippo_scan/ADNI_033_S_0734_MR_HighResHippocampus_br_raw_20171018143252309_18_S621621_I919243.dcm
+2019-10-31 00:06:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_0734/ses-02 (subject 53/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_5198/ses-01 (subject 54/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_5198/ses-02 (subject 54/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_5259/ses-01 (subject 55/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_5259/ses-02 (subject 55/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-035_S_0156/ses-01 (subject 56/128)
+2019-10-31 00:06:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-035_S_0156/ses-02 (subject 56/128)
+2019-10-31 00:06:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-035_S_4114/ses-01 (subject 57/128)
+2019-10-31 00:06:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-035_S_4114/ses-02 (subject 57/128)
+2019-10-31 00:06:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-01 (subject 58/128)
+2019-10-31 00:06:30 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-01/MPRAGE/ADNI_036_S_2380_MR_Accelerated_Sagittal_MPRAGE__br_raw_20180719165658878_18_S706589_I1023430.dcm
+2019-10-31 00:06:30 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-01/hippo_scan/ADNI_036_S_2380_MR_HighResHippocampus_br_raw_20180719170450315_6_S706595_I1023436.dcm
+2019-10-31 00:06:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-02 (subject 58/128)
+2019-10-31 00:06:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_4538/ses-01 (subject 59/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_4538/ses-02 (subject 59/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_0377/ses-01 (subject 60/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_0377/ses-02 (subject 60/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_4030/ses-01 (subject 61/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_4030/ses-02 (subject 61/128)
+2019-10-31 00:06:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_4214/ses-01 (subject 62/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_4214/ses-02 (subject 62/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-037_S_4214/ses-03 (subject 62/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_0679/ses-01 (subject 63/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_0679/ses-02 (subject 63/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_1418/ses-01 (subject 64/128)
+2019-10-31 00:06:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_1418/ses-02 (subject 64/128)
+2019-10-31 00:06:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4051/ses-01 (subject 65/128)
+2019-10-31 00:06:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4051/ses-02 (subject 65/128)
+2019-10-31 00:06:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4143/ses-01 (subject 66/128)
+2019-10-31 00:06:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4143/ses-02 (subject 66/128)
+2019-10-31 00:06:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4874/ses-01 (subject 67/128)
+2019-10-31 00:06:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4874/ses-02 (subject 67/128)
+2019-10-31 00:06:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_4874/ses-03 (subject 67/128)
+2019-10-31 00:06:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_5097/ses-01 (subject 68/128)
+2019-10-31 00:06:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-041_S_5097/ses-02 (subject 68/128)
+2019-10-31 00:06:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_0056/ses-01 (subject 69/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_0056/ses-02 (subject 69/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_2301/ses-01 (subject 70/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_2301/ses-02 (subject 70/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_2304/ses-01 (subject 71/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_2304/ses-02 (subject 71/128)
+2019-10-31 00:06:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_2304/ses-03 (subject 71/128)
+2019-10-31 00:06:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_4767/ses-01 (subject 72/128)
+2019-10-31 00:06:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_4767/ses-02 (subject 72/128)
+2019-10-31 00:06:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_4767/ses-03 (subject 72/128)
+2019-10-31 00:06:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_4782/ses-01 (subject 73/128)
+2019-10-31 00:06:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-067_S_4782/ses-02 (subject 73/128)
+2019-10-31 00:06:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_0127/ses-01 (subject 74/128)
+2019-10-31 00:06:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_0127/ses-02 (subject 74/128)
+2019-10-31 00:06:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_2187/ses-01 (subject 75/128)
+2019-10-31 00:06:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_2187/ses-02 (subject 75/128)
+2019-10-31 00:06:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_2187/ses-03 (subject 75/128)
+2019-10-31 00:06:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_4431/ses-01 (subject 76/128)
+2019-10-31 00:06:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-068_S_4431/ses-02 (subject 76/128)
+2019-10-31 00:06:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-01 (subject 77/128)
+2019-10-31 00:06:38 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-01/MPRAGE/ADNI_082_S_2121_MR_Accelerated_Sagittal_MPRAGE__br_raw_20180214103108292_174_S658866_I963756.dcm
+2019-10-31 00:06:38 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-01/hippo_scan/ADNI_082_S_2121_MR_HighResHippocampus_br_raw_20180214103108377_18_S658872_I963762.dcm
+2019-10-31 00:06:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-02 (subject 77/128)
+2019-10-31 00:06:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_4224/ses-01 (subject 78/128)
+2019-10-31 00:06:39 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_4224/ses-02 (subject 78/128)
+2019-10-31 00:06:39 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_5282/ses-01 (subject 79/128)
+2019-10-31 00:06:39 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_5282/ses-02 (subject 79/128)
+2019-10-31 00:06:39 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-098_S_0896/ses-01 (subject 80/128)
+2019-10-31 00:06:40 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-098_S_0896/ses-01/hippo_scan/ADNI_098_S_0896_MR_Obl_HighResHippo_br_raw_20180315132758878_9_S667355_I974135.dcm
+2019-10-31 00:06:40 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-098_S_0896/ses-02 (subject 80/128)
+2019-10-31 00:06:40 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-100_S_0069/ses-01 (subject 81/128)
+2019-10-31 00:07:57 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-100_S_0069/ses-01/hippo_scan/ADNI_100_S_0069_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180123161323457_1_S652992_I956603.dcm
+2019-10-31 00:07:57 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-100_S_0069/ses-02 (subject 81/128)
+2019-10-31 00:09:14 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_0416/ses-01 (subject 82/128)
+2019-10-31 00:09:14 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_0416/ses-02 (subject 82/128)
+2019-10-31 00:09:14 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_2392/ses-01 (subject 83/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_2392/ses-02 (subject 83/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_4404/ses-01 (subject 84/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_4404/ses-02 (subject 84/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_5234/ses-01 (subject 85/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-114_S_5234/ses-02 (subject 85/128)
+2019-10-31 00:09:15 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-116_S_4199/ses-01 (subject 86/128)
+2019-10-31 00:09:16 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-116_S_4199/ses-02 (subject 86/128)
+2019-10-31 00:09:16 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-116_S_4855/ses-01 (subject 87/128)
+2019-10-31 00:09:16 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-116_S_4855/ses-02 (subject 87/128)
+2019-10-31 00:09:16 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-01 (subject 88/128)
+2019-10-31 00:10:27 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-01/MPRAGE/ADNI_123_S_0106_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170628172528924_1_S576577_I865961.dcm
+2019-10-31 00:10:38 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-01/hippo_scan/ADNI_123_S_0106_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20170628172530241_1_S576583_I865967.dcm
+2019-10-31 00:10:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-02 (subject 88/128)
+2019-10-31 00:11:59 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_4170/ses-01 (subject 89/128)
+2019-10-31 00:13:21 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_4170/ses-02 (subject 89/128)
+2019-10-31 00:13:22 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_4170/ses-02/hippo_scan/ADNI_123_S_4170_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190307122354649_26_S804273_I1139953.dcm
+2019-10-31 00:13:22 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-01 (subject 90/128)
+2019-10-31 00:13:23 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-01/MPRAGE/ADNI_126_S_4507_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20180529121018086_150_S690220_I1003342.dcm
+2019-10-31 00:13:23 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-01/hippo_scan/ADNI_126_S_4507_MR_HighResHippo_br_raw_20180529121306836_26_S690223_I1003345.dcm
+2019-10-31 00:13:23 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-02 (subject 90/128)
+2019-10-31 00:13:24 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-02/hippo_scan/ADNI_126_S_4507_MR_HighResHippo_br_raw_20190514164434899_3_S823947_I1165189.dcm
+2019-10-31 00:13:24 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5214/ses-01 (subject 91/128)
+2019-10-31 00:13:25 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5214/ses-02 (subject 91/128)
+2019-10-31 00:13:26 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5214/ses-02/hippo_scan/ADNI_126_S_5214_MR_HighResHippo_br_raw_20190726120051379_21_S844626_I1191462.dcm
+2019-10-31 00:13:26 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5243/ses-01 (subject 92/128)
+2019-10-31 00:13:26 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5243/ses-01/hippo_scan/ADNI_126_S_5243_MR_HighResHippo_br_raw_20180823115459591_23_S720722_I1040535.dcm
+2019-10-31 00:13:26 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5243/ses-02 (subject 92/128)
+2019-10-31 00:13:27 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-01 (subject 93/128)
+2019-10-31 00:13:27 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-01/MPRAGE/ADNI_127_S_4148_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20170719160220124_4_S585683_I876746.dcm
+2019-10-31 00:13:28 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-01/hippo_scan/ADNI_127_S_4148_MR_HighResHippo_br_raw_20170719160221185_26_S585685_I876748.dcm
+2019-10-31 00:13:28 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-02 (subject 93/128)
+2019-10-31 00:13:28 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-02/MPRAGE/ADNI_127_S_4148_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20190710171644072_25_S840238_I1185628.dcm
+2019-10-31 00:13:29 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-02/hippo_scan/ADNI_127_S_4148_MR_HighResHippo_br_raw_20190710171651169_13_S840240_I1185630.dcm
+2019-10-31 00:13:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-01 (subject 94/128)
+2019-10-31 00:13:29 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-01/hippo_scan/ADNI_127_S_4210_MR_HighResHippo_br_raw_20170918192339653_5_S609730_I905326.dcm
+2019-10-31 00:13:29 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-02 (subject 94/128)
+2019-10-31 00:13:30 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-02/MPRAGE/ADNI_127_S_4210_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20181221133614200_93_S757183_I1085331.dcm
+2019-10-31 00:13:30 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4604/ses-01 (subject 95/128)
+2019-10-31 00:13:31 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4604/ses-02 (subject 95/128)
+2019-10-31 00:13:32 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4604/ses-02/hippo_scan/ADNI_127_S_4604_MR_HighResHippo_br_raw_20190822163945266_14_S863788_I1215570.dcm
+2019-10-31 00:13:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5132/ses-01 (subject 96/128)
+2019-10-31 00:13:32 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5132/ses-02 (subject 96/128)
+2019-10-31 00:13:33 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5132/ses-02/hippo_scan/ADNI_127_S_5132_MR_HighResHippo_br_raw_20190513151537573_11_S823162_I1164213.dcm
+2019-10-31 00:13:33 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5266/ses-01 (subject 97/128)
+2019-10-31 00:13:34 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5266/ses-02 (subject 97/128)
+2019-10-31 00:13:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-01 (subject 98/128)
+2019-10-31 00:13:35 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-01/hippo_scan/ADNI_128_S_2002_MR_HighResHippo_br_raw_20190829115231722_8_S869225_I1221692.dcm
+2019-10-31 00:13:35 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-02 (subject 98/128)
+2019-10-31 00:13:36 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-02/hippo_scan/ADNI_128_S_2002_MR_HighResHippo_br_raw_20190802150839653_23_S847300_I1194947.dcm
+2019-10-31 00:13:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_4742/ses-01 (subject 99/128)
+2019-10-31 00:13:36 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_4742/ses-02 (subject 99/128)
+2019-10-31 00:13:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-01 (subject 100/128)
+2019-10-31 00:13:37 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-01/MPRAGE/ADNI_129_S_2332_MR_Accelerated_Sag_IR-FSPGR___br_raw_20170517094704555_18_S565059_I852333.dcm
+2019-10-31 00:13:37 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-01/hippo_scan/ADNI_129_S_2332_MR_HighResHippo_br_raw_20170517094557223_30_S565061_I852335.dcm
+2019-10-31 00:13:37 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-02 (subject 100/128)
+2019-10-31 00:13:38 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-02/MPRAGE/ADNI_129_S_2332_MR_Accelerated_Sag_IR-FSPGR___br_raw_20180414122537406_192_S676469_I985405.dcm
+2019-10-31 00:13:38 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-02/hippo_scan/ADNI_129_S_2332_MR_HighResHippo_br_raw_20180414122653769_6_S676471_I985407.dcm
+2019-10-31 00:13:38 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-03 (subject 100/128)
+2019-10-31 00:13:39 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-01 (subject 101/128)
+2019-10-31 00:13:40 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-01/hippo_scan/ADNI_129_S_4369_MR_HighResHippo_br_raw_20170622095627196_1_S574011_I862993.dcm
+2019-10-31 00:13:40 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-02 (subject 101/128)
+2019-10-31 00:13:40 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-02/hippo_scan/ADNI_129_S_4369_MR_HighResHippo_br_raw_20190614085737499_24_S832428_I1175726.dcm
+2019-10-31 00:13:40 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4422/ses-01 (subject 102/128)
+2019-10-31 00:13:41 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4422/ses-02 (subject 102/128)
+2019-10-31 00:13:42 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-01 (subject 103/128)
+2019-10-31 00:13:43 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-01/MPRAGE/ADNI_130_S_4294_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20171102171436113_196_S627588_I926294.dcm
+2019-10-31 00:13:43 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-01/hippo_scan/ADNI_130_S_4294_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20171102171518441_2_S627595_I926306.dcm
+2019-10-31 00:13:43 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-02 (subject 103/128)
+2019-10-31 00:13:44 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-02/MPRAGE/ADNI_130_S_4294_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20190327140120667_115_S810505_I1147957.dcm
+2019-10-31 00:13:44 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-02/hippo_scan/ADNI_130_S_4294_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190327142840196_5_S810514_I1147973.dcm
+2019-10-31 00:13:44 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-01 (subject 104/128)
+2019-10-31 00:13:45 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-01/MPRAGE/ADNI_130_S_6072_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180831161156042_116_S724007_I1044557.dcm
+2019-10-31 00:13:45 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-01/hippo_scan/ADNI_130_S_6072_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180831160751959_30_S724013_I1044568.dcm
+2019-10-31 00:13:45 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-02 (subject 104/128)
+2019-10-31 00:13:46 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4356/ses-01 (subject 105/128)
+2019-10-31 00:13:47 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4356/ses-02 (subject 105/128)
+2019-10-31 00:13:48 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4356/ses-02/hippo_scan/ADNI_135_S_4356_MR_HighResHippo_br_raw_20180831133114649_12_S723910_I1044440.dcm
+2019-10-31 00:13:48 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4356/ses-03 (subject 105/128)
+2019-10-31 00:13:48 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4446/ses-01 (subject 106/128)
+2019-10-31 00:13:49 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4446/ses-02 (subject 106/128)
+2019-10-31 00:13:50 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4446/ses-02/hippo_scan/ADNI_135_S_4446_MR_HighResHippo_br_raw_20190715105911360_15_S841036_I1186655.dcm
+2019-10-31 00:13:50 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4489/ses-01 (subject 107/128)
+2019-10-31 00:13:51 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4489/ses-02 (subject 107/128)
+2019-10-31 00:13:52 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4489/ses-03 (subject 107/128)
+2019-10-31 00:13:52 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-01 (subject 108/128)
+2019-10-31 00:13:53 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-01/MPRAGE/ADNI_135_S_4598_MR_Accelerated_Sag_IR-FSPGR___br_raw_20170724170308660_166_S586985_I878250.dcm
+2019-10-31 00:13:53 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-01/hippo_scan/ADNI_135_S_4598_MR_HighResHippo_br_raw_20170724170315197_6_S586987_I878252.dcm
+2019-10-31 00:13:53 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-02 (subject 108/128)
+2019-10-31 00:13:54 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-02/hippo_scan/ADNI_135_S_4598_MR_HighResHippo_br_raw_20190809112915453_27_S850777_I1199312.dcm
+2019-10-31 00:13:54 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-01 (subject 109/128)
+2019-10-31 00:13:55 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-02 (subject 109/128)
+2019-10-31 00:13:56 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-02/hippo_scan/ADNI_135_S_4722_MR_HighResHippo_br_raw_20180706132246777_30_S701886_I1017755.dcm
+2019-10-31 00:13:56 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-03 (subject 109/128)
+2019-10-31 00:13:56 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-03/hippo_scan/ADNI_135_S_4722_MR_HighResHippo_br_raw_20190625172239130_30_S836159_I1180421.dcm
+2019-10-31 00:13:56 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4723/ses-01 (subject 110/128)
+2019-10-31 00:13:57 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4723/ses-02 (subject 110/128)
+2019-10-31 00:13:58 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4723/ses-03 (subject 110/128)
+2019-10-31 00:13:59 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4723/ses-03/hippo_scan/ADNI_135_S_4723_MR_HighResHippo_br_raw_20190625171010386_11_S836130_I1180389.dcm
+2019-10-31 00:13:59 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_5113/ses-01 (subject 111/128)
+2019-10-31 00:14:00 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_5113/ses-02 (subject 111/128)
+2019-10-31 00:14:01 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-137_S_4536/ses-01 (subject 112/128)
+2019-10-31 00:14:01 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-137_S_4536/ses-02 (subject 112/128)
+2019-10-31 00:14:01 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_0767/ses-01 (subject 113/128)
+2019-10-31 00:14:01 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_0767/ses-02 (subject 113/128)
+2019-10-31 00:14:01 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1052/ses-01 (subject 114/128)
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1052/ses-02 (subject 114/128)
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1052/ses-03 (subject 114/128)
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1378/ses-01 (subject 115/128)
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1378/ses-02 (subject 115/128)
+2019-10-31 00:14:02 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1378/ses-02/hippo_scan/ADNI_141_S_1378_MR_HighResHippocampus_br_raw_20190506090010995_26_S821253_I1161824.dcm
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_2333/ses-01 (subject 116/128)
+2019-10-31 00:14:02 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_2333/ses-02 (subject 116/128)
+2019-10-31 00:14:03 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_4160/ses-01 (subject 117/128)
+2019-10-31 00:14:03 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_4160/ses-01/MPRAGE/ADNI_141_S_4160_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170711102916343_59_S582356_I872948.dcm
+2019-10-31 00:14:03 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_4160/ses-02 (subject 117/128)
+2019-10-31 00:14:03 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_6008/ses-01 (subject 118/128)
+2019-10-31 00:14:03 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_6008/ses-02 (subject 118/128)
+2019-10-31 00:14:03 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_6061/ses-01 (subject 119/128)
+2019-10-31 00:14:04 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_6061/ses-02 (subject 119/128)
+2019-10-31 00:14:04 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-01 (subject 120/128)
+2019-10-31 00:14:04 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-01/MPRAGE/ADNI_301_S_6056_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180822151841114_3_S720476_I1040207.dcm
+2019-10-31 00:14:05 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-01/hippo_scan/ADNI_301_S_6056_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180822151819648_29_S720484_I1040220.dcm
+2019-10-31 00:14:05 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-02 (subject 120/128)
+2019-10-31 00:14:06 - bidscoin - INFO New 'extra_data' sample found: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-02/hippo_scan/ADNI_301_S_6056_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190906134836184_30_S871080_I1224059.dcm
+2019-10-31 00:14:06 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4036/ses-01 (subject 121/128)
+2019-10-31 00:14:06 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4036/ses-02 (subject 121/128)
+2019-10-31 00:14:06 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4100/ses-01 (subject 122/128)
+2019-10-31 00:14:06 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4100/ses-02 (subject 122/128)
+2019-10-31 00:14:06 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4187/ses-01 (subject 123/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4187/ses-02 (subject 123/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4292/ses-01 (subject 124/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4292/ses-02 (subject 124/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4365/ses-01 (subject 125/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4365/ses-02 (subject 125/128)
+2019-10-31 00:14:07 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4376/ses-01 (subject 126/128)
+2019-10-31 00:14:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_4376/ses-02 (subject 126/128)
+2019-10-31 00:14:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_5193/ses-01 (subject 127/128)
+2019-10-31 00:14:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_5193/ses-02 (subject 127/128)
+2019-10-31 00:14:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_6068/ses-01 (subject 128/128)
+2019-10-31 00:14:08 - bidscoin - INFO Parsing: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-941_S_6068/ses-02 (subject 128/128)
+2019-10-31 00:14:09 - bidscoin - INFO Writing bidsmap to: /data/fasttemp/uqtshaw/ADNI_data/ADNI_BIDS/code/bidscoin/bidsmap.yaml
+2019-10-31 00:14:17 - bidscoin - INFO Opening the bidseditor
+2019-10-31 00:14:32 - bidscoin - INFO -------------- FINISHED! -------------------
+2019-10-31 00:14:32 - bidscoin - INFO 
+2019-10-31 00:14:32 - bidscoin - INFO No BIDScoin errors or warnings were reported
+2019-10-31 00:14:32 - bidscoin - INFO 
+2019-10-31 00:14:32 - bidscoin - INFO For the complete log see: /data/fasttemp/uqtshaw/ADNI_data/ADNI_BIDS/code/bidscoin/bidsmapper.log
+2019-10-31 00:14:32 - bidscoin - INFO NB: logfiles may contain identifiable information, e.g. from pathnames

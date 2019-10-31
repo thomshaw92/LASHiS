@@ -1,0 +1,2485 @@
+# --------------------------------------------------------------------------------
+# This is a bidsmap YAML file with the key-value mappings for the different BIDS
+# modalities (anat, func, dwi, etc). The modality attributes are the keys that map
+# onto the BIDS labels. The bidsmap data-structure should be 5 levels deep:
+# dict > dict > list > dict > dict
+#
+# NB:
+# 1) Edit the bidsmap file to your needs before feeding it to bidscoiner.py
+# 2) (Institute) users may create their own bidsmap_[template].yaml or
+#    bidsmap_[sample].yaml file
+#
+# For more information, see:
+# https://github.com/Donders-Institute/bidscoin
+# https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+# --------------------------------------------------------------------------------
+
+
+Options:
+  bidscoin:
+    version: 2.3.1                # BIDScoin version (should correspond with the version in ../bidscoin/version.txt)
+    bidsignore: extra_data/       # Semicolon-separated list of entries that are added to the .bidsignore file (for more info, see BIDS specifications), e.g. extra_data/;pet/;myfile.txt;yourfile.csv
+  dcm2niix:                       # See dcm2niix -h and https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage#General_Usage for more info
+    path: module add dcm2niix;    # Command to set the path to dcm2niix (note the semi-colon), e.g. module add dcm2niix/1.0.20180622; or PATH=/opt/dcm2niix/bin:$PATH; or /opt/dcm2niix/bin/ or '"C:\Program Files\dcm2niix\"' (note the quotes to deal with the whitespace)
+    args: -b y -z y -i n          # Argument string that is passed to dcm2niix. Tip: SPM users may want to use '-z n' (which produces unzipped nifti's, see dcm2niix -h for more information)
+
+
+PlugIns: []
+DICOM:
+  subject: <<SourceFilePath>>     # <<SourceFilePath>> extracts the subject label from the source directory during bidscoiner runtime. A DICOM attribute can also be used as subject-label instead, e.g. <PatientID>
+  session: <<SourceFilePath>>     # <<SourceFilePath>> extracts the session label from the source directory during bidscoiner runtime. A DICOM attribute can also be used as session-label instead, e.g. <StudyID>
+  anat:       # ----------------------- All anatomical series --------------------
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-01/MPRAGE/ADNI_002_S_0413_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170622131413667_34_S574065_I863056.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_16ns'
+      SequenceVariant: "['SK', 'SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1.1999999284744'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.95'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-01/hippo_scan/ADNI_002_S_0413_MR_HighResHippocampus_br_raw_20170622131416825_15_S574070_I863061.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-02/MPRAGE/ADNI_002_S_0413_MR_Accelerated_Sagittal_MPRAGE__br_raw_20190828115108286_87_S868726_I1221051.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_16ns'
+      SequenceVariant: "['SK', 'SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.98'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-002_S_0413/ses-02/hippo_scan/ADNI_002_S_0413_MR_HighResHippocampus_br_raw_20190828115108320_3_S868732_I1221059.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-01/MPRAGE/ADNI_005_S_4185_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20170922111621212_194_S611490_I907427.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*Research ADNI3 Basic Hu'
+      SeriesDescription: Accelerated Sagittal IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.064'
+      RepetitionTime: '7.388'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-01/hippo_scan/ADNI_005_S_4185_MR_HighResHippo_br_raw_20170922111651104_27_S611492_I907429.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*Research ADNI3 Basic Hu'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.176'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-005_S_4185/ses-02/hippo_scan/ADNI_005_S_4185_MR_HighResHippo_br_raw_20180928102628640_3_S731169_I1053468.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*Research ADNI3 Basic Hu'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.224'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-01/MPRAGE/ADNI_006_S_0731_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170919093704366_209_S609740_I905360.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.944'
+      RepetitionTime: '6.53840017318725'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-01/hippo_scan/ADNI_006_S_0731_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20170919093637940_4_S609744_I905365.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal tail
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '49.815'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-02/MPRAGE/ADNI_006_S_0731_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20181010125820860_2_S734872_I1058014.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.944'
+      RepetitionTime: '6.53639984130859'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-006_S_0731/ses-02/hippo_scan/ADNI_006_S_0731_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20181010130114727_10_S734879_I1058026.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal tail
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '50.197'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-01/MPRAGE/ADNI_009_S_0751_MR_Accelerated_Sag_IR-FSPGR_br_raw_20170719075122786_195_S585522_I876555.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: Accelerated Sag IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-01/hippo_scan/ADNI_009_S_0751_MR_HighResHippo_br_raw_20170719075122459_5_S585524_I876557.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.32'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-03/MPRAGE/ADNI_009_S_0751_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190712175958293_165_S840935_I1186516.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_0751/ses-03/hippo_scan/ADNI_009_S_0751_MR_HighResHippo_br_raw_20190712180126299_9_S840937_I1186518.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.344'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-009_S_4324/ses-01/hippo_scan/ADNI_009_S_4324_MR_HighResHippo_br_raw_20180713114557025_15_S704286_I1020619.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.368'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_2308/ses-01/MPRAGE/ADNI_014_S_2308_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170902083709918_137_S604746_I899456.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_ns'
+      SequenceVariant: "['SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.98'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-014_S_4576/ses-02/MPRAGE/ADNI_014_S_4576_MR_Accelerated_Sagittal_MPRAGE__br_raw_20181113111537828_121_S746718_I1072377.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tfl3d1_ns'
+      SequenceVariant: "['SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.98'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-01/MPRAGE/ADNI_016_S_4951_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170216194954740_67_S537530_I820302.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_16ns'
+      SequenceVariant: "['SK', 'SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2000000476837'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.95'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-01/hippo_scan/ADNI_016_S_4951_MR_HighResHippocampus_br_raw_20170216195042538_9_S537535_I820307.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '52'
+      RepetitionTime: '8150'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-02/hippo_scan/ADNI_129_S_2332_MR_HighResHippo_br_raw_20180414122653769_6_S676471_I985407.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.368'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4951/ses-02/hippo_scan/ADNI_016_S_4951_MR_HighResHippocampus_br_raw_20190605135331171_8_S830319_I1173066.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '52'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-016_S_4952/ses-01/hippo_scan/ADNI_016_S_4952_MR_HighResHippocampus_br_raw_20170216200748029_35_S537549_I820322.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '52'
+      RepetitionTime: '10870'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-01/MPRAGE/ADNI_018_S_2133_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180111122109066_1_S649539_I952527.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE SENSE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T1', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 3D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-01/hippo_scan/ADNI_018_S_2133_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180111122141396_1_S649544_I952532.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocam SENSE
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T2', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 2D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-02/MPRAGE/ADNI_018_S_2133_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20190212134645607_16_S796183_I1129657.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.94'
+      RepetitionTime: '6.51289987564086'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2133/ses-02/hippo_scan/ADNI_018_S_2133_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190212134523310_1_S796188_I1129665.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '53.707'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-02/MPRAGE/ADNI_018_S_2155_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180828152819566_1_S723052_I1043303.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T1', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 3D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-01/MPRAGE/ADNI_019_S_4293_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170608151340176_199_S571710_I860224.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sagittal 3D Accelerated MPRAGE SENSE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.931'
+      RepetitionTime: '6.54869985580444'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-01/hippo_scan/ADNI_019_S_4293_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20170608151340597_10_S571715_I860232.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal  SENSE
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail)
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '54.797'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-022_S_5004/ses-01/MPRAGE/ADNI_022_S_5004_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170322112912730_151_S547805_I831854.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_ns'
+      SequenceVariant: "['SP', 'MP', 'OSP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1.1999999284744'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.95'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-018_S_2155/ses-02/hippo_scan/ADNI_018_S_2155_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180828152757286_1_S723057_I1043308.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T2', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 2D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-02/MPRAGE/ADNI_019_S_4293_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180618154716659_46_S696761_I1011352.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sagittal 3D Accelerated MPRAGE SENSE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.931'
+      RepetitionTime: '6.54890012741088'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4293/ses-02/hippo_scan/ADNI_019_S_4293_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180618154345248_23_S696766_I1011361.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal  SENSE
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail)
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '54.646'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-019_S_4835/ses-02/hippo_scan/ADNI_019_S_4835_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180712164224799_30_S704076_I1020365.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal  SENSE
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail)
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '53.239'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-01/MPRAGE/ADNI_021_S_0178_MR_Accelerated_Sag_IR-FSPGR_br_raw_20170428121500579_64_S559429_I844772.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: Accelerated Sag IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.016'
+      RepetitionTime: '7.312'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-01/hippo_scan/ADNI_021_S_0178_MR_HighResHippo_br_raw_20170428121519533_10_S559434_I844777.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.944'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-01/hippo_scan/ADNI_021_S_0337_MR_HighResHippo_br_raw_20170608121654334_13_S571524_I859996.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.28'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0178/ses-02/hippo_scan/ADNI_021_S_0178_MR_HighResHippo_br_raw_20190606120156541_22_S830623_I1173505.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.968'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-02/MPRAGE/ADNI_021_S_0337_MR_Accelerated_Sag_IR-FSPGR_br_raw_20190520170935042_108_S825450_I1167048.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: Accelerated Sag IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.16'
+      RepetitionTime: '7.664'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_0337/ses-02/hippo_scan/ADNI_021_S_0337_MR_HighResHippo_br_raw_20190520170943523_9_S825451_I1167049.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.712'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-01/hippo_scan/ADNI_021_S_4254_MR_HighResHippo_br_raw_20170406094026019_20_S552175_I836645.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.376'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4254/ses-02/hippo_scan/ADNI_021_S_4254_MR_HighResHippo_br_raw_20190409150303472_4_S813957_I1152449.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.896'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-01/hippo_scan/ADNI_021_S_4276_MR_HighResHippo_br_raw_20170412122516356_1_S553681_I838416.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.92'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_4276/ses-02/hippo_scan/ADNI_021_S_4276_MR_HighResHippo_br_raw_20190415160223355_28_S815775_I1154747.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.992'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-02/hippo_scan/ADNI_021_S_5194_MR_HighResHippo_br_raw_20180802161244144_21_S712167_I1030386.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.088'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-021_S_5194/ses-03/hippo_scan/ADNI_021_S_5194_MR_HighResHippo_br_raw_20190723155530150_9_S843468_I1189913.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '51.264'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-01/MPRAGE/ADNI_029_S_2395_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190927125832181_101_S669270_I976478.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*(3.22) ADNI3_Study_Huma'
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-02/MPRAGE/ADNI_029_S_2395_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190418135045465_63_S817067_I1156476.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Pha'
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-01/hippo_scan/ADNI_029_S_2395_MR_HighResHippo_br_raw_20190927130529713_8_S669272_I976480.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*(3.22) ADNI3_Study_Huma'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '51.024'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_2395/ses-02/hippo_scan/ADNI_029_S_2395_MR_HighResHippo_br_raw_20190418134645900_13_S817069_I1156478.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Pha'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.296'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-01/hippo_scan/ADNI_029_S_4290_MR_HighResHippo_br_raw_20190418103829482_30_S799645_I1133907.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*(3.22) ADNI3_Study_Huma'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.368'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-02/MPRAGE/ADNI_029_S_4290_MR_Accelerated_Sag_IR-FSPGR___br_raw_20190401102925953_169_S811411_I1149150.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Hum'
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4290/ses-02/hippo_scan/ADNI_029_S_4290_MR_HighResHippo_br_raw_20190401103313673_29_S811413_I1149152.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Hum'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.368'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-029_S_4384/ses-01/hippo_scan/ADNI_029_S_4384_MR_HighResHippo_br_raw_20180427094126743_30_S680231_I990075.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '*(3.22) ADNI3_Study_Huma'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '51.072'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-01/MPRAGE/ADNI_036_S_2380_MR_Accelerated_Sagittal_MPRAGE__br_raw_20180719165658878_18_S706589_I1023430.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ''
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_16ns'
+      SequenceVariant: "['SK', 'SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1.1999999284744'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.95'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-033_S_0734/ses-01/hippo_scan/ADNI_033_S_0734_MR_HighResHippocampus_br_raw_20171018143252309_18_S621621_I919243.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '52'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-036_S_2380/ses-01/hippo_scan/ADNI_036_S_2380_MR_HighResHippocampus_br_raw_20180719170450315_6_S706595_I1023436.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ''
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '52'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-01/MPRAGE/ADNI_082_S_2121_MR_Accelerated_Sagittal_MPRAGE__br_raw_20180214103108292_174_S658866_I963756.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_ns'
+      SequenceVariant: "['SP', 'MP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.96'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-082_S_2121/ses-01/hippo_scan/ADNI_082_S_2121_MR_HighResHippocampus_br_raw_20180214103108377_18_S658872_I963762.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-098_S_0896/ses-01/hippo_scan/ADNI_098_S_0896_MR_Obl_HighResHippo_br_raw_20180315132758878_9_S667355_I974135.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sawyer_yesa5f_ADNI3_Basi
+      SeriesDescription: Obl HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '48.504'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: OblHighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-100_S_0069/ses-01/hippo_scan/ADNI_100_S_0069_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail___br_raw_20180123161323457_1_S652992_I956603.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocam SENSE
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail)
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T2', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 2D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-01/MPRAGE/ADNI_123_S_0106_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20170628172528924_1_S576577_I865961.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T1', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 3D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_0106/ses-01/hippo_scan/ADNI_123_S_0106_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20170628172530241_1_S576583_I865967.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal tail
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'T2', 'NONE']"
+      SequenceName: ''
+      SequenceVariant: ''
+      ScanningSequence: ''
+      MRAcquisitionType: 2D
+      SliceThickness: ''
+      FlipAngle: ''
+      EchoNumbers: ''
+      EchoTime: ''
+      RepetitionTime: ''
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-123_S_4170/ses-02/hippo_scan/ADNI_123_S_4170_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190307122354649_26_S804273_I1139953.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippo Scan (Oblique - perpendicular to hippocampal tail
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '52.547'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-01/MPRAGE/ADNI_126_S_4507_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20180529121018086_150_S690220_I1003342.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: Accelerated Sagittal IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.064'
+      RepetitionTime: '7.388'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: AcceleratedSagittalIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-01/hippo_scan/ADNI_126_S_4507_MR_HighResHippo_br_raw_20180529121306836_26_S690223_I1003345.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.904'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_4507/ses-02/hippo_scan/ADNI_126_S_4507_MR_HighResHippo_br_raw_20190514164434899_3_S823947_I1165189.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.76'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5214/ses-02/hippo_scan/ADNI_126_S_5214_MR_HighResHippo_br_raw_20190726120051379_21_S844626_I1191462.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.808'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-126_S_5243/ses-01/hippo_scan/ADNI_126_S_5243_MR_HighResHippo_br_raw_20180823115459591_23_S720722_I1040535.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.832'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-01/MPRAGE/ADNI_127_S_4148_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20170719160220124_4_S585683_I876746.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: Accelerated Sagittal IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.016'
+      RepetitionTime: '7.312'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-01/hippo_scan/ADNI_127_S_4148_MR_HighResHippo_br_raw_20170719160221185_26_S585685_I876748.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.176'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-02/MPRAGE/ADNI_127_S_4148_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20190710171644072_25_S840238_I1185628.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: Accelerated Sagittal IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.036'
+      RepetitionTime: '7.352'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4148/ses-02/hippo_scan/ADNI_127_S_4148_MR_HighResHippo_br_raw_20190710171651169_13_S840240_I1185630.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '48.912'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-01/hippo_scan/ADNI_127_S_4210_MR_HighResHippo_br_raw_20170918192339653_5_S609730_I905326.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.128'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4210/ses-02/MPRAGE/ADNI_127_S_4210_MR_Accelerated_Sagittal_IR-FSPGR__br_raw_20181221133614200_93_S757183_I1085331.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: Accelerated Sagittal IR-FSPGR
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.036'
+      RepetitionTime: '7.348'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_4604/ses-02/hippo_scan/ADNI_127_S_4604_MR_HighResHippo_br_raw_20190822163945266_14_S863788_I1215570.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.224'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-127_S_5132/ses-02/hippo_scan/ADNI_127_S_5132_MR_HighResHippo_br_raw_20190513151537573_11_S823162_I1164213.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3 Basic Human Protoc
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.344'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-01/hippo_scan/ADNI_128_S_2002_MR_HighResHippo_br_raw_20190829115231722_8_S869225_I1221692.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Hum'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.32'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-128_S_2002/ses-02/hippo_scan/ADNI_128_S_2002_MR_HighResHippo_br_raw_20190802150839653_23_S847300_I1194947.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: '* (3.22) ADNI3_Study_Hum'
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.344'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-01/MPRAGE/ADNI_129_S_2332_MR_Accelerated_Sag_IR-FSPGR___br_raw_20170517094704555_18_S565059_I852333.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1.2'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.016'
+      RepetitionTime: '7.312'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-01/hippo_scan/ADNI_129_S_2332_MR_HighResHippo_br_raw_20170517094557223_30_S565061_I852335.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.32'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_2332/ses-02/MPRAGE/ADNI_129_S_2332_MR_Accelerated_Sag_IR-FSPGR___br_raw_20180414122537406_192_S676469_I985405.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.056'
+      RepetitionTime: '7.372'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-01/hippo_scan/ADNI_129_S_4369_MR_HighResHippo_br_raw_20170622095627196_1_S574011_I862993.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.824'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-129_S_4369/ses-02/hippo_scan/ADNI_129_S_4369_MR_HighResHippo_br_raw_20190614085737499_24_S832428_I1175726.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_GE_3T_24x_12.2016
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.512'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-01/MPRAGE/ADNI_130_S_4294_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20171102171436113_196_S627588_I926294.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.942'
+      RepetitionTime: '6.51749992370605'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-01/hippo_scan/ADNI_130_S_4294_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20171102171518441_2_S627595_I926306.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '53.439'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-02/MPRAGE/ADNI_130_S_4294_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20190327140120667_115_S810505_I1147957.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.941'
+      RepetitionTime: '6.52899980545043'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_4294/ses-02/hippo_scan/ADNI_130_S_4294_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190327142840196_5_S810514_I1147973.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '53.306'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-01/MPRAGE/ADNI_130_S_6072_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180831161156042_116_S724007_I1044557.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.94'
+      RepetitionTime: '6.52790021896362'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-130_S_6072/ses-01/hippo_scan/ADNI_130_S_6072_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180831160751959_30_S724013_I1044568.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '53.109'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4356/ses-02/hippo_scan/ADNI_135_S_4356_MR_HighResHippo_br_raw_20180831133114649_12_S723910_I1044440.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.496'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4446/ses-02/hippo_scan/ADNI_135_S_4446_MR_HighResHippo_br_raw_20190715105911360_15_S841036_I1186655.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.68'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-01/MPRAGE/ADNI_135_S_4598_MR_Accelerated_Sag_IR-FSPGR___br_raw_20170724170308660_166_S586985_I878250.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: A4_Study_Human_GE_3T_23w
+      SeriesDescription: 'Accelerated Sag IR-FSPGR '
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: "['SS', 'SP', 'SK']"
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '11'
+      EchoNumbers: 1
+      EchoTime: '3.12'
+      RepetitionTime: '7.676'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagIRFSPGR
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-01/hippo_scan/ADNI_135_S_4598_MR_HighResHippo_br_raw_20170724170315197_6_S586987_I878252.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: A4_Study_Human_GE_3T_23w
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.368'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4598/ses-02/hippo_scan/ADNI_135_S_4598_MR_HighResHippo_br_raw_20190809112915453_27_S850777_I1199312.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.88'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-02/hippo_scan/ADNI_135_S_4722_MR_HighResHippo_br_raw_20180706132246777_30_S701886_I1017755.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.608'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4722/ses-03/hippo_scan/ADNI_135_S_4722_MR_HighResHippo_br_raw_20190625172239130_30_S836159_I1180421.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '49.92'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-135_S_4723/ses-03/hippo_scan/ADNI_135_S_4723_MR_HighResHippo_br_raw_20190625171010386_11_S836130_I1180389.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: ADNI3_Study_Human_GE_3T_
+      SeriesDescription: HighResHippo
+      ImageType: "['ORIGINAL', 'PRIMARY', 'OTHER']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50.064'
+      RepetitionTime: '8020'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippo
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_1378/ses-02/hippo_scan/ADNI_141_S_1378_MR_HighResHippocampus_br_raw_20190506090010995_26_S821253_I1161824.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: HighResHippocampus
+      SeriesDescription: HighResHippocampus
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS2D']"
+      SequenceName: '*tse2d1_15'
+      SequenceVariant: "['SK', 'SP', 'OSP']"
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '122'
+      EchoNumbers: 1
+      EchoTime: '50'
+      RepetitionTime: '8820'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippocampus
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-141_S_4160/ses-01/MPRAGE/ADNI_141_S_4160_MR_Accelerated_Sagittal_MPRAGE__br_raw_20170711102916343_59_S582356_I872948.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: Accelerated Sagittal MPRAGE
+      SeriesDescription: Accelerated Sagittal MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M', 'NORM', 'DIS3D', 'DIS2D']"
+      SequenceName: '*tfl3d1_ns'
+      SequenceVariant: "['SP', 'MP', 'OSP']"
+      ScanningSequence: "['GR', 'IR']"
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.98'
+      RepetitionTime: '2300'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: AcceleratedSagittalMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-01/MPRAGE/ADNI_301_S_6056_MR_Sagittal_3D_Accelerated_MPRAGE_br_raw_20180822151841114_3_S720476_I1040207.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP Sagittal 3D Accelerated MPRAGE
+      SeriesDescription: Sagittal 3D Accelerated MPRAGE
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_FFE', 'M', 'FFE']"
+      SequenceName: ''
+      SequenceVariant: MP
+      ScanningSequence: GR
+      MRAcquisitionType: 3D
+      SliceThickness: '1'
+      FlipAngle: '9'
+      EchoNumbers: 1
+      EchoTime: '2.944'
+      RepetitionTime: '6.53620004653930'
+      PhaseEncodingDirection: ''
+    bids:
+      acq: Sagittal3DAcceleratedMPRAGE
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+      suffix: T1w
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-01/hippo_scan/ADNI_301_S_6056_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20180822151819648_29_S720484_I1040220.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '51.832'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  - provenance: /data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/sub-301_S_6056/ses-02/hippo_scan/ADNI_301_S_6056_MR_HighResHippo_Scan__Oblique_-_perpendicular_to_hippocampal_tail_br_raw_20190906134836184_30_S871080_I1224059.dcm
+    attributes:
+      Modality: MR
+      ProtocolName: WIP HighResHippo Scan (Oblique - perpendicular to hippocampal
+        ta
+      SeriesDescription: HighResHippo Scan (Oblique - perpendicular to hippocampal
+        tail
+      ImageType: "['ORIGINAL', 'PRIMARY', 'M_SE', 'M', 'SE']"
+      SequenceName: ''
+      SequenceVariant: SK
+      ScanningSequence: SE
+      MRAcquisitionType: 2D
+      SliceThickness: '2'
+      FlipAngle: '90'
+      EchoNumbers: 1
+      EchoTime: '51.44'
+      RepetitionTime: '8020.00048828125'
+      PhaseEncodingDirection: ''
+    bids:
+      suffix: T2w
+      acq: HighResHippoScanObliqueperpendiculartohippocampaltail
+      ce:
+      rec:
+      run: <<1>>
+      mod:
+  func:       # ----------------------- All functional series --------------------
+  dwi:        # ----------------------- All diffusion series ---------------------
+  fmap:       # ----------------------- All fieldmap series ----------------------
+  beh:        # ----------------------- All behavioural data ---------------------
+  pet:        # ----------------------- All PET series ---------------------------
+  extra_data: # ----------------------- All extra data ---------------------------
+  leave_out:  # ----------------------- Data that will be left out ---------------
+PAR:
+# --------------------------------------------------------------------------------
+# PAR key-value heuristics (Philips PAR fields that are mapped to the BIDS labels)
+# --------------------------------------------------------------------------------
+
+
+P7:
+# --------------------------------------------------------------------------------
+# P*.7 key-value heuristics (GE fields that are mapped to the BIDS labels)
+# --------------------------------------------------------------------------------
+
+
+Nifti:
+# --------------------------------------------------------------------------------
+# Nifti key-value heuristics (Nifti fields that are mapped to the BIDS labels)
+# --------------------------------------------------------------------------------
+
+FileSystem:
+# --------------------------------------------------------------------------------
+# File system key-value heuristics (these file- and foldernames will be mapped
+# to the BIDS labels; Special substitutions can be performed using python's
+# Format Specification Mini-Language)
+# --------------------------------------------------------------------------------
+  subject: <<SourceFilePath>>       # <<SourceFilePath>> extracts the subject label from the source directory during bidscoiner runtime
+  session: <<SourceFilePath>>       # <<SourceFilePath>> extracts the session label from the source directory during bidscoiner runtime
+  anat:       # ----------------------- All anatomical series --------------------
+  func:       # ----------------------- All functional series --------------------
+  dwi:        # ----------------------- All diffusion series ---------------------
+  fmap:       # ----------------------- All fieldmap series ----------------------
+  beh:        # ----------------------- All behavioural data ---------------------
+  extra_data: # ----------------------- All extra data ---------------------------
+  leave_out:  # ----------------------- Data that will be left out ---------------
