@@ -96,7 +96,7 @@ Required arguments:
 			  
 	anatomical images	Set of multimodal (T1w or gradient echo, followed by T2w FSE/TSE input)
                                 data. Data must be in the format specified by ASHS & ordered as follows:
-                                {time1_T1w} {time1_T2w} /\                          
+                                {time1_T1w} {time1_T2w} \                          
                                            .
                                            .
                                            .
