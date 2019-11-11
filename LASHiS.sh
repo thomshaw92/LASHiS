@@ -88,56 +88,46 @@ Example:
   bash $0 -a /some/path/ashs_atlas_umcutrecht_7t_20170810/ -o output \${anatomicalImages[@]}
 
 Required arguments:
+	-o:  Output prefix   	The following subdirectory and images are created for the single-subject template
+            			{OUTPUT_PREFIX}SingleSubjectTemplate/
+                		{OUTPUT_PREFIX}SingleSubjectTemplate/T_template*.nii.gz
+	-a: Atlas selection	Full path for the atlas you would like to use for the Cross-sectional
+                                labelling of ASHS and the SST. Can be made in ASHS_train
+			  
+	anatomical images	Set of multimodal (T1w or gradient echo, followed by T2w FSE/TSE input)
+                                data. Data must be in the format specified by ASHS & ordered as follows:
+                                {time1_T1w} {time1_T2w} \
+                                {time2_T1w} {time2_T2w} \
+                                           .
+                                           .
+                                           .
+                                 {timeN_T1w} {timeN_T2w} ...
+				 
+	Optional arguments:
 
-     
-     -o:  Output prefix                         The following subdirectory and images are created for the single
-                                                subject template
-                                                  * \${OUTPUT_PREFIX}SingleSubjectTemplate/
-                                                  * \${OUTPUT_PREFIX}SingleSubjectTemplate/T_template*.nii.gz
-
-     -a: Atlas selection                   Full path for the atlas you would like to use for the Cross-sectional
-                                           labelling of ASHS and the SST. Can be made in ASHS_train
-
-     anatomical images                    Set of multimodal (T1w or gradient echo, followed by T2w FSE/TSE input)
-                                                data. Data must be in the format specified by ASHS & ordered as follows:
-                                                  ${time1_T1w} ${time1_T2w} \
-                                                  ${time2_T1w} ${time2_T2w} \
-                                                  .
-                                                  .
-                                                  .
-                                                   ${timeN_T1w} ${timeN_T2w} ...
-
-					
-
-Optional arguments:
-
-     -s:  image file suffix                  Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd
-     -c:  control type                       Control for parallel computation for ANTs steps
-                                             (JLF,SST creation)  (default 0):
-                                                  0 = run serially
-                                                  1 = SGE qsub
-                                                  2 = use PEXEC (localhost) (remember to define cores in -j)
-                                                  3 = Apple XGrid
-                                                  4 = PBS qsub
-                                                  5 = SLURM
-
-     -d:  OPTS                                  Pass in additional options to SGE's qsub for ASHS. Requires -c 1
- 
-     -e:  ASHS file                             ProConfiguration file. 
-                                                If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
-     -f:  Diet LASHiS                           Diet LASHiS (reverse normalise the SST only) then exit.
-     
-     -g:  denoise anatomical images             Denoise anatomical (both T1w and TSE) images (default = 0).
-     -j:  number of cpu cores                   Number of cpu cores to use locally for pexec option 
-                                                (default 2; requires "-c 2")
-    
-                                                
-     -n:  N4 Bias Correction                    If yes, Bias correct the input images before template creation.
-                                                0 = No
-                                                1 = Yes
-     
-     -b:  keep temporary files                  Keep brain extraction/segmentation warps, etc (default = 0).
-     
+	-s:  image file suffix	Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd
+	-c:  control type	Control for parallel computation for ANTs steps
+                    		(JLF,SST creation)  (default 0):
+                                0 = run serially
+                                1 = SGE qsub
+                                2 = use PEXEC (localhost) (remember to define cores in -j)
+                                3 = Apple XGrid
+                                4 = PBS qsub
+                                5 = SLURM
+	-d:  OPTS               Pass in additional options to SGEs qsub for ASHS. Requires "-c 1"
+	-e:  ASHS file          ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
+	-f:  Diet LASHiS        Diet LASHiS (reverse normalise the SST only) then exit.
+	-g:  denoise anatomical images	
+				Denoise anatomical (both T1w and TSE) images (default = 0).
+	-j:  number of cpu cores
+				Number of cpu cores to use locally for pexec option 
+                                (default 2; requires "-c 2")                                        
+	-n:  N4 Bias Correction
+				If yes, Bias correct the input images before template creation.
+                                0 = No
+                                1 = Yes
+	-b:  keep temporary files
+				Keep brain extraction/segmentation warps, etc (default = 0).
 USAGE
     exit 1
 }
