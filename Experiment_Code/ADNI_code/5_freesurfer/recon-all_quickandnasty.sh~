@@ -1,0 +1,27 @@
+#/bin/bash
+SUBJECTS_DIR=/data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer
+for x in `cat /data/fasttemp/uqtshaw/tomcat/data/subjnames.csv` ; do
+   recon-all -subjid ${x}_01_7T -autorecon2 -autorecon3 -openmp 4 -wsless -cm -no-isrunning &
+    recon-all -subjid ${x}_02_7T -autorecon2 -autorecon3 -openmp 4 -wsless -cm -no-isrunning &
+    recon-all -subjid ${x}_02_3T -autorecon2 -autorecon3 -openmp 4 -wsless -t2 /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-02_3T/anat/${x}_ses-02_3T_T2w_space.nii.gz -3T -no-isrunning &
+    echo running "$x" ;
+done
+
+<< EOF
+
+for x in `cat /data/fasttemp/uqtshaw/tomcat/data/subjnames.csv` ; do
+   recon-all -subjid ${x}_01_7T -autorecon1 -i /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-01_7T/anat/${x}_ses-01_7T_T1w.nii.gz -openmp 4 -wsless -cm -no-isrunning 
+    recon-all -subjid ${x}_02_7T -autorecon1 -i /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-02_7T/anat/${x}_ses-02_7T_T1w_run-1.nii.gz -i /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-02_7T/anat/${x}_ses-02_7T_T1w_run-2.nii.gz -openmp 4 -wsless -cm -no-isrunning 
+    recon-all -subjid ${x}_02_3T -autorecon1 -i /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-02_3T/anat/${x}_ses-02_3T_T1w.nii.gz -openmp 4 -wsless -t2 /data/fasttemp/uqtshaw/tomcat/data/${x}/ses-02_3T/anat/${x}_ses-02_3T_T2w_space.nii.gz -3T 
+    echo running "$x" ; 
+done
+
+for x in `cat /data/fasttemp/uqtshaw/tomcat/data/subjnames.csv` ; do
+    for y in 01_7T 02_3T 02_7T ; do
+    mri_convert /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/orig.mgz /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/orig.nii.gz
+    /data/lfs2/software/tools/ROBEX/ROBEX/runROBEX.sh /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/orig.nii.gz /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/brain.nii.gz /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/brainmask.nii.gz
+    mri_convert /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/brainmask.nii.gz /data/fasttemp/uqtshaw/tomcat/data/derivatives/freesurfer/${x}_${y}/mri/brainmask.mgz
+    done
+done
+
+EOF 

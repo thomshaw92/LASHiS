@@ -1,0 +1,11 @@
+#!/bin/bash
+#PBS -q CentOS7 
+#PBS -A UQ-CAI
+#PBS -V
+#PBS -N ashs_long
+#PBS -l select=1:ncpus=4:mem=16GB:vmem=16GB,walltime=12:00:00
+
+#command
+source ~/.bashrc
+~/scripts/OPTIMEX/4_long_ashs/ashs_long_script.sh $SUBJNAME $TMPDIR
+
