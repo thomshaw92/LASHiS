@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# 
+
+#PBS -A UQ-CAI
+
+#PBS -l select=1:ncpus=8:mem=64GB:vmem=64GB,walltime=50:00:00
+
+#PBS -N fs_3tp_adni
+
+#PBS -k oe
+
+#PBS -V 
+
+#Now do some things
+t2_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
+SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
+out_dir=/RDS/Q0747/ADNI_BIDS/derivatives/Freesurfer/
+mkdir ${out_dir}
+mkdir ${SUBJECTS_DIR}
+
+module load freesurfer/6.1dev
+source $FREESURFER_HOME/SetUpFreeSurfer.sh
+SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
+
+#singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
+#singularity="singularity exec --bind /RDS/:/RDS ${singularity_image_path}"
+#Neurodocker does not have freesurfer Dev version 6.1 as of 201911255 , so I have used a module of it instead.
+#if anyone is reading this, and wants to reproduce the code exactly, please email t.shaw@uq.edu.au
+##############
+## FS proc  ##
+##############
+	       
+recon-all -subjid ${SUBJNAME}_ses-01 -all -i ${t1_dir}/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T 
+recon-all -subjid ${SUBJNAME}_ses-02 -all -i ${t1_dir}/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T  
+recon-all -subjid ${SUBJNAME}_ses-03 -all -i ${t1_dir}/_ses_ses-03_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T
+
+#long proc
+#Base
+recon-all -base ${SUBJNAME} -tp ${SUBJNAME}_ses-01 -tp ${SUBJNAME}_ses-02 -tp ${SUBJNAME}_ses-03 -all
+
+#Long
+recon-all -long ${SUBJNAME}_ses-01 ${SUBJNAME} -all -no-isrunning
+recon-all -long ${SUBJNAME}_ses-02 ${SUBJNAME} -all -no-isrunning
+recon-all -long ${SUBJNAME}_ses-03 ${SUBJNAME} -all -no-isrunning
+
+#XS HSF
+segmentHA_T1.sh ${SUBJNAME}_ses-01 $SUBJECTS_DIR
+segmentHA_T2.sh ${SUBJNAME}_ses-01 ${t2_dir}/_ses_ses-01_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz T2_Only 0 $SUBJECTS_DIR
+segmentHA_T1.sh ${SUBJNAME}_ses-02 $SUBJECTS_DIR
+segmentHA_T2.sh ${SUBJNAME}_ses-02 ${t2_dir}/_ses_ses-02_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz T2_Only 0 $SUBJECTS_DIR
+segmentHA_T1.sh ${SUBJNAME}_ses-03 $SUBJECTS_DIR
+segmentHA_T2.sh ${SUBJNAME}_ses-03 ${t2_dir}/_ses_ses-03_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz T2_Only 0 $SUBJECTS_DIR
+
+#long HSF
+segmentHA_T1_long.sh ${SUBJNAME} $SUBJECTS_DIR
+
+rsync -cvr $SUBJECTS_DIR ${out_dir}

@@ -6,22 +6,22 @@
 
 #PBS -l select=1:ncpus=8:mem=64GB:vmem=64GB,walltime=30:00:00
 
+#PBS -k oe
+
 #PBS -N lashis_3tp_adni
 
 #PBS -V 
 
 #Now do some things
-
+module load singularity/2.5.2
 source ~/.bashrc 
 LASHiS_dir=/home/uqtshaw/LASHiS/
 t1_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
 t2_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-
+out_dir=/RDS/Q0747/ADNI_BIDS/derivatives/LASHiS/
 singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
 
-singularity=singularity exec ${singularity_image_path}
-
-module load singularity/2.5.2
+singularity="singularity exec --bind /RDS/:/RDS ${singularity_image_path}"
 
 #Do LASHiS and Diet
 ${singularity} ${LASHiS_dir}/LASHiS.sh \
@@ -42,3 +42,6 @@ ${singularity} ${LASHiS_dir}/LASHiS.sh \
     ${t1_dir}/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz ${t2_dir}/_ses_ses-01_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
     ${t1_dir}/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz ${t2_dir}/_ses_ses-02_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
     ${t1_dir}/_ses_ses-03_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz ${t2_dir}/_ses_ses-03_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz
+
+mkdir ${out_dir}
+mv $TMPDIR/* ${out_dir}
