@@ -4,13 +4,20 @@
 
 #PBS -A UQ-CAI
 
-#PBS -l select=1:ncpus=8:mem=64GB:vmem=64GB,walltime=8:00:00
+#PBS -l select=1:ncpus=16:mem=64GB:vmem=64GB,walltime=8:00:00
 
 #PBS -N lashis_3tp_adni
 
 #PBS -V 
 
-#Now do some things
+#PBS -J 1-17:1
+
+#set -x
+
+cd $PBS_O_WORKDIR
+
+# get the parameter combination at line PBS_ARRAY_INDEX in parameters.txt
+SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_3_ses.csv`
 module load singularity/2.5.2
 #where the script lives
 LASHiS_dir=/home/uqtshaw/LASHiS/
@@ -24,31 +31,31 @@ mkdir ${out_dir}
 #the simg path
 singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
 #singularity including bind points
-singularity="singularity exec --bind --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ --bind /RDS/:/RDS  ${singularity_image_path}"
+singularity="singularity exec --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ --bind /RDS/:/RDS  ${singularity_image_path}"
 cd $TMPDIR
 #Do LASHiS and Diet
-
-cp ${t1_dir}/_ses_ses-0*_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz $TMPDIR
-cp ${t2_dir}/_ses_ses-0*_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz $TMPDIR
-
+for x in 1 2 3 ; do
+	cp ${t1_dir}/_ses_ses-0${x}_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz $TMPDIR/mprage${x}.nii.gz
+	cp ${t2_dir}/_ses_ses-0${x}_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz $TMPDIR/tse${x}.nii.gz
+done
 ${singularity} ${LASHiS_dir}/LASHiS.sh \
     -a /ashsT1_atlas_upennpmc_07202018/ \
     -c 2 \
-    -j 8 \
-    -o /TMPDIR/${SUBJNAME}_2_ses_ \
-    /TMPDIR/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-01_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
-    /TMPDIR/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-02_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
-    /TMPDIR/_ses_ses-03_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-03_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz
+    -j 16 \
+    -o /TMPDIR/${SUBJNAME}_3_ses_ \
+    /TMPDIR/mprage1.nii.gz /TMPDIR/tse1.nii.gz \
+    /TMPDIR/mprage2.nii.gz /TMPDIR/tse2.nii.gz \
+    /TMPDIR/mprage3.nii.gz /TMPDIR/tse3.nii.gz
 
 
 ${singularity} ${LASHiS_dir}/LASHiS.sh \
     -a /ashsT1_atlas_upennpmc_07202018 \
     -c 2 \
-    -j 8 \
+    -j 16 \
     -f 1 \
-    -o ${SUBJNAME}_2_ses_ \
-    /TMPDIR/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-01_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
-    /TMPDIR/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-02_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz \
-    /TMPDIR/_ses_ses-03_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz /TMPDIR/_ses_ses-03_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz
+    -o /TMPDIR/${SUBJNAME}_3_ses_ \
+    /TMPDIR/mprage1.nii.gz /TMPDIR/tse1.nii.gz \
+    /TMPDIR/mprage2.nii.gz /TMPDIR/tse2.nii.gz \
+    /TMPDIR/mprage3.nii.gz /TMPDIR/tse3.nii.gz
 
 mv $TMPDIR/* ${out_dir} 

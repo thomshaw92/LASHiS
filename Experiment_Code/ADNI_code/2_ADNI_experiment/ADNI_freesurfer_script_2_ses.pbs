@@ -8,9 +8,15 @@
 
 #PBS -N fs_2tp_adni
 
-#PBS -k oe
-
 #PBS -V 
+
+#PBS -J 1-125:1
+
+#set -x
+
+cd $PBS_O_WORKDIR
+
+SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
 
 #Now do some things
 module load singularity/2.5.2
@@ -18,7 +24,6 @@ t1_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp
 t2_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
 out_dir=/RDS/Q0747/ADNI_BIDS/derivatives/Freesurfer/
 mkdir ${out_dir}
-mkdir ${SUBJECTS_DIR}
 
 module load freesurfer/6.1dev
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
@@ -32,12 +37,12 @@ SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
 ## FS proc  ##
 ##############
 	       
-recon-all -subjid ${SUBJNAME}_ses-01 -all -i ${t1_dir}/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T  
-recon-all -subjid ${SUBJNAME}_ses-02 -all -i ${t1_dir}/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T 
+recon-all -subjid ${SUBJNAME}_ses-01 -all -i ${t1_dir}/_ses_ses-01_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T -no-isrunning
+recon-all -subjid ${SUBJNAME}_ses-02 -all -i ${t1_dir}/_ses_ses-02_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz -openmp 8 -3T -no-isrunning
 
 #long proc
 #Base
-recon-all -base ${SUBJNAME} -tp ${SUBJNAME}_ses-01 -tp ${SUBJNAME}_ses-02 -tp ${SUBJNAME}_ses-03 -all
+recon-all -base ${SUBJNAME} -tp ${SUBJNAME}_ses-01 -tp ${SUBJNAME}_ses-02 -all -no-isrunning
 
 #Long
 recon-all -long ${SUBJNAME}_ses-01 ${SUBJNAME} -all -no-isrunning 
