@@ -673,8 +673,11 @@ do
     let k=$i+$NUMBER_OF_MODALITIES
     for (( j=$i; j < $k; j++ ))
     do
+	mkdir ${OUTPUT_LOCAL_PREFIX}/tmpfiles
         SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
 	SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
+	cp ${ANATOMICAL_REFERENCE_IMAGE[$i]} ${OUTPUT_LOCAL_PREFIX}/tmpfiles/mprage.nii.gz
+	cp ${ANATOMICAL_REFERENCE_IMAGE[$i]} ${OUTPUT_LOCAL_PREFIX}/tmpfiles/tse.nii.gz
     done
     
     
@@ -684,8 +687,8 @@ do
     then
 	logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
 	       -a ${ASHS_ATLAS} \
-	       -g ${ANATOMICAL_REFERENCE_IMAGE} \
-	       -f ${SUBJECT_TSE} \
+	       -g ${OUTPUT_LOCAL_PREFIX}/tmpfiles/mprage.nii.gz \
+	       -f ${OUTPUT_LOCAL_PREFIX}/tmpfiles/tse.nii.gz \
 	       -w ${OUTPUT_LOCAL_PREFIX} \
 	       -T \
 	       ${ASHS_QSUBOPTS} \
@@ -702,6 +705,7 @@ do
 	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/tse_raw.nii.gz
 	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_to_chunk*
 	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/*regmask
+	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/tmpfiles
     fi
 done
 
