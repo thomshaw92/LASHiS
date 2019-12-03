@@ -10,24 +10,29 @@
 
 #PBS -V 
 
-#PBS -J 1-125:1
+#### -J 1-125:1
 
 #set -x
 
-cd $PBS_O_WORKDIR
+#cd $PBS_O_WORKDIR
 
-SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
+#SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
 
 #Now do some things
 module load singularity/2.5.2
-t1_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
-t2_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-out_dir=/RDS/Q0747/ADNI_BIDS/derivatives/Freesurfer/
+t1_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
+t2_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
+out_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/Freesurfer/
 mkdir ${out_dir}
 
 module load freesurfer/6.1dev
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
 SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
+
+#for x in 1 2 ; do
+#        cp ${t1_dir}/_ses_ses-0${x}_subject_${SUBJNAME}/_T1_histmatch_n0/normalised_MPRAGE_n.nii.gz $TMPDIR/mprage${x}.nii.gz
+#        cp ${t2_dir}/_ses_ses-0${x}_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz $TMPDIR/tse${x}.nii.gz
+#done
 
 #singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
 #singularity="singularity exec --bind /RDS/:/RDS ${singularity_image_path}"

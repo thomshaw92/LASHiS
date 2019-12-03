@@ -8,25 +8,27 @@
 
 #PBS -N fs_3tp_adni
 
-#PBS -J 1-17:1
+#PBS -V 
+
+#### -J 1-17:1
 
 #set -x
 
-cd $PBS_O_WORKDIR
+#cd $PBS_O_WORKDIR
 
-SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_3_ses.csv`
-
-#PBS -V 
+#SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_3_ses.csv`
 
 #Now do some things
-t2_dir=/RDS/Q0747/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-out_dir=/RDS/Q0747/ADNI_BIDS/derivatives/Freesurfer/
+module load singularity/2.5.2
+t1_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
+t2_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
+out_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/Freesurfer/
 mkdir ${out_dir}
-mkdir ${SUBJECTS_DIR}
 
 module load freesurfer/6.1dev
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
 SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
+
 
 #singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
 #singularity="singularity exec --bind /RDS/:/RDS ${singularity_image_path}"
@@ -45,8 +47,8 @@ recon-all -subjid ${SUBJNAME}_ses-03 -all -i ${t1_dir}/_ses_ses-03_subject_${SUB
 recon-all -base ${SUBJNAME} -tp ${SUBJNAME}_ses-01 -tp ${SUBJNAME}_ses-02 -tp ${SUBJNAME}_ses-03 -all -no-isrunning
 
 #Long
-recon-all -long ${SUBJNAME}_ses-01 ${SUBJNAME} -all -no-isrunning
-recon-all -long ${SUBJNAME}_ses-02 ${SUBJNAME} -all -no-isrunning
+recon-all -long ${SUBJNAME}_ses-01 ${SUBJNAME} -all -no-isrunning 
+recon-all -long ${SUBJNAME}_ses-02 ${SUBJNAME} -all -no-isrunning 
 recon-all -long ${SUBJNAME}_ses-03 ${SUBJNAME} -all -no-isrunning
 
 #XS HSF
