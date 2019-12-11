@@ -5,7 +5,7 @@ buildDate=`date +%Y%m%d`
 #pip3 install --no-cache-dir https://github.com/kaczmarj/neurodocker/tarball/master --user
 
 #upgrade neurodocker
-#pip install --no-cache-dir https://github.com/kaczmarj/neurodocker/tarball/master --upgrade
+pip install --no-cache-dir https://github.com/kaczmarj/neurodocker/tarball/master --upgrade
 
 neurodocker generate docker \
 	    --base=neurodebian:stretch-non-free \
@@ -14,10 +14,11 @@ neurodocker generate docker \
 	    --run="printf '#!/bin/bash\nls -la' > /usr/bin/ll" \
 	    --run="chmod +x /usr/bin/ll" \
 	    --copy ashs-fastashs_beta /ashs-fastashs_beta \
-	    --copy ashsT1_atlas_upennpmc_07202018 /ashsT1_atlas_upennpmc_07202018 \
-	    --env ASHS_ROOT=ashs-fastashs_beta \
+	    --copy ashs_atlas_upennpmc_20170810 /ashs_atlas_upennpmc_20170810 \
+	    --env ASHS_ROOT="/ashs-fastashs_beta" \
 	    --freesurfer version=6.0.1 \
-	    --ants version=2.2.0 \
+	    --ants version=2.3.0 \
+	    --copy antsJointLabelFusion2.sh /opt/ants-2.3.0/antsJointLabelFusion2.sh \
 	    --copy LASHiS /LASHiS \
 	    --workdir /proc_temp \
 	    --workdir /90days \
@@ -27,7 +28,6 @@ neurodocker generate docker \
 	    --workdir /data \
 	    --workdir /home/neuro \
 	    --workdir /TMPDIR \
-	    --user=neuro \
 	    > Dockerfile.${imageName}
 
 #LASHiS is from github repo

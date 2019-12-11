@@ -4,20 +4,20 @@
 
 #PBS -A UQ-CAI
 
-#PBS -l select=1:ncpus=16:mem=64GB:vmem=64GB,walltime=8:00:00
+#PBS -l select=1:ncpus=16:mem=64GB:vmem=64GB,walltime=23:00:00
 
 #PBS -N lashis_2tp_adni
 
 #PBS -V 
 
-#PBS -J 1-125:1
+# 1-125:1
 
 #set -x
 
-cd $PBS_O_WORKDIR
+#cd $PBS_O_WORKDIR
 
 # get the parameter combination at line PBS_ARRAY_INDEX in parameters.txt
-SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
+#SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
 
 module load singularity/2.5.2
 #where the script lives
@@ -30,7 +30,7 @@ mkdir ${out_dir}
 #The data will be copied to $TMPDIR first for processing - already called $TMPDIR 
 #TMPDIR=$TMPDIR
 #the simg path
-singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191127.simg
+singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191210.simg
 #singularity including bind points
 singularity="singularity exec --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ --bind /RDS/:/RDS  ${singularity_image_path}"
 cd $TMPDIR
@@ -40,7 +40,7 @@ for x in 1 2 ; do
 	cp ${t2_dir}/_ses_ses-0${x}_subject_${SUBJNAME}/_T2_histmatch_n0/normalised_TSE_n.nii.gz $TMPDIR/tse${x}.nii.gz
 done
 ${singularity} ${LASHiS_dir}/LASHiS.sh \
-    -a /ashsT1_atlas_upennpmc_07202018/ \
+    -a /ashs_atlas_upennpmc_20170810/ \
     -c 2 \
     -j 16 \
     -o /TMPDIR/${SUBJNAME}_2_ses_ \
@@ -49,7 +49,7 @@ ${singularity} ${LASHiS_dir}/LASHiS.sh \
 
 
 ${singularity} ${LASHiS_dir}/LASHiS.sh \
-    -a /ashsT1_atlas_upennpmc_07202018 \
+    -a /ashs_atlas_upennpmc_20170810 \
     -c 2 \
     -j 16 \
     -f 1 \
@@ -57,5 +57,6 @@ ${singularity} ${LASHiS_dir}/LASHiS.sh \
     /TMPDIR/mprage1.nii.gz /TMPDIR/tse1.nii.gz \
     /TMPDIR/mprage2.nii.gz /TMPDIR/tse2.nii.gz
 
-
-mv $TMPDIR/* ${out_dir} 
+cd $TMPDIR
+tar -cvzf ${SUBJNAME}_LASHIS.tar.gz * 
+rsync -rv ${TMPDIR}/${SUBJNAME}_LASHIS.tar.gz ${out_dir} 
