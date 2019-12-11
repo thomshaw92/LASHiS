@@ -328,16 +328,17 @@ fi
 echo "###########################################################################################"
 echo " Performing LASHiS cross-sectional using the following ${NUMBER_OF_MODALITIES}-tuples:  "
 echo "###########################################################################################"
-for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i+=${NUMBER_OF_MODALITIES} ))
 do
     IMAGEMETRICSET=""
     for (( j = 0; j < $ANATOMICAL_IMAGES; j++ ))
     do
         k=0
-        let k=$i+$j
+        let k=${i}+${j}
         IMAGEMETRICSET="$IMAGEMETRICSET ${ANATOMICAL_IMAGES[$k]}"
     done
-    echo $IMAGEMETRICSET
+    echo ${IMAGEMETRICSET}
+    echo ${ANATOMICAL_IMAGES[@]}
     
 done
 echo "###########################################################################################"
@@ -854,7 +855,7 @@ for side in left right ; do
 
 		# Write the volume information to output file
 		if [[ $NBODY ]]; then
-		    echo $ASHS_SUBJID $side $SUB $NBODY $VSUB >> $FNBODYVOL
+		    echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
 		fi
 
 	    done
