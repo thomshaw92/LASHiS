@@ -3,140 +3,103 @@
 #FS Xs and Fs Long, LASHiS, Diet LASHis, and ASHS Xs
 #Thomas Shaw 9/12/2019
 
+#set the directory where the data now lives after processing
+base_dir="/30days/uqtshaw/ADNI_BIDS/derivatives"
 
-#set the directory where the data now lives
-base_dir=/30days/uqtshaw/ADNI_BIDS/derivatives
-for subjName in `cat ${base_dir}/subjnames.csv ` ; do
+#set the github dir
+github_dir="/home/uqtshaw/LASHiS/Experiment_Code/"
 
-# one liner from hell for ASHS results
-#tr -s ' ' <input.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > output.csv
+ADNI_collection_csv=${github_dir}/R_experiments/Hippo_scans_10_27_2019_reconciled.csv
 
+#first get rid of all the underscores in the subjnames column of the adni collection csv
+nounderscores="$(awk '{gsub(/_/,"")}1' $ADNI_collection_csv)"
+echo "$nounderscores" > $ADNI_collection_csv
 
-for var in long_ashs_v1 long_ashs_JLF ; do
-    for TP in 2TP_1-2 3TP ; do
-       	mkdir ${base_dir}/4_long_ashs/results/${var}/cleaned/
-	############
-	##  ASHS  ##
-	############
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_right_lfseg_corr_usegray_warped_to_ses-01.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_left_lfseg_corr_usegray_warped_to_ses-01.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	echo -e ' 0 0 0 0 0 '`cat ${base_dir}/4_long_ashs/${subjName}_long_ashs_v1_${TP}/final/${subjName}_ashs_${TP}_SST_icv.txt`>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	echo -e ' 0 0 0 0 0 0 '"${subjName}_ses-01_${TP}_warped_to_ses-01">>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	echo -e ' 0 0 0 0 0 0 0 0 0 ' >> ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	tr -s ' ' <${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
-	echo `cat ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv` >> ${base_dir}/4_long_ashs/results/${var}/cleaned/ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-01.csv
+#set up the reconciled files
+for var is LASHiS Diet_LASHiS FsLong ASHSXs FsXs ; do 
+    echo -e 'IMAGE_ID,ID,DIAGNOSIS,SEX,AGE,VISIT,IMA_FORMAT,EXAM_DATE,L.CA1,L.CA2.3,L.DG,L.SUB,R.CA1,R.CA2.3,R.DG,R.SUB'>>${github_dir}/R_experiments/${var}_reconciled.csv
+done
+
+#subjnames are in LASHiS github dir
+for subjName in `cat ${github_dir}/ADNI_code/subjnames_2_ses.csv` ; do
+
+    ######################
+    ##  LASHiS and Diet  and ASHS#
+    ######################
+    #copy all the files from ASHS xs to the same name as LASHiS and diet for ease
+    mkdir $base_dir/${subjName}_LASHiS/ashs_xs
+    for side in left right ; do
+	cp ${base_dir}/${subjName}_LASHiS/mprage1_0/mprage1/final/mprage1_${side}_corr_usegray_volumes.txt $base_dir/${subjName}_LASHiS/ashs_xs/mprage1${side}SSTLabelsWarpedToTimePoint0_stats.txt
+	cp ${base_dir}/${subjName}_LASHiS/mprage2_1/mprage1/final/mprage2_${side}_corr_usegray_volumes.txt $base_dir/${subjName}_LASHiS/ashs_xs/mprage2${side}SSTLabelsWarpedToTimePoint1_stats.txt
+	cp ${base_dir}/${subjName}_LASHiS/mprage3_2/mprage1/final/mprage3_${side}_corr_usegray_volumes.txt $base_dir/${subjName}_LASHiS/ashs_xs/mprage3${side}SSTLabelsWarpedToTimePoint2_stats.txt
     done
-done
-for var in long_ashs_v1 long_ashs_JLF ; do
-    for TP in  2TP_1-2 2TP_2-3 3TP ; do
-       	mkdir ${base_dir}/4_long_ashs/results/${var}/cleaned/
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_right_lfseg_corr_usegray_warped_to_ses-02.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_left_lfseg_corr_usegray_warped_to_ses-02.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	echo -e ' 0 0 0 0 0 '`cat ${base_dir}/4_long_ashs/${subjName}_long_ashs_v1_${TP}/final/${subjName}_ashs_${TP}_SST_icv.txt`>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	echo -e ' 0 0 0 0 0 0 '"${subjName}_ses-02_${TP}_warped_to_ses-02">>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	echo -e ' 0 0 0 0 0 0 0 0 0 ' >> ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	tr -s ' ' <${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-	echo `cat ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv` >> ${base_dir}/4_long_ashs/results/${var}/cleaned/ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-02.csv
-    done
-done
-for var in long_ashs_v1 long_ashs_JLF ; do
-    for TP in 2TP_2-3 3TP ; do
-       	mkdir ${base_dir}/4_long_ashs/results/${var}/cleaned/
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_right_lfseg_corr_usegray_warped_to_ses-03.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_left_lfseg_corr_usegray_warped_to_ses-03.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	echo -e ' 0 0 0 0 0 '`cat ${base_dir}/4_long_ashs/${subjName}_long_ashs_v1_${TP}/final/${subjName}_ashs_${TP}_SST_icv.txt`>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	echo -e ' 0 0 0 0 0 0 '"${subjName}_ses-03_${TP}_warped_to_ses-03">>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	echo -e ' 0 0 0 0 0 0 0 0 0 ' >> ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	tr -s ' ' <${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-	echo `cat ${base_dir}/4_long_ashs/results/${var}/cleaned/${subjName}_ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv` >> ${base_dir}/4_long_ashs/results/${var}/cleaned/ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-03.csv
-    done
-done
-done
+    for var in LASHiS Diet_LASHiS ashs_xs ; do
+	
+	#first print the lines that contain the demographic variables from ADNI
+	awk -v subjname="${subjName}" '$0~subjname' ${ADNI_collection_csv}>>$base_dir/${subjName}_LASHiS/${subjName}_demo_info.csv
+	#then start arranging the various subfield values into variables
+	#first de-tar the LASHiS
+	cd ${base_dir}/LASHiS
+	mkdir ${subjName}_LASHiS && tar -xvzf ./${subjName}_LASHIS.tar.gz -C ${subjName}_LASHiS
+	
+	#then find the values and normalise them by hippocampus volume over the time points using this stupid awk code (not optimised but whatever)
+	
+	LCA11=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt` 
+	LCA231=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt` 
+	LDG1=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt` 
+	LSUB1=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt` 
+	RCA11=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt` 
+	RCA231=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt` 
+	RDG1=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt` 
+	RSUB1=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt ` 
+	LCA12=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt` 
+	LCA232=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt` 
+	LDG2=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt` 
+	LSUB2=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt` 
+	RCA12=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt` 
+	RCA232=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt` 
+	RDG2=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt` 
+	RSUB2=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt` 
+	LCA13=` awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt` 
+	LCA233=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt` 
+	LDG3=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt` 
+	LSUB3=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt` 
+	RCA13=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e1)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt`  
+	RCA233=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e2+e4)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt` 
+	RDG3=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e3)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt` 
+	RSUB3=`awk -v x=5 -v a=1 -v b=2 -v c=4 -v d=3 -v e=6 'NR==a{e1=$x} NR==b{e2=$x} NR==c{e3=$x} NR==d{e4=$x} NR==e{e5=$x} END{if (e) print" (e6)/(e1+e2+e3+e4+e5)}' $base_dir/${subjName}_LASHiS/${var}/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt` 
 
+	#concatenate the timepoints into csvs for TP1/2 
 
-<<EOF
-#atlas based 3TP only
-var=long_ashs_atlas 
-TP=3TP
-for ses in 01 02 03 ; do 
-    mkdir ${base_dir}/4_long_ashs/results/${var}/cleaned
-    cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_right_lfseg_corr_usegray_warped_to_ses-${ses}.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_left_lfseg_corr_usegray_warped_to_ses-${ses}.csv>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
+## this doesn't work, try something else.
+	echo -e "$LCA11\n$LCA11">>$base_dir/${subjName}_LASHiS/${var}/LCA1.csv
+	echo -e "$LCA231\n$LCA232">>$base_dir/${subjName}_LASHiS/${var}/LCA23.csv
+	echo -e "$LDG1\n$LDG2">>$base_dir/${subjName}_LASHiS/${var}/LDG.csv
+	echo -e "$LSUB1\n$LSUB2">>$base_dir/${subjName}_LASHiS/${var}/LSUB.csv
+	echo -e "$RCA11\n$RCA12">>$base_dir/${subjName}_LASHiS/${var}/RCA1.csv
+	echo -e "$RCA231\n$RCA232">>$base_dir/${subjName}_LASHiS/${var}/RCA23.csv
+	echo -e "$RDG1\n$RDG2">>$base_dir/${subjName}_LASHiS/${var}/RDG.csv
+	echo -e "$RSUB1\n$RSUB2">>$base_dir/${subjName}_LASHiS/${var}/RSUB.csv
+	
+	
+	
+
+	if [[ -z "$LCA11" || -z "$LCA231" || -z "$LDG1" || -z "$LSUB1" || -z "$RCA11" || -z "$RCA231" || -z "$RDG1" || -z "$RSUB1"  || -z "$LCA12" || -z "$LCA232" || -z "$LDG2" || -z "$LSUB2" || -z "$RCA12" || -z "$RCA232" || -z "$RDG2" || -z "$RSUB2" || -z ${demo} ]] 
+	then 
+	    echo "$subjName varibale is empty" >> $base_dir/ADNI_DATA_missing_files.txt
+	    echo "skipping participant ${subjName}"
+	else 
+	    echo "Data is all good" 
+	    #maybe just do this for each of the values where $value is the value of the variable $LCA11 etc
+	awk -v value=$value -v row=$row -v col=$col 'BEGIN{FS=OFS="@"} NR==row {$col=value}1' file
+
+	paste -d "," $base_dir/${subjName}_LASHiS/${subjName}_demo_info.csv <(printf %s `awk -v lca1="$LCA1" 'BEGIN { printf lca1 }'`)
+	fi
+	
+
+	
+    done
+
     
-    echo -e ' 0 0 0 0 0 '`cat ${base_dir}/4_long_ashs/${subjName}_long_ashs_v1_${TP}/final/${subjName}_ashs_${TP}_SST_icv.txt`>>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    echo -e ' 0 0 0 0 0 0 '"${subjName}_ses-${ses}_${TP}_warped_to_ses-${ses}">>${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    echo -e ' 0 0 0 0 0 0 0 0 0 ' >> ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    tr -s ' ' < ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    echo `cat ${base_dir}/4_long_ashs/results/${var}/${subjName}_ashs_${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv` >> ${base_dir}/4_long_ashs/results/${var}/cleaned/ashs_${TP}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-done
+    #freesurfer results.
 
-mkdir ${base_dir}/2_xs_ashs/cleaned
-####ASHS XS#####
-for ses in 01 02 03 ; do
-    mkdir -p ${base_dir}/2_xs_ashs/results/cleaned
-    cat ${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_right_corr_usegray_volumes.txt>>${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_combined_corr_usegray_volumes.csv
-    cat ${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_left_corr_usegray_volumes.txt>>${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_combined_corr_usegray_volumes.csv
-    echo -e ' 0 0 0 '`cat ${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_icv.txt`>>${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_combined_corr_usegray_volumes.csv
-    echo -e ' 0 0 0 0 '"${subjName}_ses-${ses}_xs">>${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_combined_corr_usegray_volumes.csv
-    tr -s ' ' < ${base_dir}/2_xs_ashs/${subjName}_ses-${ses}_xs_ashs/final/${subjName}_ses-${ses}_xs_ashs_combined_corr_usegray_volumes.csv | tr ' ' ',' | cut -c 2- | awk -F "\"*,\"*" '{print $7}' | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/2_xs_ashs/cleaned/${subjName}_ashs_ses-${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv
-    echo `cat ${base_dir}/2_xs_ashs/cleaned/${subjName}_ashs_ses-${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv` >> ${base_dir}/2_xs_ashs/cleaned/ashs_ses-${ses}_SST_combined_lfseg_corr_usegray_warped_to_ses-${ses}.csv 
-done
-
-
-#freesurfer results.
-
-for TP in 3TP 2TP_1-2 ; do
-    mkdir -p ${base_dir}/freesurfer/results/cleaned/
-    cat ${base_dir}/freesurfer/${subjName}_01_7T.long.${subjName}_${TP}/mri/rh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_01_7T.long.${subjName}_${TP}/mri/lh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_01_7T.long.${subjName}_${TP}/stats/aseg.stats | grep "Estimated Total Intracranial Volume" > ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}_icv.csv
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}_icv.csv` >> ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}.csv
-    sed 's/[^0-9.]*//g' ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}.csv >> ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}.csv
-    echo ${subjName}_01_long_${TP} >> ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}1.csv
-    echo 0 >> ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}1.csv
-     cat  ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}1.csv | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}2.csv 
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_01_7T.long.${subjName}_${TP}2.csv` >> ${base_dir}/freesurfer/results/cleaned/FS_01_7T.long.${TP}_concat.csv 
-done
-for TP in 3TP 2TP_1-2 2TP_2-3 ; do
-    mkdir -p ${base_dir}/freesurfer/results/cleaned/
-    cat ${base_dir}/freesurfer/${subjName}_02_7T.long.${subjName}_${TP}/mri/rh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_02_7T.long.${subjName}_${TP}/mri/lh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_02_7T.long.${subjName}_${TP}/stats/aseg.stats | grep "Estimated Total Intracranial Volume" > ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}_icv.csv
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}_icv.csv` >> ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}.csv
-    sed 's/[^0-9.]*//g' ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}.csv >> ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}1.csv
-    echo ${subjName}_02_long_${TP} >> ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}1.csv
-    echo 0 >> ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}1.csv
-    cat  ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}1.csv | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}2.csv 
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_02_7T.long.${subjName}_${TP}2.csv` >> ${base_dir}/freesurfer/results/cleaned/FS_02_7T.long.${TP}_concat.csv 
-done
-for TP in 3TP 2TP_2-3 ; do
-    mkdir -p ${base_dir}/freesurfer/results/cleaned/
-    cat ${base_dir}/freesurfer/${subjName}_03_7T.long.${subjName}_${TP}/mri/rh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_03_7T.long.${subjName}_${TP}/mri/lh.hippoSfVolumes-T1.long.v21.txt>>${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}.csv
-    cat ${base_dir}/freesurfer/${subjName}_03_7T.long.${subjName}_${TP}/stats/aseg.stats | grep "Estimated Total Intracranial Volume" > ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}_icv.csv
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}_icv.csv`>> ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}.csv
-    sed 's/[^0-9.]*//g' ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}.csv >> ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}1.csv
-    echo ${subjName}_03_long_${TP} >> ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}1.csv
-    echo 0 >> ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}1.csv
-    cat  ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}1.csv | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}2.csv 
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_03_7T.long.${subjName}_${TP}2.csv` >> ${base_dir}/freesurfer/results/cleaned/FS_03_7T.long.${TP}_concat.csv 
-done
-#XS
-for ses in 01_7T 02_7T 03_7T ; do
-    cat ${base_dir}/freesurfer/${subjName}_${ses}/mri/lh.hippoSfVolumes-T2_Only.v21.txt>>${base_dir}/freesurfer/results/${subjName}_xs_${ses}.csv
-    cat ${base_dir}/freesurfer/${subjName}_${ses}/mri/rh.hippoSfVolumes-T2_Only.v21.txt>>${base_dir}/freesurfer/results/${subjName}_xs_${ses}.csv
-    cat ${base_dir}/freesurfer/${subjName}_${ses}/stats/aseg.stats | grep "Estimated Total Intracranial Volume" > ${base_dir}/freesurfer/results/${subjName}_xs_${ses}_icv.csv
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_xs_${ses}_icv.csv` >> ${base_dir}/freesurfer/results/${subjName}_xs_${ses}.csv
-    sed 's/[^0-9.]*//g' ${base_dir}/freesurfer/results/${subjName}_xs_${ses}.csv >> ${base_dir}/freesurfer/results/${subjName}_xs_${ses}1.csv
-    echo ${subjName}_xs_${ses}>>${base_dir}/freesurfer/results/${subjName}_xs_${ses}1.csv
-    echo 0 >> ${base_dir}/freesurfer/results/${subjName}_xs_${ses}1.csv
-    cat ${base_dir}/freesurfer/results/${subjName}_xs_${ses}1.csv | awk '{for (i=1; i<=NF; i++) a[i,NR]=$i; max=(max<NF?NF:max)} END {for (i=1; i<=max; i++) {for (j=1; j<+NR; j++) printf "%s%s", a[ i,j], (j==NR?RS:FS) }}' > ${base_dir}/freesurfer/results/${subjName}_xs_${ses}2.csv
-    echo `cat ${base_dir}/freesurfer/results/${subjName}_xs_${ses}2.csv` >> ${base_dir}/freesurfer/results/cleaned/xs_${ses}_concat.csv
-done
-#you need to add 0s to the bottom of the fs ones
-#then done
-#yay
-#also delete everything and re run
-   #because the second tp for these wasnt workingfor subjName in sub-SF01 sub-JH09 ; do recon-all -subjid ${subjName}_02_7T -autorecon2 -autorecon3 -cm -openmp 16 -no-isrunning && segmentHA_T1.sh ${subjName:0:8}_02_7T $SUBJECTS_DIR && segmentHA_T2.sh ${subjName:0:8}_02_7T /data/fasttemp/uqtshaw/tomcat/data/derivatives/preprocessing/$subjName/${subjName}_ses-02_7T_T2w_NlinMoCo_res-iso.3_N4corrected_denoised_norm_brain_preproc.nii.gz T2_Only 0 $SUBJECTS_DIR ; done 
-
-EOF
