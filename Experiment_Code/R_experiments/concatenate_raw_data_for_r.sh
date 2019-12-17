@@ -106,7 +106,7 @@ for subjName in `cat ${github_dir}/ADNI_code/subjnames_2_ses.csv` ; do
 	    awk 
 -v lca12=$LCA12 -v lca232=$LCA232 -v ldg2=$LDG2 -v lsub2=$LSUB2 -v rca12=$RCA12 -v rca232=$RCA232 -v rdg2=$RDG2 -v rsub2=$RSUB2 'BEGIN{FS=OFS=","} NR==1 {print $0","lca12","lca232","ldg2","lsub2","rca12","rca232","rdg2","rsub2}1' $base_dir/${subjName}_LASHiS/${subjName}_demo_info.csv > $base_dir/${subjName}_LASHiS/temp.csv && cat $base_dir/${subjName}_LASHiS/temp.csv >  $base_dir/${subjName}_LASHiS/${subjName}_${var}_final.csv && rm $base_dir/${subjName}_LASHiS/temp.csv 
 
-	    #paste -d "," $base_dir/${subjName}_LASHiS/${subjName}_demo_info.csv <(printf %s `awk -v lca1="$LCA1" 'BEGIN { printf lca1 }'`)
+	  
 	fi
 	#then you just have to concatenate all the subjnames and for each var.
 	
