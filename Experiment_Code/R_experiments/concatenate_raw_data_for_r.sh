@@ -160,25 +160,27 @@ for subjName in `cat ${github_dir}/ADNI_code/subjnames_2_ses.csv` ; do
     ## Freesurfer Xs and Long #
     ###########################
 
-
+    #coding error left the freesurfer files spread out a bit
+    subjects_dir=${base_dir}/Freesurfer
+    #/30days/uqtshaw/ADNI_freesurfer/
     #left 
     mkdir -p $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs
     #Xs
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-01/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-02/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-03/mri/lh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt
     #right
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-01/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-02/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-03/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
     #FsLong
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-01.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-02.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-03.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt
 
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-01.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-02.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${subjects_dir}/${subjName}_ses-03.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
 
 
 
@@ -295,3 +297,21 @@ for subjName in `cat ${github_dir}/ADNI_code/subjnames_2_ses.csv` ; do
 	fi
     done
 done
+
+#some additional code for finding demo info
+#awk  -F"," '{delta = $5 - avg; avg += delta / NR; mean2 += delta * ($5 - avg); } END { print sqrt(mean2 / NR); }' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_FsLong_reconciled.csv
+#8.75705
+# awk -F ',' '{print $2,$4,$5}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_FsLong_reconciled.csv  | sort | uniq -c | grep " M " | wc -l
+#73
+#awk -F ',' '{print $2,$4,$5}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_FsLong_reconciled.csv  | sort | uniq -c | grep " F " | wc -l
+#90
+#awk -F ',' '{print $2,$3}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_ashs_xs_reconciled.csv  | sort | uniq -c | grep " MCI" | wc -l
+#9
+#awk -F ',' '{print $2,$3}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_ashs_xs_reconciled.csv  | sort | uniq -c | grep " LMCI" | wc -l
+#13
+# awk -F ',' '{print $2,$3}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_ashs_xs_reconciled.csv  | sort | uniq -c | grep " EMCI" | wc -l
+#20
+# awk -F ',' '{print $2,$3}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_ashs_xs_reconciled.csv  | sort | uniq -c | grep " CN" | wc -l
+#38
+#awk -F ',' '{print $2,$3}' ~/LASHiS/Experiment_Code/R_experiments/LME_experiment/Data/ADNI_ashs_xs_reconciled.csv  | sort | uniq -c | grep "SMC" | wc -l
+#11
