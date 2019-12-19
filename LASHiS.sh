@@ -27,7 +27,7 @@
 # Check dependencies
 
 PROGRAM_DEPENDENCIES=( 'antsApplyTransforms' 'N4BiasFieldCorrection' )
-SCRIPTS_DEPENDENCIES=( 'antsBrainExtraction.sh' 'antsMultivariateTemplateConstruction2.sh' 'antsJointLabelFusion2.sh' )
+SCRIPT_DEPENDENCIES=( 'antsBrainExtraction.sh' 'antsMultivariateTemplateConstruction2.sh' 'antsJointLabelFusion2.sh' )
 ASHS_DEPENDENCIES=( '/bin/ashs_main.sh' '/ext/Linux/bin/c3d' )
 
 for D in ${PROGRAM_DEPENDENCIES[@]};
@@ -498,8 +498,8 @@ fi
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then 
     #Rescale the images because ASHS can't handle float for some reason
-    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000 
-    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
+    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
+    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
     
 fi
 ###############################

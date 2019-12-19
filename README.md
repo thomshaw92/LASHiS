@@ -3,8 +3,9 @@ Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using mult
 
 ## Requirements:
 
- Requires ANTs  https://github.com/ANTsX/ANTs/
- Requires ASHS https://sites.google.com/site/hipposubfields/home 
+ Requires ANTs  https://github.com/ANTsX/ANTs/ (>= v2.3.0)
+
+ Requires ASHS https://sites.google.com/site/hipposubfields/home
 
 LASHiS performs a longitudinal estimation of hippoocampus subfields.  The following steps are performed:
   1. Run Cross-sectional ASHS on all timepoints
