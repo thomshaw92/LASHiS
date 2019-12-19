@@ -172,13 +172,13 @@ for subjName in `cat ${github_dir}/ADNI_code/subjnames_2_ses.csv` ; do
     cp ${base_dir}/Freesurfer/${subjName}_ses-02/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
     cp ${base_dir}/Freesurfer/${subjName}_ses-03/mri/rh.hippoSfVolumes-T2_Only.v20.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsXs/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
     #FsLong
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1${side}SSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2${side}SSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3${side}SSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1leftSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2leftSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/lh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3leftSSTLabelsWarpedToTimePoint2_stats.txt
 
-    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1${side}SSTLabelsWarpedToTimePoint0_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2${side}SSTLabelsWarpedToTimePoint1_stats.txt
-    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3${side}SSTLabelsWarpedToTimePoint2_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-01.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage1rightSSTLabelsWarpedToTimePoint0_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-02.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage2rightSSTLabelsWarpedToTimePoint1_stats.txt
+    cp ${base_dir}/Freesurfer/${subjName}_ses-03.long.${subjName}/mri/rh.hippoSfVolumes-T1.long.v21.txt $base_dir/Freesurfer/${subjName}_Freesurfer/FsLong/mprage3rightSSTLabelsWarpedToTimePoint2_stats.txt
 
 
 
