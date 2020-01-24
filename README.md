@@ -115,3 +115,27 @@ project_base_dir
   
 
 ```
+
+## Subfield labels
+Labels are derived directly from the chosen atlas.
+Labels values are copied from the atlas package to the LASHiS folder for each participant > check under snaplabels.txt
+
+## Subfield label stats
+The stats text file is in the LASHiS directory as well, and is arranged in the same order as ASHS:
+Columns: {side} {subfield name} {number of voxels containing the label} {volume in mm^2}
+for example: 
+```
+cat LASHiS/{subjName}{side}SSTLabelsWarpedToTimePoint{timepoint}_stats.txt
+left CA1 125 1102.059
+left CA2 52 16.497
+left DG 111 721.278
+left CA3 48 57.375
+left misc 58 98.091
+left SUB 120 405.837
+left ERC 66 461.997
+left BA35 75 507.465
+left BA36 83 1746.954
+left PHC 65 1186.920
+left sulcus 134 451.170
+```
+
