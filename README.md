@@ -1,7 +1,10 @@
 # LASHiS
 Longitudinal Automatic Segmentation of Hippocampal Subfields (LASHiS) using multi-contrast MRI.
+
 The publication for this work is available at https://doi.org/10.1016/j.neuroimage.2020.116798
+
 Data for the TOMCAT dataset referenced in this work is located at https://osf.io/bt4ez/
+
 ## Requirements:
 
  Requires ANTs  https://github.com/ANTsX/ANTs/ (>= v2.3.0)
