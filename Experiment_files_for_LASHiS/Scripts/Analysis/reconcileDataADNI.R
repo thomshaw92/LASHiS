@@ -1,7 +1,7 @@
 # library( ADNIMERGE )
 # 
 
-baseDirectory <- 'C:/Users/uqtshaw/Google\ Drive/Publications/LASHiS/NeuroImage/R1_major/LASHiS/Experiment_Code/R_experiments/LME_experiment/'
+baseDirectory <- '/path/to/github_dir'
 dataDirectory <- paste0( baseDirectory, 'Data/' )
 #sandboxDirectory <- paste0( baseDirectory, 'Sandbox/' )
 figuresDirectory <- paste0( baseDirectory, 'Figures/' )
@@ -11,11 +11,11 @@ hippoVolumePipelineNames <- c( 'FsXs', 'ashs_xs', 'FsLong', 'Diet_LASHiS', 'LASH
 
 hippoVolumeCsvs <- list()
 hippoVolumeData <- list()
-cat( "Reading reconciled data.\n" )
+cat( "Reading unreconciled data.\n" )
 
 for( i in 1:length( hippoVolumePipelineNames ) )
 {
-  hippoVolumeCsvs[[i]] <- paste0( dataDirectory, 'ADNI_', hippoVolumePipelineNames[i], '_reconciled.csv' )
+  hippoVolumeCsvs[[i]] <- paste0( dataDirectory, 'ADNI_', hippoVolumePipelineNames[i], '_unreconciled.csv' )
   hippoVolumeData[[i]] <- read.csv( hippoVolumeCsvs[[i]] )
 }
 
