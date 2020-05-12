@@ -27,8 +27,8 @@ Sys.setenv( TZ = 'America/Los_Angeles' )
 #
 
 baseDirectory <- 'path/to/git/directory/'
-dataDirectory <- paste0( baseDirectory, 'Data/ADNI/' )
-figuresDirectory <- paste0( baseDirectory, 'Figures/ADNI/' )
+dataDirectory <- paste0( baseDirectory, 'Data/TOMCAT/' )
+figuresDirectory <- paste0( baseDirectory, 'Figures/TOMCAT/' )
 hippoVolumePipelineNames <- c( 'Freesurfer Xs', 'ASHS Xs', 'Freesurfer Long', 'Diet LASHiS', 'LASHiS')
 numberOfRegions <- 8
 
@@ -60,7 +60,7 @@ if( file.exists( stanAllResultsFile ) )
   hippoVolumeData <- list()
   for( i in 1:length( hippoVolumePipelineNames ) )
     {
-    hippoVolumeCsvs[[i]] <- paste0( dataDirectory, 'fullyReconciledADNI_', hippoVolumePipelineNames[i], '.csv' )
+    hippoVolumeCsvs[[i]] <- paste0( dataDirectory, 'reconciled_', hippoVolumePipelineNames[i], '.csv' )
     hippoVolumeData[[i]] <- read.csv( hippoVolumeCsvs[[i]] )
     }
 
@@ -87,6 +87,7 @@ if( file.exists( stanAllResultsFile ) )
         {
         for( k in 2:nrow( hippoVolumeDataSubject ) )
           {
+          # span <- interval( dmy( hippoVolumeDataSubject$EXAM_DATE[1] ), dmy( hippoVolumeDataSubject$EXAM_DATE[k] ) )
           span <- interval( mdy( hippoVolumeDataSubject$EXAM_DATE[1] ), mdy( hippoVolumeDataSubject$EXAM_DATE[k] ) )
           hippoVolumeDataSubject$VISIT[k] <- as.numeric( as.period( span ), "months" )
           }
