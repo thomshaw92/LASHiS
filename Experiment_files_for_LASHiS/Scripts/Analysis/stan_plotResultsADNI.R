@@ -28,10 +28,8 @@ Sys.setenv( TZ = 'America/Los_Angeles' )
 
 baseDirectory <-'C:/Users/uqtshaw/Google\ Drive/Publications/LASHiS/NeuroImage/R1_major/LASHiS/Experiment_Code/R_experiments/LME_experiment/'
 dataDirectory <- paste0( baseDirectory, 'Data/' )
-sandboxDirectory <- paste0( baseDirectory, 'Sandbox/' )
 figuresDirectory <- paste0( baseDirectory, 'Figures/' )
 hippoVolumePipelineNames <- c( 'Freesurfer Xs', 'ASHS Xs', 'Freesurfer Long', 'Diet LASHiS', 'LASHiS')
-#hippoVolumePipelineNames <- c( 'FXs', 'ashs_xs', 'FsLong', 'Diet_LASHiS', 'LASHiS')
 numberOfRegions <- 8
 
 
