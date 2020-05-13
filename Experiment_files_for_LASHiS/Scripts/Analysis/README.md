@@ -6,3 +6,4 @@ reconcileDataADNI.R code that ensures that all data are present for all sessions
 
 LASHiS_experiment_one contains the script for making the figures for the first experiment. NB that the script for conducting the Bayesian t-tests is located in Data as the Jamovi file contains both Data and Analysis.
 
+the stanPlotResults files are for each of the datasets (TOMCAT and ADNI)
