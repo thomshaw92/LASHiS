@@ -10,7 +10,7 @@ library(reshape2)
 require(reshape2)
 
 # set up directory structure and other things
-baseDirectory <- 'C:/Users/uqtshaw/Google\ Drive/Projects/LASHiS/LASHiS_figures_results_etc/supplementary mats/'
+baseDirectory <- '/path/to/git_dir'
 ColPurple <- rgb(123,50,148, maxColorValue = 255)
 ColGreen <- rgb(0,136,55, maxColorValue = 255)
 ColLightGreen <- rgb(166,219,160, maxColorValue = 255)
