@@ -7,4 +7,3 @@ The subfields.csv file contains the names of the subfields that are read in by S
 The TOMCAT and ADNI folders contain Data for each of the datasets and model results.
 
 
-The V2
