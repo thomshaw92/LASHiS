@@ -16,20 +16,18 @@
 
 #cd $PBS_O_WORKDIR
 
-# get the parameter combination at line PBS_ARRAY_INDEX in parameters.txt
-#SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_3_ses.csv`
 module load singularity/2.5.2
 #where the script lives
 LASHiS_dir=/home/uqtshaw/LASHiS/
 #where the data lives
-t1_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
-t2_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-out_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/LASHiS/
+t1_dir=/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
+t2_dir=/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
+out_dir=/ADNI_BIDS/derivatives/LASHiS/
 mkdir ${out_dir}
 #The data will be copied to $TMPDIR first for processing - already called $TMPDIR 
 #TMPDIR=$TMPDIR
 #the simg path
-singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191210.simg
+singularity_image_path=/adni_lashis_simg_20191210.simg
 #singularity including bind points
 singularity="singularity exec --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ --bind /RDS/:/RDS  ${singularity_image_path}"
 cd $TMPDIR
