@@ -16,13 +16,11 @@
 
 #cd $PBS_O_WORKDIR
 
-#SUBJNAME=`sed "${PBS_ARRAY_INDEX}q;d" ~/LASHiS/Experiment_Code/ADNI_code/subjnames_2_ses.csv`
-
 #Now do some things
 module load singularity/2.5.2
-t1_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
-t2_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-out_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/Freesurfer/
+t1_dir=/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
+t2_dir=/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
+out_dir=/ADNI_BIDS/derivatives/Freesurfer/
 mkdir ${out_dir}
 
 module load freesurfer/6.1dev
@@ -37,7 +35,7 @@ SUBJECTS_DIR=/30days/uqtshaw/ADNI_freesurfer/
 #singularity_image_path=/90days/uqtshaw/adni_lashis_simg_20191112.simg
 #singularity="singularity exec --bind /RDS/:/RDS ${singularity_image_path}"
 #Neurodocker does not have freesurfer Dev version 6.1 as of 201911255 , so I have used a module of it instead.
-#if anyone is reading this, and wants to reproduce the code exactly, please email t.shaw@uq.edu.au
+#if anyone is reading this, and wants to reproduce the code exactly, please use the dev version 6.1
 ##############
 ## FS proc  ##
 ##############
