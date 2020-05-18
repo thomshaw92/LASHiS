@@ -13,11 +13,11 @@ Data for the TOMCAT dataset referenced in this work is located at https://osf.io
  
 ## Docker/Singularity image (including LASHiS and all required software + 1 atlas)
 
-docker pull caid/adni_lashis_simg
+```docker pull caid/adni_lashis_simg```
 
 or 
 
-singularity build LASHiS.simg docker://caid/adni_lashis_simg:latest
+```singularity build LASHiS.simg docker://caid/adni_lashis_simg:latest```
 
 ## LASHiS pipeline steps:
 
