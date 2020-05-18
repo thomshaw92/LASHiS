@@ -16,4 +16,4 @@
 
 source ~/.bashrc 
 
-/path/to/git_dir/LASHiS/Experiment_Code/ADNI_code/1_preprocessing/pp_script.sh $SUBJNAME
+/path/to/git_dir/LASHiS/Experiment_files_for_LASHiS/Scripts/1_preprocessing/pp_script.sh $SUBJNAME
