@@ -21,11 +21,11 @@
 
 module load singularity/2.5.2
 #where the script lives
-LASHiS_dir=/home/uqtshaw/LASHiS/
+LASHiS_dir=/home/$USER/LASHiS/
 #where the data lives
-t1_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/mp2rage_n4_denoised_norm/
-t2_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/nipype_working_dir_ADNI_pp/output_dir/tse_n4_denoised_norm/
-out_dir=/30days/uqtshaw/ADNI_BIDS/derivatives/LASHiS/
+t1_dir=/path/to/t1_directory/
+t2_dir=/path/to/t2_dir/
+out_dir=/ADNI_BIDS/derivatives/LASHiS/
 mkdir ${out_dir}
 #The data will be copied to $TMPDIR first for processing - already called $TMPDIR 
 #TMPDIR=$TMPDIR

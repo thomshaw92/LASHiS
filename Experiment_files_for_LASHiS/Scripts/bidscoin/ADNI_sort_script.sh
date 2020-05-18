@@ -1,6 +1,6 @@
 #!/bin/bash
-#
-ADNI_DATA=/data/fasttemp/uqtshaw/ADNI_data/ADNI/ADNI_data_test/
+#fairly hacky script to take the data from the ADNI zip files and prep it for conversion to BIDS
+ADNI_DATA=/data/path
 
 #mv all the first folders in the MPRAGE (always has Accelerated)  and Hippo (always says Hippo)
 #first delete all the sequence folders with only one time point (they aren't needed)

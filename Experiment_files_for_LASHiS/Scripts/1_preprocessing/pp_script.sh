@@ -13,10 +13,12 @@ for ss in "ses-01" "ses-02" "ses-03" ; do
     echo $TMPDIR
 
     ########################################
-    raw_data_dir=/RDS/Q0530/tomcat/ADNI_BIDS
+    raw_data_dir=/path/to/bids_dir
     ########################################
-
-    data_dir=/30days/$USER
+    ##############################	
+    data_dir=/path/to/working/dir
+    #############################
+    
     cp -r $raw_data_dir/${subjName}/${ss}/anat $TMPDIR
     chmod -R 740 $TMPDIR/anat
     mkdir -p $TMPDIR/derivatives/preprocessing/$subjName
@@ -24,7 +26,7 @@ for ss in "ses-01" "ses-02" "ses-03" ; do
     rsync -v -r $TMPDIR/anat/${subjName}_${ss}*T2w*.nii.gz $TMPDIR/derivatives/preprocessing/$subjName
     rsync -v -r $TMPDIR/anat/${subjName}_${ss}*T1w*.nii.gz $TMPDIR/derivatives/preprocessing/$subjName
     module load singularity/2.5.1
-    singularity="singularity exec --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ $data_dir/ants_fsl_robex_20180427.simg"
+    singularity="singularity exec --bind $TMPDIR:/TMPDIR --pwd /TMPDIR/ $data_dir/ants_fsl_robex_20180427.simg" #this is the name of the singularity image defined elsewhere
     bidsdir=/TMPDIR
     t1w=$bidsdir/derivatives/preprocessing/$subjName/${subjName}_${ss}_T1w.nii.gz
     tse=$bidsdir/derivatives/preprocessing/$subjName/${subjName}_${ss}*T2w*.nii.gz

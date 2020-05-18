@@ -18,7 +18,6 @@ neurodocker generate docker \
 	    --env ASHS_ROOT="/ashs-fastashs_beta" \
 	    --freesurfer version=6.0.1 \
 	    --ants version=2.3.0 \
-	    --copy antsJointLabelFusion2.sh /opt/ants-2.3.0/antsJointLabelFusion2.sh \
 	    --copy LASHiS /LASHiS \
 	    --workdir /proc_temp \
 	    --workdir /90days \
@@ -31,17 +30,17 @@ neurodocker generate docker \
 	    > Dockerfile.${imageName}
 
 #LASHiS is from github repo
-#ASHS from NITRC
+#ASHS from NITRC, as is the atlas
 
 docker build -t ${imageName}:$buildDate -f  Dockerfile.${imageName} .
 #test:
 docker run -it ${imageName}:$buildDate
 
 docker tag ${imageName}:$buildDate caid/${imageName}:$buildDate
-docker login
-docker push caid/${imageName}:$buildDate
-docker tag ${imageName}:$buildDate caid/${imageName}:latest
-docker push caid/${imageName}:latest
+#docker login
+#docker push caid/${imageName}:$buildDate
+#docker tag ${imageName}:$buildDate caid/${imageName}:latest
+#docker push caid/${imageName}:latest
 
 echo "BootStrap:docker" > Singularity.${imageName}
 echo "From:caid/${imageName}" >> Singularity.${imageName}
@@ -50,5 +49,3 @@ rm ${imageName}_${buildDate}.simg
 sudo singularity build ${imageName}_${buildDate}.simg Singularity.${imageName}
 
 #singularity shell --bind $PWD:/data ${imageName}_${buildDate}.simg
-
-
