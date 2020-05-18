@@ -10,6 +10,16 @@ Data for the TOMCAT dataset referenced in this work is located at https://osf.io
  Requires ANTs  https://github.com/ANTsX/ANTs/ (>= v2.3.0)
 
  Requires ASHS https://sites.google.com/site/hipposubfields/home
+ 
+## Docker/Singularity image (including LASHiS and all required software + 1 atlas)
+
+docker pull caid/adni_lashis_simg
+
+or 
+
+singularity build LASHiS.simg docker://caid/adni_lashis_simg:latest
+
+## LASHiS pipeline steps:
 
 LASHiS performs a longitudinal estimation of hippoocampus subfields.  The following steps are performed:
   1. Run Cross-sectional ASHS on all timepoints
