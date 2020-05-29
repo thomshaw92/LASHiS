@@ -28,7 +28,7 @@ singularity exec LASHiS.simg /LASHiS.sh \
 ```
 
 
-If you wish to build the container for reproduction of the ADNI pipeline, please see the 
+If you wish to build the container for reproduction of the ADNI pipeline, please see the directory /Experiment_files_for_LASHiS/Scripts/Singularity/
 
 ## LASHiS pipeline steps:
 
