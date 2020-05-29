@@ -26,7 +26,7 @@ singularity exec LASHiS.simg /LASHiS.sh \
 		-o outputPrefix \
 		anatomicalImages (see below for details)
 ```
-
+Note that no other environmental variables need to be set, though you will need to specify bind points to your data in Singularity.
 
 If you wish to build the container for reproduction of the ADNI pipeline, please see the directory /Experiment_files_for_LASHiS/Scripts/Singularity/
 
