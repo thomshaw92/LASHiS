@@ -11,13 +11,24 @@ Data for the TOMCAT dataset referenced in this work is located at https://osf.io
 
  Requires ASHS https://sites.google.com/site/hipposubfields/home
  
-## Docker/Singularity image (including LASHiS and all required software + 1 atlas)
+## Docker/Singularity image (including LASHiS and all required software)
 
-```docker pull caid/adni_lashis_simg```
+```docker pull caid/lashis_1.0```
 
 or 
 
-```singularity build LASHiS.simg docker://caid/adni_lashis_simg:latest```
+```singularity build LASHiS.simg docker://caid/lashis_1.0:latest```
+That can be run with:
+``` 
+singularity exec LASHiS.simg /LASHiS.sh \
+		-a atlas selection for ashs \
+        	-OptionalArguments \
+		-o outputPrefix \
+		anatomicalImages (see below for details)
+```
+Note that no other environmental variables need to be set, though you will need to specify bind points to your data in Singularity.
+
+If you wish to build the container for reproduction of the ADNI pipeline, please see the directory /Experiment_files_for_LASHiS/Scripts/Singularity/
 
 ## LASHiS pipeline steps:
 
