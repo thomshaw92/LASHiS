@@ -772,7 +772,7 @@ then
                 STATS=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
                 $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
                 # Create an output file
-                FNBODYVOL=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+                FNBODYVOL=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}_${side}_TimePoint_${TIMEPOINTS_COUNT}_stats.txt
                 rm -rf $FNBODYVOL
                 # Dump volumes into that file
                 for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
@@ -921,7 +921,7 @@ for side in left right ; do
             STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
             $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
             # Create an output file
-            FNBODYVOL=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+            FNBODYVOL=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}_${side}_TimePoint_${TIMEPOINTS_COUNT}_stats.txt
             rm -rf $FNBODYVOL
             
             # Dump volumes into that file
@@ -948,8 +948,6 @@ for side in left right ; do
         let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
     done
 done
-
-
 
 time_end_jlf=`date +%s`
 time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
