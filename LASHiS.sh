@@ -391,7 +391,41 @@ time_start=`date +%s`
 #  Run each individual subject through ASHS
 #
 ################################################################################
+##########################
+##  Do denoising if on  ##
+##########################
 
+if [[ ${DENOISE} == 1 ]] ; then
+    echo
+    echo "###########################################################################################"
+    echo " Denoising                                                                                 "
+    echo "###########################################################################################"
+    echo
+    DENOISED_ANATOMICAL_IMAGES=''
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i++ ))
+    do
+        if [[ ! -e ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz ]] ; then
+            BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+            BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+            BASENAME_ID=${BASENAME_ID/\.nii/}
+            logCmd ${ANTSPATH}/DenoiseImage \
+            -d 3 \
+            -i ${ANATOMICAL_IMAGES[$i]} \
+            -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
+            -n Rician \
+            -v
+        fi
+        DENOISED_ANATOMICAL_IMAGES="${DENOISED_ANATOMICAL_IMAGES}"' '"${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz"
+    done
+    unset ANATOMICAL_IMAGES
+    #ANATOMICAL_IMAGES=${DENOISED_ANATOMICAL_IMAGES}
+    
+    for IMG in $DENOISED_ANATOMICAL_IMAGES
+    do
+        ANATOMICAL_IMAGES[${#ANATOMICAL_IMAGES[@]}]=$IMG
+    done
+    echo  "new anat images are: ${ANATOMICAL_IMAGES[@]}"
+fi
 echo
 echo "###########################################################################################"
 echo " Run each individual through ASHS                                                     "
@@ -462,7 +496,6 @@ do
     fi
 done
 
-
 time_end_ashs=`date +%s`
 time_elapsed_ashs=$((time_end_ashs - time_start_ashs))
 
@@ -472,51 +505,11 @@ echo " Done with individual ASHS:  $(( time_elapsed_ashs / 3600 ))h $(( time_ela
 echo "###########################################################################################"
 echo
 
-
-#THEN MAKE TEMPLATE WITH NEW INPUTS
-
-
-
 ################################################################################
 #
 # Single-subject template creation
 #
 ################################################################################
-##########################
-##  Do denoising if on  ##
-##########################
-
-if [[ ${DENOISE} == 1 ]] ; then
-    echo
-    echo "###########################################################################################"
-    echo " Denoising                                                                                 "
-    echo "###########################################################################################"
-    echo
-    DENOISED_ANATOMICAL_IMAGES=''
-    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i++ ))
-    do
-        if [[ ! -e ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz ]] ; then
-            BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-            BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-            BASENAME_ID=${BASENAME_ID/\.nii/}
-            logCmd ${ANTSPATH}/DenoiseImage \
-            -d 3 \
-            -i ${ANATOMICAL_IMAGES[$i]} \
-            -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
-            -n Rician \
-            -v
-        fi
-        DENOISED_ANATOMICAL_IMAGES="${DENOISED_ANATOMICAL_IMAGES}"' '"${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz"
-    done
-    unset ANATOMICAL_IMAGES
-    #ANATOMICAL_IMAGES=${DENOISED_ANATOMICAL_IMAGES}
-    
-    for IMG in $DENOISED_ANATOMICAL_IMAGES
-    do
-        ANATOMICAL_IMAGES[${#ANATOMICAL_IMAGES[@]}]=$IMG
-    done
-    echo  "new anat images are: ${ANATOMICAL_IMAGES[@]}"
-fi
 
 echo
 echo
