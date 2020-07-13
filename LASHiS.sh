@@ -509,15 +509,6 @@ echo
 ###########################################
 ## TSE PREPROCESSING READY FOR TEMPLATE  ##
 ###########################################
-
-#add the TSE images together
-#But first, reslice the native chunk left and right to the tse.nii.gz in the folder.
-
-#enter the Added TSE native chunk image into the template instead of the whole TSE.
-
-#apply the warp from the template to the original images (both T1w and T2w) - with themselves as the reference
-
-#then copy the spacing from the warped whole images to the chunk template - so we have a warped hippo chunkk, and the rest is garbahe (hopefully)
 echo
 echo "###########################################################################################"
 echo " Pre-process the ASHS output, ready for the template                                       "
@@ -549,8 +540,8 @@ do
         SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
         SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
     done
-    
-    
+    #First, reslice the native chunk left and right to the tse.nii.gz in the folder.
+    #then add the TSE side images together
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
     
     if [[ -f ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ]] ;
@@ -611,6 +602,8 @@ SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templat
 #fi
 time_start_sst_creation=`date +%s`
 
+#enter the Added TSE native chunk image into the template instead of the whole TSE, unimodal example.
+
 if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
 then
     logCmd ${ANTSPATH}/antsMultivariateTemplateConstruction.sh \
@@ -629,7 +622,7 @@ then
     -s CC \
     -t GR \
     -y 1 \
-	${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
+    ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
     #${TEMPLATE_Z_IMAGES} \
 fi
 logCmd rm ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
@@ -638,14 +631,51 @@ then
     echo "Error:  The single subject template was not created.  Exiting."
     exit 1
 fi
+
+#apply the warp from the template to the original images (both T1w and T2w) - with themselves as the reference
+SUBJECT_COUNT=0
+for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+do
+    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+    SUBJECT_T1_IMAGE=${ANATOMICAL_IMAGES[$i]}
+    let k=$i+$NUMBER_OF_MODALITIES
+    for (( j=$i; j < $k; j++ ))
+    do
+        SUBJECT_T2_IMAGE=${ANATOMICAL_IMAGES[$j]}
+    done
+    
+    #Copy the spacing from the warped whole images to the chunk template
+    #So we have a warped hippo chunk, and the rest is blurry for ASHS input
+    
+    resampled_SST_WB=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_WB.nii.gz
+    if [[ ! -f ${resampled_SST_WB} ]]; then
+        #resample based on the transform from the template making step
+        logCmd ${ANTSPATH}/antsApplyTransforms 3 \
+        -i ${SUBJECT_T1_IMAGE} \
+        -r ${SUBJECT_T1_IMAGE} \
+        -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
+        -t transforms_from_template.mat
+        
+        logCmd ${ANTSPATH}/antsApplyTransforms 3 \
+        -i ${SUBJECT_T2_IMAGE} \
+        -r ${SUBJECT_T2_IMAGE} \
+        -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
+        -t transforms_from_template.mat
+    
+        #then average the resulting images, these are the inputs for the next step
+        logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
+        logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
+        logCmd rm ${OUTPUT_DIR}/resampled_t*
+    fi
+    
+done
+
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
     #Rescale the images because ASHS can't handle float for some reason
-    #logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
+    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
     logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
 fi
-
-
 
 ###############################
 ##  Label the SST with ASHS  ##
