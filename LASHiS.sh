@@ -505,6 +505,80 @@ echo " Done with individual ASHS:  $(( time_elapsed_ashs / 3600 ))h $(( time_ela
 echo "###########################################################################################"
 echo
 
+
+###########################################
+## TSE PREPROCESSING READY FOR TEMPLATE  ##
+###########################################
+
+#add the TSE images together
+#But first, reslice the native chunk left and right to the tse.nii.gz in the folder.
+
+#enter the Added TSE native chunk image into the template instead of the whole TSE.
+
+#apply the warp from the template to the original images (both T1w and T2w) - with themselves as the reference
+
+#then copy the spacing from the warped whole images to the chunk template - so we have a warped hippo chunkk, and the rest is garbahe (hopefully)
+echo
+echo "###########################################################################################"
+echo " Pre-process the ASHS output, ready for the template                                       "
+echo "###########################################################################################"
+echo
+
+time_start_temp_pp=`date +%s`
+
+SUBJECT_COUNT=0
+for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+do
+    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+    BASENAME_ID=${BASENAME_ID/\.nii/}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+    
+    echo $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
+    
+    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+    
+    ANATOMICAL_REFERENCE_IMAGE=${ANATOMICAL_IMAGES[$i]}
+    
+    SUBJECT_ANATOMICAL_IMAGES=''
+    
+    let k=$i+$NUMBER_OF_MODALITIES
+    for (( j=$i; j < $k; j++ ))
+    do
+        SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
+        SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
+    done
+    
+    
+    OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
+    
+    if [[ -f ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ]] ;
+    then
+        for side in left right ; do
+            logCmd ${ANTSPATH}/antsApplyTransforms \
+            -d 3 \
+            -i ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
+            -r ${SUBJECT_TSE} \
+            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz \
+        done
+		logCmd ${ANTSPATH}/ImageMath \
+		3 \
+		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_both_sides_resliced.nii.gz + \
+		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
+		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
+    fi
+done
+
+time_end_temp_pp=`date +%s`
+time_elapsed_temp_pp=$((time_end_temp_pp - time_start_temp_pp))
+
+echo
+echo "###########################################################################################"
+echo " Done with PP for template:  $(( time_elapsed_temp_pp / 3600 ))h $(( time_elapsed_temp_pp %3600 / 60 ))m $(( time_elapsed_temp_pp % 60 ))s"
+echo "###########################################################################################"
+echo
+
 ################################################################################
 #
 # Single-subject template creation
