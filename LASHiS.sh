@@ -550,7 +550,7 @@ do
             logCmd ${ANTSPATH}/antsApplyTransforms \
             -d 3 \
             -i ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
-            -r ${SUBJECT_TSE} \
+            -r ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz \
             -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz \
         done
         logCmd ${ANTSPATH}/ImageMath \
@@ -558,6 +558,9 @@ do
         ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}.nii.gz + \
         ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
         ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
+        #copy the tse and mprage to out_dir for later when applying warps
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage.nii.gz ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz
     fi
 done
 
@@ -636,6 +639,13 @@ fi
 SUBJECT_COUNT=0
 for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
 do
+    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+    BASENAME_ID=${BASENAME_ID/\.nii/}
+    
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+    WARP_COUNT=0
     let SUBJECT_COUNT=${SUBJECT_COUNT}+1
     SUBJECT_T1_IMAGE=${ANATOMICAL_IMAGES[$i]}
     let k=$i+$NUMBER_OF_MODALITIES
@@ -650,23 +660,28 @@ do
     resampled_SST_WB=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_WB.nii.gz
     if [[ ! -f ${resampled_SST_WB} ]]; then
         #resample based on the transform from the template making step
-        logCmd ${ANTSPATH}/antsApplyTransforms 3 \
-        -i ${SUBJECT_T1_IMAGE} \
-        -r ${SUBJECT_T1_IMAGE} \
+        logCmd ${ANTSPATH}/antsApplyTransforms \
+        -d 3 \
+        -i ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
+        -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
-        -t transforms_from_template.mat
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
+		-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
         
-        logCmd ${ANTSPATH}/antsApplyTransforms 3 \
-        -i ${SUBJECT_T2_IMAGE} \
-        -r ${SUBJECT_T2_IMAGE} \
+        logCmd ${ANTSPATH}/antsApplyTransforms \
+        -d 3 \
+        -i $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse.nii.gz \
+        -r $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
-        -t transforms_from_template.mat
-    
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
+		-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
+        
         #then average the resulting images, these are the inputs for the next step
         logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
         logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
         logCmd rm ${OUTPUT_DIR}/resampled_t*
     fi
+	let WARP_COUNT=${WARP_COUNT}+1
     
 done
 
