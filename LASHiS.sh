@@ -8,8 +8,8 @@
 # Thomas Shaw 1/5/2019
 # Language:  BASH Shell Script
 # Copyright (c) 2019 Thomas B Shaw
-#  
-# 
+#
+#
 #
 # LASHiS is free software. Its composite parts are freely available.
 # You can redistribute it and/or modify
@@ -20,7 +20,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details. 
+# GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -65,7 +65,7 @@ function Usage {
   1. Run Cross-sectional ASHS on all timepoints
   2. Create a single-subject template (SST) from all the data, then cross-sectionally run the SST through ASHS.
   3. Using the Cross-sectional inputs as priors, label the hippocampi of the SST.
-  4. Segmentation results are reverse normalised to the individual time-point. 
+  4. Segmentation results are reverse normalised to the individual time-point.
 
 # Environment Variables:
   ASHS_ROOT         Path to the ASHS root directory
@@ -93,15 +93,15 @@ Required arguments:
                 		{OUTPUT_PREFIX}SingleSubjectTemplate/T_template*.nii.gz
 	-a: Atlas selection	Full path for the atlas you would like to use for the Cross-sectional
                                 labelling of ASHS and the SST. Can be made in ASHS_train
-			  
+
 	anatomical images	Set of multimodal (T1w or gradient echo, followed by T2w FSE/TSE input)
                                 data. Data must be in the format specified by ASHS & ordered as follows:
-                                {time1_T1w} {time1_T2w} \                          
+                                {time1_T1w} {time1_T2w} \
                                 {time1_T2w} {time2_T2w} \
                                            .
                                            .
                                 {timeN_T1w} {timeN_T2w} ...
-				 
+
 	Optional arguments:
 
 	-s:  image file suffix	Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd
@@ -114,21 +114,21 @@ Required arguments:
                                 4 = PBS qsub
                                 5 = SLURM
 	-d:  OPTS               Pass in additional options to SGEs qsub for ASHS. Requires "-c 1"
-	-e:  ASHS file          ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh 
+	-e:  ASHS file          ProConfiguration file. If not passed, uses $ASHS_ROOT/bin/ashs_config.sh
 	-f:  Diet LASHiS        Diet LASHiS (reverse normalise the SST only) then exit.
-	-g:  denoise anatomical images	
+	-g:  denoise anatomical images
 				Denoise anatomical (both T1w and TSE) images (default = 0).
 	-j:  number of cpu cores
-				Number of cpu cores to use locally for pexec option 
-                                (default 2; requires "-c 2")                                        
+				Number of cpu cores to use locally for pexec option
+                                (default 2; requires "-c 2")
 	-n:  N4 Bias Correction
 				If yes, Bias correct the input images before template creation.
                                 0 = No
                                 1 = Yes
 	-b:  keep temporary files
 				Keep brain extraction/segmentation warps, etc (default = 0).
-				
-				
+
+
 Basic usage: LASHiS.sh -a /path/to/atlas
              	 <OPTARGS>
              	 -o outputPrefix
@@ -144,7 +144,7 @@ echoParameters() {
       image dimension         = ${DIMENSION}
       anatomical image        = ${ANATOMICAL_IMAGES[@]}
       output prefix           = ${OUTPUT_PREFIX}
-           
+
     Other parameters:
       run quick               = ${RUN_QUICK}
       debug mode              = ${DEBUG_MODE}
@@ -168,24 +168,24 @@ function logCmd() {
     echo "Start command:"
     echo $cmd
     $cmd
-
+    
     cmdExit=$?
-
+    
     if [[ $cmdExit -gt 0 ]];
     then
-	echo "ERROR: command exited with nonzero status $cmdExit"
-	echo "Command: $cmd"
-	echo
-	if [[ ! $DEBUG_MODE -gt 0 ]];
+        echo "ERROR: command exited with nonzero status $cmdExit"
+        echo "Command: $cmd"
+        echo
+        if [[ ! $DEBUG_MODE -gt 0 ]];
         then
             exit 1
         fi
     fi
-
+    
     echo "Command finished without error!"
     echo
     echo
-
+    
     return $cmdExit
 }
 
@@ -238,70 +238,70 @@ if [[ $# -lt 3 ]] ; then
 else
     while getopts "a:b:c:d:e:f:g:h:j:k:l:m:n:o:p:q:r:s:t:u:v:x:w:y:z:" OPT
     do
-	case $OPT in
+        case $OPT in
             a)  #ASHS_atlas directory
-		ASHS_ATLAS=$OPTARG
-		if [[ ! -d $ASHS_ATLAS ]];
-		then
-		    echo "You must specify the full path to the ASHS atlas directory"
-		    exit 1
-		fi
-	        ;;
-	    b)
-		KEEP_TMP_IMAGES=$OPTARG
-		;;
+                ASHS_ATLAS=$OPTARG
+                if [[ ! -d $ASHS_ATLAS ]];
+                then
+                    echo "You must specify the full path to the ASHS atlas directory"
+                    exit 1
+                fi
+            ;;
+            b)
+                KEEP_TMP_IMAGES=$OPTARG
+            ;;
             c) # QSUBOPTS
-		DOQSUB=$OPTARG
-		if [[ $DOQSUB -gt 5 ]];
-		then
-		    echo " DOQSUB must be an integer value (0=serial, 1=SGE qsub, 2=try pexec, 3=XGrid, 4=PBS qsub, 5=SLURM ) you passed  -c $DOQSUB "
-		    exit 1
-		fi
-		;;
-	    d) #ASHS SGE options
-		ASHS_SGE_OPTS="-q $OPTARG"
-		;;
-	    e) #ASHS Config file
-		ASHS_CONFIG="-C $OPTARG"
-		;;
-	    f) #Diet LASHiS
-		DIET_LASHIS=$OPTARG
-		;;
+                DOQSUB=$OPTARG
+                if [[ $DOQSUB -gt 5 ]];
+                then
+                    echo " DOQSUB must be an integer value (0=serial, 1=SGE qsub, 2=try pexec, 3=XGrid, 4=PBS qsub, 5=SLURM ) you passed  -c $DOQSUB "
+                    exit 1
+                fi
+            ;;
+            d) #ASHS SGE options
+                ASHS_SGE_OPTS="-q $OPTARG"
+            ;;
+            e) #ASHS Config file
+                ASHS_CONFIG="-C $OPTARG"
+            ;;
+            f) #Diet LASHiS
+                DIET_LASHIS=$OPTARG
+            ;;
             g) #denoise
-		DENOISE=$OPTARG
-		;;
-	    n) #N4
-		N4_BIAS_CORRECTION=$OPTARG
-		;;
+                DENOISE=$OPTARG
+            ;;
+            n) #N4
+                N4_BIAS_CORRECTION=$OPTARG
+            ;;
             h) #help
-		Usage >&2
-		exit 0
-		;;
+                Usage >&2
+                exit 0
+            ;;
             j) #number of cpu cores to use (default = 2)
-		CORES=$OPTARG
-		openmp_variable=$OPTARG
-		;;
+                CORES=$OPTARG
+                openmp_variable=$OPTARG
+            ;;
             o) #output prefix
-		OUTPUT_PREFIX=$OPTARG
-		;;
+                OUTPUT_PREFIX=$OPTARG
+            ;;
             q) # run quick
-		RUN_QUICK=$OPTARG
-		;;
-	    z) #debug mode
-		DEBUG_MODE=$OPTARG
-		;;
+                RUN_QUICK=$OPTARG
+            ;;
+            z) #debug mode
+                DEBUG_MODE=$OPTARG
+            ;;
             *) # getopts issues an error message
-		echo "ERROR:  unrecognized option -$OPT $OPTARG"
-		exit 1
-		;;
-	esac
+                echo "ERROR:  unrecognized option -$OPT $OPTARG"
+                exit 1
+            ;;
+        esac
     done
 fi
 
 if [[ ${DOQSUB} == '1' ]] ;
 then ASHS_QSUBOPTS="-Q"
-elif [[ ${DOQSUB} == '2' ]]; then
-    export OMP_NUM_THREADS=$openmp_variable ;     
+    elif [[ ${DOQSUB} == '2' ]]; then
+    export OMP_NUM_THREADS=$openmp_variable ;
 else ASHS_QSUBOPTS=""  ;
 fi
 
@@ -368,8 +368,8 @@ for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i++ ))
 do
     if [[ ! -f ${ANATOMICAL_IMAGES[$i]} ]];
     then
-	echo "The specified image \"${ANATOMICAL_IMAGES[$i]}\" does not exist."
-	exit 1
+        echo "The specified image \"${ANATOMICAL_IMAGES[$i]}\" does not exist."
+        exit 1
     fi
 done
 
@@ -386,8 +386,94 @@ echo "---------------------  Running `basename $0` on $HOSTNAME  ---------------
 
 time_start=`date +%s`
 
+################################################################################
+#
+#  Run each individual subject through ASHS
+#
+################################################################################
+
+echo
+echo "###########################################################################################"
+echo " Run each individual through ASHS                                                     "
+echo "###########################################################################################"
+echo
+
+time_start_ashs=`date +%s`
 
 
+SUBJECT_COUNT=0
+for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+do
+    
+    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+    BASENAME_ID=${BASENAME_ID/\.nii/}
+    
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+    
+    echo $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
+    
+    if [[ ! -d $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS ]];
+    then
+        echo "The output directory \"$OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS\" does not exist. Making it."
+        mkdir -p $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
+    fi
+    
+    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+    
+    ANATOMICAL_REFERENCE_IMAGE=${ANATOMICAL_IMAGES[$i]}
+    
+    SUBJECT_ANATOMICAL_IMAGES=''
+    
+    let k=$i+$NUMBER_OF_MODALITIES
+    for (( j=$i; j < $k; j++ ))
+    do
+        SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
+        SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
+    done
+    
+    
+    OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
+    
+    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/final/${BASENAME_ID}_right_lfseg_heur.nii.gz ]] ;
+    then
+        logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
+        -a ${ASHS_ATLAS} \
+        -g ${ANATOMICAL_REFERENCE_IMAGE} \
+        -f ${SUBJECT_TSE} \
+        -w ${OUTPUT_LOCAL_PREFIX} \
+        -T \
+        ${ASHS_QSUBOPTS} \
+        ${ASHS_CONFIG} \
+        ${ASHS_SGE_OPTS}
+        
+        #cleanup
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/affine_t1_to_template
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/ants_t1_to_temp
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/bootstrap
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/dump
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/flirt_t2_to_t1
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_raw.nii.gz
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/tse_raw.nii.gz
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_to_chunk*
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/*regmask
+        logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/tmpfiles
+    fi
+done
+
+
+time_end_ashs=`date +%s`
+time_elapsed_ashs=$((time_end_ashs - time_start_ashs))
+
+echo
+echo "###########################################################################################"
+echo " Done with individual ASHS:  $(( time_elapsed_ashs / 3600 ))h $(( time_elapsed_ashs %3600 / 60 ))m $(( time_elapsed_ashs % 60 ))s"
+echo "###########################################################################################"
+echo
+
+
+#THEN MAKE TEMPLATE WITH NEW INPUTS
 
 
 
@@ -407,42 +493,32 @@ if [[ ${DENOISE} == 1 ]] ; then
     echo "###########################################################################################"
     echo
     DENOISED_ANATOMICAL_IMAGES=''
-    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i++ )) 
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i++ ))
     do
-	if [[ ! -e ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz ]] ; then 
-	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-	BASENAME_ID=${BASENAME_ID/\.nii/}
-	logCmd ${ANTSPATH}/DenoiseImage \
-	       -d 3 \
-	       -i ${ANATOMICAL_IMAGES[$i]} \
-	       -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
-	       -n Rician \
-	       -v
-	fi
-	DENOISED_ANATOMICAL_IMAGES="${DENOISED_ANATOMICAL_IMAGES}"' '"${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz"
+        if [[ ! -e ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz ]] ; then
+            BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+            BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+            BASENAME_ID=${BASENAME_ID/\.nii/}
+            logCmd ${ANTSPATH}/DenoiseImage \
+            -d 3 \
+            -i ${ANATOMICAL_IMAGES[$i]} \
+            -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
+            -n Rician \
+            -v
+        fi
+        DENOISED_ANATOMICAL_IMAGES="${DENOISED_ANATOMICAL_IMAGES}"' '"${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz"
     done
     unset ANATOMICAL_IMAGES
     #ANATOMICAL_IMAGES=${DENOISED_ANATOMICAL_IMAGES}
     
     for IMG in $DENOISED_ANATOMICAL_IMAGES
     do
-	ANATOMICAL_IMAGES[${#ANATOMICAL_IMAGES[@]}]=$IMG
+        ANATOMICAL_IMAGES[${#ANATOMICAL_IMAGES[@]}]=$IMG
     done
     echo  "new anat images are: ${ANATOMICAL_IMAGES[@]}"
 fi
 
-
-
-
-
-
-
-
-
-
-
-echo 
+echo
 echo
 echo "###########################################################################################"
 echo " Creating single-subject template                                                          "
@@ -463,11 +539,11 @@ SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templat
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
     for(( i=0; i < 2 ; i++ ))
     do
-	TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
-
-	logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
-
-	TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
+        TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
+        
+        logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
+        
+        TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
     done
 fi
 time_start_sst_creation=`date +%s`
@@ -475,23 +551,23 @@ time_start_sst_creation=`date +%s`
 if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
 then
     logCmd ${ANTSPATH}/antsMultivariateTemplateConstruction.sh \
-           -d 3 \
-           -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
-           -b 0 \
-           -g 0.25 \
-           -i 4 \
-           -c ${DOQSUB} \
-           -j ${CORES} \
-           -k 2 \
-           -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
-           -m 100x70x30x3 \
-           -n ${N4_BIAS_CORRECTION} \
-           -r 1 \
-           -s CC \
-           -t GR \
-	   -y 1 \
-           ${TEMPLATE_Z_IMAGES} \
-	   ${ANATOMICAL_IMAGES[@]}  
+    -d 3 \
+    -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
+    -b 0 \
+    -g 0.25 \
+    -i 4 \
+    -c ${DOQSUB} \
+    -j ${CORES} \
+    -k 2 \
+    -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
+    -m 100x70x30x3 \
+    -n ${N4_BIAS_CORRECTION} \
+    -r 1 \
+    -s CC \
+    -t GR \
+    -y 1 \
+    ${TEMPLATE_Z_IMAGES} \
+    ${ANATOMICAL_IMAGES[@]}
 fi
 
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
@@ -500,7 +576,7 @@ then
     exit 1
 fi
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
-if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then 
+if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
     #Rescale the images because ASHS can't handle float for some reason
     logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
     logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
@@ -512,14 +588,14 @@ fi
 if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_heur_volumes.txt ]] ;
 then
     logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-	   -a ${ASHS_ATLAS} \
-	   -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0_rescaled.nii.gz \
-	   -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1_rescaled.nii.gz \
-	   -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
-	   ${ASHS_QSUBOPTS} \
-	   -T \
-	   ${ASHS_CONFIG} \
-	   ${ASHS_SGE_OPTS}
+    -a ${ASHS_ATLAS} \
+    -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0_rescaled.nii.gz \
+    -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1_rescaled.nii.gz \
+    -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
+    ${ASHS_QSUBOPTS} \
+    -T \
+    ${ASHS_CONFIG} \
+    ${ASHS_SGE_OPTS}
 fi
 #CLEAN UP
 
@@ -572,62 +648,62 @@ then
     OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/Diet_LASHiS
     logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_DL}
     cat $ASHS_ATLAS/snap/snaplabels.txt | \
-	awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
-	    > ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt
+    awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
+    > ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt
     LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt | awk '{print $1}'))
     LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_DL}/snaplabels.txt | awk '{print $2}'))
     
     for side in left right ; do
-	TIMEPOINTS_COUNT=0
-	WARP_COUNT=0
-	for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
-	do   
-	    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-	    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-	    BASENAME_ID=${BASENAME_ID/\.nii/}
-	    logCmd ${ANTSPATH}/antsApplyTransforms \
-		   -d 3 \
-		   -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz \
-		   -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
-		   -r ${ANATOMICAL_IMAGES[${TIMEPOINTS_COUNT}]} \
-		   -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}Affine.txt,1] \
-		   -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}InverseWarp.nii.gz \
-		   -n GenericLabel[Linear]
-	    #measure the volumes
-	    SBC=${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
-	    #Collect the Seg Stats in a pretty way
-	    if [[ -f $SBC ]]; then
-		# Generate the voxel and extent statistics
-		STATS=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
-		$ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
-		# Create an output file
-		FNBODYVOL=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
-		rm -rf $FNBODYVOL
-		# Dump volumes into that file
-		for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
-		    # The id of the label
-		    j=${LABIDS[ilab]};
-		    SUB=${LABNAMES[ilab]};
-		    # Get the extent along z axis
-		    NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
-		    # Get the volume of this subfield
-		    VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
-		    # Write the volume information to output file
-		    if [[ $NBODY ]]; then
-			echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
-		    fi
-		done
-	    fi
-	    rm $STATS
-	    let WARP_COUNT=${WARP_COUNT}+2
-	    let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
-	done
-	   
+        TIMEPOINTS_COUNT=0
+        WARP_COUNT=0
+        for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+        do
+            BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+            BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+            BASENAME_ID=${BASENAME_ID/\.nii/}
+            logCmd ${ANTSPATH}/antsApplyTransforms \
+            -d 3 \
+            -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz \
+            -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
+            -r ${ANATOMICAL_IMAGES[${TIMEPOINTS_COUNT}]} \
+            -t [${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}Affine.txt,1] \
+            -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_${BASENAME_ID}${WARP_COUNT}InverseWarp.nii.gz \
+            -n GenericLabel[Linear]
+            #measure the volumes
+            SBC=${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz
+            #Collect the Seg Stats in a pretty way
+            if [[ -f $SBC ]]; then
+                # Generate the voxel and extent statistics
+                STATS=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
+                $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
+                # Create an output file
+                FNBODYVOL=${OUTPUT_DIRECTORY_FOR_DL}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+                rm -rf $FNBODYVOL
+                # Dump volumes into that file
+                for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+                    # The id of the label
+                    j=${LABIDS[ilab]};
+                    SUB=${LABNAMES[ilab]};
+                    # Get the extent along z axis
+                    NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
+                    # Get the volume of this subfield
+                    VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
+                    # Write the volume information to output file
+                    if [[ $NBODY ]]; then
+                        echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
+                    fi
+                done
+            fi
+            rm $STATS
+            let WARP_COUNT=${WARP_COUNT}+2
+            let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
+        done
+        
     done
     
     time_end_DL=`date +%s`
     time_elapsed_DL=$((time_end_DL - time_start_DL))
-
+    
     echo
     echo "###########################################################################################"
     echo " Done with Diet LASHiS:  $(( time_elapsed_DL / 3600 ))h $(( time_elapsed_DL %3600 / 60 ))m $(( time_elapsed_DL % 60 ))s"
@@ -635,97 +711,6 @@ then
     echo
     exit 0
 fi
-################################################################################
-#
-#  Run each individual subject through ASHS
-#
-################################################################################
-
-echo
-echo "###########################################################################################"
-echo " Run each individual through ASHS                                                     "
-echo "###########################################################################################"
-echo
-
-time_start_ashs=`date +%s`
-
-
-SUBJECT_COUNT=0
-for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES )) 
-do
-    
-    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-    BASENAME_ID=${BASENAME_ID/\.nii/}
-
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-
-    echo $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
-
-    if [[ ! -d $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS ]];
-    then
-        echo "The output directory \"$OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS\" does not exist. Making it."
-        mkdir -p $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
-    fi
-
-    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
-
-    ANATOMICAL_REFERENCE_IMAGE=${ANATOMICAL_IMAGES[$i]}
-    
-    SUBJECT_ANATOMICAL_IMAGES=''
-    
-    let k=$i+$NUMBER_OF_MODALITIES
-    for (( j=$i; j < $k; j++ ))
-    do
-	#mkdir ${OUTPUT_LOCAL_PREFIX}/tmpfiles
-        SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
-	SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
-	#cp ${ANATOMICAL_REFERENCE_IMAGE[$i]} ${OUTPUT_LOCAL_PREFIX}/tmpfiles/mprage.nii.gz
-	#cp ${ANATOMICAL_REFERENCE_IMAGE[$i]} ${OUTPUT_LOCAL_PREFIX}/tmpfiles/tse.nii.gz
-    done
-    
-    
-    OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
-
-    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/final/${BASENAME_ID}_right_lfseg_heur.nii.gz ]] ;
-    then
-	logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-	    -a ${ASHS_ATLAS} \
-	    -g ${ANATOMICAL_REFERENCE_IMAGE} \
-	    -f ${SUBJECT_TSE} \
-	    -w ${OUTPUT_LOCAL_PREFIX} \
-	    -T \
-	    ${ASHS_QSUBOPTS} \
-	    ${ASHS_CONFIG} \
-	    ${ASHS_SGE_OPTS} 
-	
-
-	#cleanup
-	#-g ${OUTPUT_LOCAL_PREFIX}/tmpfiles/mprage.nii.gz \
-	#-f ${OUTPUT_LOCAL_PREFIX}/tmpfiles/tse.nii.gz \
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/affine_t1_to_template
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/ants_t1_to_temp
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/bootstrap
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/dump
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/flirt_t2_to_t1
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_raw.nii.gz
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/tse_raw.nii.gz
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/mprage_to_chunk*
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/final/*regmask
-	logCmd rm -rf ${OUTPUT_LOCAL_PREFIX}/tmpfiles
-    fi
-done
-
-
-time_end_ashs=`date +%s`
-time_elapsed_ashs=$((time_end_ashs - time_start_ashs))
-
-echo
-echo "###########################################################################################"
-echo " Done with individual ASHS:  $(( time_elapsed_ashs / 3600 ))h $(( time_elapsed_ashs %3600 / 60 ))m $(( time_elapsed_ashs % 60 ))s"
-echo "###########################################################################################"
-echo
 
 ################################
 ## START JLF AND REVERSE NORM  #
@@ -751,8 +736,8 @@ logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}
 
 #first get the labels ready
 cat $ASHS_ATLAS/snap/snaplabels.txt | \
-    awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
-	> ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt
+awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
+> ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt
 
 LABIDS=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $1}'))
 LABNAMES=($(cat ${OUTPUT_DIRECTORY_FOR_LASHiS}/snaplabels.txt | awk '{print $2}'))
@@ -764,108 +749,108 @@ for side in left right ; do
     SUBJECT_COUNT=0
     for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
     do
-	
-	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-	BASENAME_ID=${BASENAME_ID/\.nii/}
-	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+        
+        BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+        BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+        BASENAME_ID=${BASENAME_ID/\.nii/}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
         let SUBJECT_COUNT=${SUBJECT_COUNT}+1
-	
-	
-	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_heur.nii.gz "
-	
+        
+        
+        JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/final/*_${side}_lfseg_heur.nii.gz "
+        
     done
     
     if [[  ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz ]] ;
     then
-
-	JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz"
-	echo "                                                                   "                                                    
-	echo "Your JLF Atlas inputs and labels were:"
-	echo "$JLF_ATLAS_LABEL_OPTIONS"
-	echo "                                                                   "
-	
-    	logCmd $ANTSPATH/antsJointLabelFusion2.sh \
-	       -d 3 \
-	       -c ${DOQSUB} \
-	       -j ${CORES} \
-	       -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz \
-	       ${JLF_ATLAS_LABEL_OPTIONS} \
-	       -o ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_ \
-	       -p  ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}/${i}_${side}%04d.nii.gz \
-	       -k 1 \
-	       -z $MEMORY_PARAM_jlf \
-	       -v $registration_memory_limit \
-	       -u $JLF_walltime_param \
-	       -w $registration_walltime_param 
+        
+        JLF_ATLAS_LABEL_OPTIONS="${JLF_ATLAS_LABEL_OPTIONS} -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz -l ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz"
+        echo "                                                                   "
+        echo "Your JLF Atlas inputs and labels were:"
+        echo "$JLF_ATLAS_LABEL_OPTIONS"
+        echo "                                                                   "
+        
+        logCmd $ANTSPATH/antsJointLabelFusion2.sh \
+        -d 3 \
+        -c ${DOQSUB} \
+        -j ${CORES} \
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz \
+        ${JLF_ATLAS_LABEL_OPTIONS} \
+        -o ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_ \
+        -p  ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}/${i}_${side}%04d.nii.gz \
+        -k 1 \
+        -z $MEMORY_PARAM_jlf \
+        -v $registration_memory_limit \
+        -u $JLF_walltime_param \
+        -w $registration_walltime_param
     fi
     
     SUBJECT_COUNT=0
     TIMEPOINTS_COUNT=0
-    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]} ; i+=$NUMBER_OF_MODALITIES )) 
+    for (( i=0; i < ${#ANATOMICAL_IMAGES[@]} ; i+=$NUMBER_OF_MODALITIES ))
     do
-	BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-	BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-	BASENAME_ID=${BASENAME_ID/\.nii/}
-	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-	OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${TIMEPOINTS_COUNT}
-	
-	#Reverse Norm
-	
-	logCmd ${ANTSPATH}/antsApplyTransforms \
-	       -d 3 \
-	       -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
-	       -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
-	       -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz \
-	       -t [${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_0GenericAffine.mat,1] \
-	       -t ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_1InverseWarp.nii.gz \
-	       -n GenericLabel[Linear]
-
-	#copy the tse in for easy reference
-	cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz ${OUTPUT_DIRECTORY_FOR_LASHiS}/tse_${TIMEPOINTS_COUNT}.nii.gz
-	
-	if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz ]]; #JLF_FILES
-	then
-	    echo "Error:  The JLF files were not created.  Exiting."
-	    exit 1
-	fi
-
-	SBC=${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz 
-
-	#Collect the Seg Stats in a pretty way
-
-	if [[ -f $SBC ]]; then
-
-	    # Generate the voxel and extent statistics
-	    STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
-	    $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
-	    # Create an output file
-	    FNBODYVOL=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
-	    rm -rf $FNBODYVOL
-
-	    # Dump volumes into that file
-	    for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
-
-		# The id of the label
-		j=${LABIDS[ilab]};
-		SUB=${LABNAMES[ilab]};
-
-		# Get the extent along z axis
-		NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
-
-		# Get the volume of this subfield
-		VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
-
-		# Write the volume information to output file
-		if [[ $NBODY ]]; then
-		    echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
-		fi
-
-	    done
-	fi
-	let SUBJECT_COUNT=${SUBJECT_COUNT}+2
-	let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
+        BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+        BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+        BASENAME_ID=${BASENAME_ID/\.nii/}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${TIMEPOINTS_COUNT}
+        
+        #Reverse Norm
+        
+        logCmd ${ANTSPATH}/antsApplyTransforms \
+        -d 3 \
+        -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
+        -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
+        -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz \
+        -t [${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_0GenericAffine.mat,1] \
+        -t ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_tse_native_chunk_${side}_${TIMEPOINTS_COUNT}_1InverseWarp.nii.gz \
+        -n GenericLabel[Linear]
+        
+        #copy the tse in for easy reference
+        cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}/tse.nii.gz ${OUTPUT_DIRECTORY_FOR_LASHiS}/tse_${TIMEPOINTS_COUNT}.nii.gz
+        
+        if [[ ! -f ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz ]]; #JLF_FILES
+        then
+            echo "Error:  The JLF files were not created.  Exiting."
+            exit 1
+        fi
+        
+        SBC=${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz
+        
+        #Collect the Seg Stats in a pretty way
+        
+        if [[ -f $SBC ]]; then
+            
+            # Generate the voxel and extent statistics
+            STATS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats_raw.txt
+            $ASHS_ROOT/ext/Linux/bin/c3d $SBC -dup -lstat | tee $STATS
+            # Create an output file
+            FNBODYVOL=${OUTPUT_DIRECTORY_FOR_LASHiS}/${BASENAME_ID}${side}SSTLabelsWarpedToTimePoint${TIMEPOINTS_COUNT}_stats.txt
+            rm -rf $FNBODYVOL
+            
+            # Dump volumes into that file
+            for ((ilab = 0; ilab < ${#LABIDS[*]}; ilab++)); do
+                
+                # The id of the label
+                j=${LABIDS[ilab]};
+                SUB=${LABNAMES[ilab]};
+                
+                # Get the extent along z axis
+                NBODY=$(cat $STATS | awk -v id=$j '$1 == id {print $10}')
+                
+                # Get the volume of this subfield
+                VSUB=$(cat $STATS | awk -v id=$j '$1 == id {print $7}')
+                
+                # Write the volume information to output file
+                if [[ $NBODY ]]; then
+                    echo ${BASENAME_ID} $side $SUB $NBODY $VSUB >> $FNBODYVOL
+                fi
+                
+            done
+        fi
+        let SUBJECT_COUNT=${SUBJECT_COUNT}+2
+        let TIMEPOINTS_COUNT=${TIMEPOINTS_COUNT}+1
     done
 done
 
