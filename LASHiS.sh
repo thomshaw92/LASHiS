@@ -328,19 +328,7 @@ fi
 echo "###########################################################################################"
 echo " Performing LASHiS cross-sectional using the following ${NUMBER_OF_MODALITIES}-tuples:  "
 echo "###########################################################################################"
-for (( i = 0; i < ${#ANATOMICAL_IMAGES[@]}; i+=${NUMBER_OF_MODALITIES} ))
-do
-    IMAGEMETRICSET=""
-    for (( j = 0; j < $ANATOMICAL_IMAGES; j++ ))
-    do
-        k=0
-        let k=${i}+${j}
-        IMAGEMETRICSET="$IMAGEMETRICSET ${ANATOMICAL_IMAGES[$k]}"
-    done
-    echo ${IMAGEMETRICSET}
-    echo ${ANATOMICAL_IMAGES[@]}
-    
-done
+echo ${ANATOMICAL_IMAGES[@]}
 echo "###########################################################################################"
 
 
@@ -398,6 +386,11 @@ echo "---------------------  Running `basename $0` on $HOSTNAME  ---------------
 
 time_start=`date +%s`
 
+
+
+
+
+
 ################################################################################
 #
 # Single-subject template creation
@@ -438,6 +431,17 @@ if [[ ${DENOISE} == 1 ]] ; then
     done
     echo  "new anat images are: ${ANATOMICAL_IMAGES[@]}"
 fi
+
+
+
+
+
+
+
+
+
+
+
 echo 
 echo
 echo "###########################################################################################"
