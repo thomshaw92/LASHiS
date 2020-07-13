@@ -562,11 +562,11 @@ do
             -r ${SUBJECT_TSE} \
             -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz \
         done
-		logCmd ${ANTSPATH}/ImageMath \
-		3 \
-		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_both_sides_resliced.nii.gz + \
-		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
-		${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
+        logCmd ${ANTSPATH}/ImageMath \
+        3 \
+        ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}.nii.gz + \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
     fi
 done
 
@@ -592,10 +592,6 @@ echo " Creating single-subject template                                         
 echo "###########################################################################################"
 echo
 TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
-for(( i=1; i < 2 ; i++ ))
-do
-    TEMPLATE_MODALITY_WEIGHT_VECTOR="${TEMPLATE_MODALITY_WEIGHT_VECTOR}x1"
-done
 TEMPLATE_Z_IMAGES=''
 
 OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
@@ -603,16 +599,16 @@ OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTempl
 logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
 # Pad initial template image to avoid problems with SST drifting out of FOV
-if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
-    for(( i=0; i < 2 ; i++ ))
-    do
-        TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
-        
-        logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
-        
-        TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
-    done
-fi
+#if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
+#    for(( i=0; i < 2 ; i++ ))
+#    do
+#        TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
+#
+#        logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
+#
+#        TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
+#    done
+#fi
 time_start_sst_creation=`date +%s`
 
 if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
@@ -622,21 +618,21 @@ then
     -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
     -b 0 \
     -g 0.25 \
-    -i 4 \
+    -i 3 \
     -c ${DOQSUB} \
     -j ${CORES} \
-    -k 2 \
-    -w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
+    -k 1 \
+    #-w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
     -m 100x70x30x3 \
     -n ${N4_BIAS_CORRECTION} \
     -r 1 \
     -s CC \
     -t GR \
     -y 1 \
-    ${TEMPLATE_Z_IMAGES} \
-    ${ANATOMICAL_IMAGES[@]}
+	${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
+    #${TEMPLATE_Z_IMAGES} \
 fi
-
+logCmd rm ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
 then
     echo "Error:  The single subject template was not created.  Exiting."
@@ -645,10 +641,12 @@ fi
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
     #Rescale the images because ASHS can't handle float for some reason
-    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
+    #logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
     logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
-    
 fi
+
+
+
 ###############################
 ##  Label the SST with ASHS  ##
 ###############################
