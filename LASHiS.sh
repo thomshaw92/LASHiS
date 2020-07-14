@@ -619,7 +619,6 @@ then
     -c ${DOQSUB} \
     -j ${CORES} \
     -k 1 \
-    #-w ${TEMPLATE_MODALITY_WEIGHT_VECTOR} \
     -m 100x70x30x3 \
     -n ${N4_BIAS_CORRECTION} \
     -r 1 \
