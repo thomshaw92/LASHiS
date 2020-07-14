@@ -551,13 +551,14 @@ do
             -d 3 \
             -i ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
             -r ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz \
-            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz \
+            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz 
         done
         logCmd ${ANTSPATH}/ImageMath \
         3 \
         ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}.nii.gz + \
         ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
         ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
+        
         #copy the tse and mprage to out_dir for later when applying warps
         logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz
         logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage.nii.gz ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz
@@ -666,7 +667,7 @@ do
         -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
-		-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
         
         logCmd ${ANTSPATH}/antsApplyTransforms \
         -d 3 \
@@ -674,14 +675,14 @@ do
         -r $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
-		-t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
         
         #then average the resulting images, these are the inputs for the next step
         logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
         logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
         logCmd rm ${OUTPUT_DIR}/resampled_t*
     fi
-	let WARP_COUNT=${WARP_COUNT}+1
+    let WARP_COUNT=${WARP_COUNT}+1
     
 done
 
