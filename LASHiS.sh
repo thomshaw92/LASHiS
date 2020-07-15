@@ -544,14 +544,14 @@ do
     #then add the TSE side images together
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
     
-    if [[ -f ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ]] ;
+    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz ]] ;
     then
         for side in left right ; do
             logCmd ${ANTSPATH}/antsApplyTransforms \
             -d 3 \
             -i ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
             -r ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz \
-            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz 
+            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz
         done
         logCmd ${ANTSPATH}/ImageMath \
         3 \
@@ -628,7 +628,9 @@ then
     ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
     #${TEMPLATE_Z_IMAGES} \
 fi
-logCmd rm ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
+if [[ -e ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz ]] ; then
+    logCmd rm ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
+fi
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
 then
     echo "Error:  The single subject template was not created.  Exiting."
@@ -665,16 +667,16 @@ do
         -i ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
         -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
         
         logCmd ${ANTSPATH}/antsApplyTransforms \
         -d 3 \
-        -i $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse.nii.gz \
-        -r $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse.nii.gz \
+        -i $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse_${SUBJECT_COUNT}.nii.gz \
+        -r $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse_${SUBJECT_COUNT}.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Warp.nii.gz
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_${BASENAME_ID}${WARP_COUNT}Affine.txt
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
+        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
         
         #then average the resulting images, these are the inputs for the next step
         logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
