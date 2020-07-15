@@ -672,8 +672,8 @@ do
         
         logCmd ${ANTSPATH}/antsApplyTransforms \
         -d 3 \
-        -i $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse_${SUBJECT_COUNT}.nii.gz \
-        -r $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS/tse_${SUBJECT_COUNT}.nii.gz \
+        -i ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
+        -r ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
         -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
