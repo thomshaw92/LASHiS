@@ -27,7 +27,7 @@
 # Check dependencies
 
 PROGRAM_DEPENDENCIES=( 'antsApplyTransforms' 'N4BiasFieldCorrection' )
-SCRIPT_DEPENDENCIES=( 'antsBrainExtraction.sh' 'antsMultivariateTemplateConstruction2.sh' 'antsJointLabelFusion2.sh' )
+SCRIPT_DEPENDENCIES=( 'antsBrainExtraction.sh' 'antsMultivariateTemplateConstruction2.sh' 'antsJointLabelFusion.sh' )
 ASHS_DEPENDENCIES=( '/bin/ashs_main.sh' '/ext/Linux/bin/c3d' )
 
 for D in ${PROGRAM_DEPENDENCIES[@]};
@@ -882,7 +882,7 @@ for side in left right ; do
         echo "$JLF_ATLAS_LABEL_OPTIONS"
         echo "                                                                   "
         
-        logCmd $ANTSPATH/antsJointLabelFusion2.sh \
+        logCmd $ANTSPATH/antsJointLabelFusion.sh \
         -d 3 \
         -c ${DOQSUB} \
         -j ${CORES} \
