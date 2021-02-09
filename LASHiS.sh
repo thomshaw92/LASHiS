@@ -24,6 +24,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#load ants if using module
+module load ants
+
 # Check dependencies
 
 PROGRAM_DEPENDENCIES=( 'antsApplyTransforms' 'N4BiasFieldCorrection' )
@@ -32,7 +35,7 @@ ASHS_DEPENDENCIES=( '/bin/ashs_main.sh' '/ext/Linux/bin/c3d' )
 
 for D in ${PROGRAM_DEPENDENCIES[@]};
 do
-    if [[ ! -s ${ANTSPATH}/${D} ]];
+    if [[ ! ${D} ]];
     then
         echo "Error:  we can't find the $D program."
         echo "Perhaps you need to \(re\)define \$ANTSPATH in your environment."
@@ -42,7 +45,7 @@ done
 
 for D in ${SCRIPT_DEPENDENCIES[@]};
 do
-    if [[ ! -s ${ANTSPATH}/${D} ]];
+    if [[ ! ${D} ]];
     then
         echo "We can't find the $D script."
         echo "Perhaps you need to \(re\)define \$ANTSPATH in your environment."
@@ -408,7 +411,7 @@ if [[ ${DENOISE} == 1 ]] ; then
             BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
             BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
             BASENAME_ID=${BASENAME_ID/\.nii/}
-            logCmd ${ANTSPATH}/DenoiseImage \
+            logCmd DenoiseImage \
             -d 3 \
             -i ${ANATOMICAL_IMAGES[$i]} \
             -o ${ANATOMICAL_IMAGES[$i]:0:-7}_denoised.nii.gz \
@@ -882,7 +885,7 @@ for side in left right ; do
         echo "$JLF_ATLAS_LABEL_OPTIONS"
         echo "                                                                   "
         
-        logCmd $ANTSPATH/antsJointLabelFusion.sh \
+        logCmd antsJointLabelFusion.sh \
         -d 3 \
         -c ${DOQSUB} \
         -j ${CORES} \
