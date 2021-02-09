@@ -509,12 +509,167 @@ echo "##########################################################################
 echo
 
 
+################################################################################
+#
+# Single-subject template creation
+#
+################################################################################
+
+echo
+echo
+echo "###########################################################################################"
+echo " Creating initial rough single-subject template                                            "
+echo "###########################################################################################"
+echo
+TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
+TEMPLATE_Z_IMAGES=''
+
+OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
+
+logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
+SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
+time_start_sst_creation=`date +%s`
+
+#enter full TSE for one iteration to make a rough template
+if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
+then
+    logCmd antsMultivariateTemplateConstruction.sh \
+    -d 3 \
+    -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
+    -b 0 \
+    -g 0.25 \
+    -i 1 \
+    -c ${DOQSUB} \
+    -j ${CORES} \
+    -k 2 \
+    -m 100x70x30x3 \
+    -n ${N4_BIAS_CORRECTION} \
+    -r 1 \
+    -s CC \
+    -t GR \
+    -y 1 \
+    ${ANATOMICAL_IMAGES[@]}
+    
+fi
+if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
+then
+    echo "Error:  The single subject template was not created.  Exiting."
+    exit 1
+fi
+
+SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
+if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
+    #Rescale the images because ASHS can't handle float for some reason
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
+fi
+
+###############################
+##  Label the SST with ASHS  ##
+###############################
+if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_heur_volumes.txt ]] ;
+then
+    logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
+    -a ${ASHS_ATLAS} \
+    -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0_rescaled.nii.gz \
+    -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1_rescaled.nii.gz \
+    -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
+    ${ASHS_QSUBOPTS} \
+    -T \
+    ${ASHS_CONFIG} \
+    ${ASHS_SGE_OPTS}
+fi
+#CLEAN UP
+
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.sh
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.txt
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}rigid*
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*Repaired*
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*WarpedToTemplate*
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0warp.nii.gz
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0Affine.txt
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templatewarplog.txt
+logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality*.nii.gz
+
+
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/ants_t1_to_temp
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_raw.nii.gz
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_raw.nii.gz
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_to_chunk*
+logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/*regmask
+
+
+#PRE PROCESS THE OUTPUT OF THE SST ASHS
+for side in left right ; do
+    
+    # binarize the TSE by first rescaling the images
+    #atlas
+    logCmd ImageMath \
+    3 \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz \
+    RescaleImage \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}.nii.gz \
+    0 10000
+    #then replace the values
+    logCmd ImageMath \
+    3 \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz \
+    ReplaceVoxelValue \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz \
+    0.01 10000 1
+    #then fill holes in the mask
+    logCmd ImageMath \
+    3 \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz \
+    FillHoles \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz \
+    1
+    #then finally extract the region of the tse combined chunk using the new mask
+    logCmd ExtractRegionFromImageByMask \
+    3 \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_SST_input_${side}_SST.nii.gz \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz 1 0
+    #then the mprage
+    #first reslice mprage to tse space
+    logCmd antsApplyTransforms \
+    -d 3 \
+    -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage.nii.gz \
+    -r ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz \
+    -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_tse_space_${side}.nii.gz
+    #then extract
+    logCmd ExtractRegionFromImageByMask \
+    3 \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_tse_space_${side}.nii.gz \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_SST_input_${side}_SST.nii.gz \
+    ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz 1 0
+    
+    #copy the tse and mprage to out_dir for later when applying warps
+    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz ${OUTPUT_DIR}/tse_SST_input_${side}_FromSST.nii.gz
+    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_SST_input_${side}_SST.nii.gz ${OUTPUT_DIR}/mprage_SST_input_${side}_FromSST.nii.gz
+done
+
+
+time_end_sst_creation=`date +%s`
+time_elapsed_sst_creation=$((time_end_sst_creation - time_start_sst_creation))
+
+echo
+echo "###########################################################################################"
+echo " Done with single subject template:  $(( time_elapsed_sst_creation / 3600 ))h $(( time_elapsed_sst_creation %3600 / 60 ))m $(( time_elapsed_sst_creation % 60 ))s"
+echo "###########################################################################################"
+echo
+
+
 ###########################################
 ## TSE PREPROCESSING READY FOR TEMPLATE  ##
 ###########################################
 echo
 echo "###########################################################################################"
-echo " Pre-process the ASHS output, ready for the template                                       "
+echo " Pre-process the ASHS output, ready for the smaller template                               "
 echo "###########################################################################################"
 echo
 
@@ -543,30 +698,58 @@ do
         SUBJECT_ANATOMICAL_IMAGES="${SUBJECT_ANATOMICAL_IMAGES} -a ${ANATOMICAL_IMAGES[$j]}"
         SUBJECT_TSE=${ANATOMICAL_IMAGES[$j]}
     done
-    #First, reslice the native chunk left and right to the tse.nii.gz in the folder.
-    #then add the TSE side images together
+    #First, binarize the TSE chunks including the atlas one
     OUTPUT_LOCAL_PREFIX=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}/${BASENAME_ID}
     
-    if [[ ! -f ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz ]] ;
-    then
-        for side in left right ; do
-            logCmd ${ANTSPATH}/antsApplyTransforms \
-            -d 3 \
-            -i ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
-            -r ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz \
-            -o ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced.nii.gz
-        done
-        logCmd ${ANTSPATH}/ImageMath \
+    for side in left right ; do
+        # binarize the TSE by first rescaling the images
+        logCmd ImageMath \
         3 \
-        ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}.nii.gz + \
-        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_left_resliced.nii.gz \
-        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_right_resliced.nii.gz
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}.nii.gz \
+        RescaleImage \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}.nii.gz \
+        0 10000
+        #then replace the values
+        logCmd ImageMath \
+        3 \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz \
+        ReplaceVoxelValue \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}.nii.gz \
+        0.01 10000 1
+        #then fill holes in the mask
+        logCmd ImageMath \
+        3 \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz \
+        FillHoles \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz \
+        1
+        #then finally extract the region of the tse combined chunk using the new mask
+        logCmd ExtractRegionFromImageByMask \
+        3 \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}.nii.gz \
+        ${OUTPUT_LOCAL_PREFIX}/tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz 1 0
+        
+        #do the same for the MPRAGE
+        #first reslice mprage to tse space
+        logCmd antsApplyTransforms \
+        -d 3 \
+        -i ${OUTPUT_LOCAL_PREFIX}/mprage.nii.gz \
+        -r ${OUTPUT_LOCAL_PREFIX}/tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz \
+        -o ${OUTPUT_LOCAL_PREFIX}/mprage_tse_space_${side}.nii.gz
+        #then extract
+        logCmd ExtractRegionFromImageByMask \
+        3 \
+        ${OUTPUT_LOCAL_PREFIX}/mprage_tse_space_${side}.nii.gz \
+        ${OUTPUT_LOCAL_PREFIX}/mprage_SST_input_chunk_${side}_${SUBJECT_COUNT}.nii.gz \
+        ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz 1 0
         
         #copy the tse and mprage to out_dir for later when applying warps
-        logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse.nii.gz ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz
-        logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage.nii.gz ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz
-    fi
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_DIR}
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage_SST_input_chunk_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_DIR}
+    done
 done
+
 
 time_end_temp_pp=`date +%s`
 time_elapsed_temp_pp=$((time_end_temp_pp - time_start_temp_pp))
@@ -583,41 +766,40 @@ echo
 #
 ################################################################################
 
+#the inputs are ${OUTPUT_DIR}/tse_SST_input_${side}_FromSST.nii.gz  and tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz mprage and tse
+#create TSE only SST and label with both mprage and tse
+
 echo
 echo
 echo "###########################################################################################"
-echo " Creating single-subject template                                                          "
+echo " Creating single-subject template from TSE chunks                                      "
 echo "###########################################################################################"
 echo
+for side in left right ; do
 TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
 TEMPLATE_Z_IMAGES=''
 
-OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
+OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}/ChunkSingleSubjectTemplate${side}/"
 
 logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
-# Pad initial template image to avoid problems with SST drifting out of FOV
-#if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
-#    for(( i=0; i < 2 ; i++ ))
-#    do
-#        TEMPLATE_INPUT_IMAGE="${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality${i}.nii.gz"
-#
-#        logCmd ${ANTSPATH}/ImageMath 3 ${TEMPLATE_INPUT_IMAGE} PadImage ${ANATOMICAL_IMAGES[$i]} 5
-#
-#        TEMPLATE_Z_IMAGES="${TEMPLATE_Z_IMAGES} -z ${TEMPLATE_INPUT_IMAGE}"
-#    done
-#fi
+
 time_start_sst_creation=`date +%s`
 
-#enter the Added TSE native chunk image into the template instead of the whole TSE, unimodal example.
-
+#enter the Added TSE native chunk image into the template instead of the whole TSE
+echo
+echo
+echo "###########################################################################################"
+echo " your inputs are ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz                            "
+echo "###########################################################################################"
+echo
 if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
 then
-    logCmd ${ANTSPATH}/antsMultivariateTemplateConstruction.sh \
+    logCmd antsMultivariateTemplateConstruction.sh \
     -d 3 \
     -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
     -b 0 \
-    -g 0.25 \
+    -g 0.15 \
     -i 3 \
     -c ${DOQSUB} \
     -j ${CORES} \
@@ -628,11 +810,11 @@ then
     -s CC \
     -t GR \
     -y 1 \
-    ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
-    #${TEMPLATE_Z_IMAGES} \
+    ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz
+    
 fi
-if [[ -e ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz ]] ; then
-    logCmd rm ${OUTPUT_DIR}/tse_native_chunk_both_sides_resliced_*.nii.gz
+if [[ -e ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz ]] ; then
+    logCmd rm ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz
 fi
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
 then
@@ -664,7 +846,7 @@ do
     resampled_SST_WB=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_WB.nii.gz
     if [[ ! -f ${resampled_SST_WB} ]]; then
         #resample based on the transform from the template making step
-        logCmd ${ANTSPATH}/antsApplyTransforms \
+        logCmd antsApplyTransforms \
         -d 3 \
         -i ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
         -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
@@ -672,7 +854,7 @@ do
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
         
-        logCmd ${ANTSPATH}/antsApplyTransforms \
+        logCmd antsApplyTransforms \
         -d 3 \
         -i ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
         -r ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
@@ -681,8 +863,8 @@ do
         -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
         
         #then average the resulting images, these are the inputs for the next step
-        logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
-        logCmd ${ANTSPATH}/AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
+        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
+        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
         logCmd rm ${OUTPUT_DIR}/resampled_t*
     fi
     let WARP_COUNT=${WARP_COUNT}+1
@@ -692,8 +874,8 @@ done
 SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
 if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
     #Rescale the images because ASHS can't handle float for some reason
-    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
-    logCmd ${ANTSPATH}/ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
+    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
 fi
 
 ###############################
@@ -775,7 +957,7 @@ then
             BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
             BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
             BASENAME_ID=${BASENAME_ID/\.nii/}
-            logCmd ${ANTSPATH}/antsApplyTransforms \
+            logCmd antsApplyTransforms \
             -d 3 \
             -i ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/final/*${side}_lfseg_heur.nii.gz \
             -o ${OUTPUT_DIRECTORY_FOR_DL}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
@@ -912,7 +1094,7 @@ for side in left right ; do
         
         #Reverse Norm
         
-        logCmd ${ANTSPATH}/antsApplyTransforms \
+        logCmd antsApplyTransforms \
         -d 3 \
         -i ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_Labels.nii.gz \
         -o ${OUTPUT_DIRECTORY_FOR_LASHiS}/${side}SSTLabelsWarpedTo${TIMEPOINTS_COUNT}.nii.gz \
