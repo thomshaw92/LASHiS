@@ -776,147 +776,125 @@ echo " Creating single-subject template from TSE chunks                         
 echo "###########################################################################################"
 echo
 for side in left right ; do
-TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
-TEMPLATE_Z_IMAGES=''
-
-OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}/ChunkSingleSubjectTemplate${side}/"
-
-logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
-SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
-
-time_start_sst_creation=`date +%s`
-
-#enter the Added TSE native chunk image into the template instead of the whole TSE
-echo
-echo
-echo "###########################################################################################"
-echo " your inputs are ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz                            "
-echo "###########################################################################################"
-echo
-if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
-then
-    logCmd antsMultivariateTemplateConstruction.sh \
-    -d 3 \
-    -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
-    -b 0 \
-    -g 0.15 \
-    -i 3 \
-    -c ${DOQSUB} \
-    -j ${CORES} \
-    -k 1 \
-    -m 100x70x30x3 \
-    -n ${N4_BIAS_CORRECTION} \
-    -r 1 \
-    -s CC \
-    -t GR \
-    -y 1 \
-    ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz
+    TEMPLATE_MODALITY_WEIGHT_VECTOR='1'
+    TEMPLATE_Z_IMAGES=''
     
-fi
-if [[ -e ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz ]] ; then
-    logCmd rm ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz
-fi
-if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
-then
-    echo "Error:  The single subject template was not created.  Exiting."
-    exit 1
-fi
-
-#apply the warp from the template to the original images (both T1w and T2w) - with themselves as the reference
-SUBJECT_COUNT=0
-WARP_COUNT=0
-for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
-do
-    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
-    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
-    BASENAME_ID=${BASENAME_ID/\.nii/}
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
-    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
-    SUBJECT_T1_IMAGE=${ANATOMICAL_IMAGES[$i]}
-    let k=$i+$NUMBER_OF_MODALITIES
-    for (( j=$i; j < $k; j++ ))
-    do
-        SUBJECT_T2_IMAGE=${ANATOMICAL_IMAGES[$j]}
-    done
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}/ChunkSingleSubjectTemplate${side}/"
+    
+    logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}
+    SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz
+    
+    time_start_sst_creation=`date +%s`
+    
+    #enter the Added TSE native chunk image into the template instead of the whole TSE
+    echo
+    echo
+    echo "###########################################################################################"
+    echo " your inputs are `ls ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz`                            "
+    echo "###########################################################################################"
+    echo
+    if [[ ! -f $SINGLE_SUBJECT_TEMPLATE ]];
+    then
+        logCmd antsMultivariateTemplateConstruction.sh \
+        -d 3 \
+        -o ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_ \
+        -b 0 \
+        -g 0.15 \
+        -i 3 \
+        -c ${DOQSUB} \
+        -j ${CORES} \
+        -k 1 \
+        -m 100x70x30x3 \
+        -n ${N4_BIAS_CORRECTION} \
+        -r 1 \
+        -s CC \
+        -t GR \
+        -y 1 \
+        ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz
+        
+    fi
+    if [[ -e ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz ]] ; then
+        logCmd rm ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz
+    fi
+    if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
+    then
+        echo "Error:  The single subject template was not created.  Exiting."
+        exit 1
+    fi
+    ####OLDER CODE - No longer needed?
+    #apply the warp from the template to the original images (both T1w and T2w) - with themselves as the reference
+    #SUBJECT_COUNT=0
+    #WARP_COUNT=0
+    #for (( i=0; i < ${#ANATOMICAL_IMAGES[@]}; i+=$NUMBER_OF_MODALITIES ))
+    #do
+    #    BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
+    #    BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
+    #    BASENAME_ID=${BASENAME_ID/\.nii/}
+    #    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    #    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
+    #    let SUBJECT_COUNT=${SUBJECT_COUNT}+1
+    #    SUBJECT_T1_IMAGE=${ANATOMICAL_IMAGES[$i]}
+    #    let k=$i+$NUMBER_OF_MODALITIES
+    #    for (( j=$i; j < $k; j++ ))
+    #    do
+    #        SUBJECT_T2_IMAGE=${ANATOMICAL_IMAGES[$j]}
+    #    done
     
     #Copy the spacing from the warped whole images to the chunk template
     #So we have a warped hippo chunk, and the rest is blurry for ASHS input
     
-    resampled_SST_WB=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_WB.nii.gz
-    if [[ ! -f ${resampled_SST_WB} ]]; then
-        #resample based on the transform from the template making step
-        logCmd antsApplyTransforms \
-        -d 3 \
-        -i ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
-        -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
-        -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
-        
-        logCmd antsApplyTransforms \
-        -d 3 \
-        -i ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
-        -r ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
-        -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
-        
-        #then average the resulting images, these are the inputs for the next step
-        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
-        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
-        logCmd rm ${OUTPUT_DIR}/resampled_t*
-    fi
-    let WARP_COUNT=${WARP_COUNT}+1
+    #    resampled_SST_WB=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_WB.nii.gz
+    #    if [[ ! -f ${resampled_SST_WB} ]]; then
+    #resample based on the transform from the template making step
+    #        logCmd antsApplyTransforms \
+    #        -d 3 \
+    #        -i ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
+    #        -r ${OUTPUT_DIR}/mprage_${SUBJECT_COUNT}.nii.gz \
+    #        -o ${OUTPUT_DIR}/resampled_t1_${SUBJECT_COUNT}.nii.gz \
+    #        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
+    #        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
+    #
+    #        logCmd antsApplyTransforms \
+    #        -d 3 \
+    #        -i ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
+    #        -r ${OUTPUT_DIR}/tse_${SUBJECT_COUNT}.nii.gz \
+    #        -o ${OUTPUT_DIR}/resampled_t2_${SUBJECT_COUNT}.nii.gz \
+    #        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Warp.nii.gz \
+    #        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_tse_native_chunk_both_sides_resliced_${SUBJECT_COUNT}${WARP_COUNT}Affine.txt
+    
+    #        #then average the resulting images, these are the inputs for the next step
+    #        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 1 ${OUTPUT_DIR}/resampled_t2_*
+    #        logCmd AverageImages 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 1 ${OUTPUT_DIR}/resampled_t1_*
+    #        logCmd rm ${OUTPUT_DIR}/resampled_t*
+    #    fi
+    #    let WARP_COUNT=${WARP_COUNT}+1
+    
+    #done
+    
+    #CLEAN UP
+    
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.sh
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.txt
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}rigid*
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*Repaired*
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*WarpedToTemplate*
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0warp.nii.gz
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0Affine.txt
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templatewarplog.txt
+    logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality*.nii.gz
+    
+    
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/ants_t1_to_temp
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_raw.nii.gz
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_raw.nii.gz
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_to_chunk*
+    logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/*regmask
     
 done
-
-SINGLE_SUBJECT_TEMPLATE=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz
-if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]]; then
-    #Rescale the images because ASHS can't handle float for some reason
-    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template1.nii.gz 0 1000
-    logCmd ImageMath 3 ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0_rescaled.nii.gz RescaleImage ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0.nii.gz 0 1000
-fi
-
-###############################
-##  Label the SST with ASHS  ##
-###############################
-if [[ ! -e ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/final/SST_ASHS_right_heur_volumes.txt ]] ;
-then
-    logCmd ${ASHS_ROOT}/bin/ashs_main.sh \
-    -a ${ASHS_ATLAS} \
-    -g ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template0_rescaled.nii.gz \
-    -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/T_template1_rescaled.nii.gz \
-    -w ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS \
-    ${ASHS_QSUBOPTS} \
-    -T \
-    ${ASHS_CONFIG} \
-    ${ASHS_SGE_OPTS}
-fi
-#CLEAN UP
-
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.sh
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}job*.txt
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}rigid*
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*Repaired*
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}*WarpedToTemplate*
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0warp.nii.gz
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_template0Affine.txt
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}T_templatewarplog.txt
-logCmd rm -f ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}initTemplateModality*.nii.gz
-
-
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/affine_t1_to_template
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/ants_t1_to_temp
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/bootstrap
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/dump
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/flirt_t2_to_t1
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_raw.nii.gz
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_raw.nii.gz
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/mprage_to_chunk*
-logCmd rm -rf ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/*regmask
-
-
 time_end_sst_creation=`date +%s`
 time_elapsed_sst_creation=$((time_end_sst_creation - time_start_sst_creation))
 
