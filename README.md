@@ -5,6 +5,7 @@ The publication for this work is available at https://doi.org/10.1016/j.neuroima
 
 Data for the TOMCAT dataset referenced in this work is located at https://osf.io/bt4ez/
 
+
 ## Requirements:
 
  Requires ANTs  https://github.com/ANTsX/ANTs/ (>= v2.3.0)
@@ -29,6 +30,9 @@ singularity exec LASHiS.simg /LASHiS.sh \
 Note that no other environmental variables need to be set, though you will need to specify bind points to your data in Singularity.
 
 If you wish to build the container for reproduction of the ADNI pipeline, please see the directory /Experiment_files_for_LASHiS/Scripts/Singularity/
+
+## Google Colab version of LASHiS
+https://colab.research.google.com/drive/1rFwEuf_sQk62HPSSxjJffGWLwS_-n_u6?usp=sharing
 
 ## LASHiS pipeline steps:
 
