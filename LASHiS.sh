@@ -394,6 +394,15 @@ time_start=`date +%s`
 #  Run each individual subject through ASHS
 #
 ################################################################################
+
+#do some initial checking of files and move them to the correct locations if LASHiS has already been run
+if [[ -d ${OUTPUT_PREFIX}/ASHS_and_templates ]] ; then
+    logCmd mv ${OUTPUT_PREFIX}/ASHS_and_templates/* ${OUTPUT_PREFIX}/
+    logCmd mv ${OUTPUT_PREFIX}/*SingleSubjectTemplate ${OUTPUT_PREFIX}SingleSubjectTemplate/
+    logCmd rmdir ${OUTPUT_PREFIX}/ASHS_and_templates
+fi
+
+
 ##########################
 ##  Do denoising if on  ##
 ##########################
@@ -920,6 +929,7 @@ then
     time_start_DL=`date +%s`
     #first get the labels ready
     OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/Diet_LASHiS
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
     logCmd mkdir -p ${OUTPUT_DIRECTORY_FOR_DL}
     cat $ASHS_ATLAS/snap/snaplabels.txt | \
     awk '$1 > 0 {split($0,arr,"\""); sub(/[ \t]+/,"_",arr[2]); print $1,arr[2]}' \
@@ -997,7 +1007,7 @@ echo "##########################################################################
 echo
 
 time_start_jlf=`date +%s`
-
+OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
 OUTPUT_DIRECTORY_FOR_LASHiS=${OUTPUT_DIR}/LASHiS
 OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS=${OUTPUT_DIRECTORY_FOR_LASHiS}/posteriors
 OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output
@@ -1049,7 +1059,7 @@ for side in left right ; do
         -d 3 \
         -c ${DOQSUB} \
         -j ${CORES} \
-        -t ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}/SST_ASHS/tse_native_chunk_${side}.nii.gz \
+        -t ${OUTPUT_PREFIX}/ChunkSingleSubjectTemplate${side}/T_template0.nii.gz \
         ${JLF_ATLAS_LABEL_OPTIONS} \
         -o ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_ \
         -p  ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}/${i}_${side}%04d.nii.gz \
@@ -1134,6 +1144,16 @@ time_elapsed_jlf=$((time_end_jlf - time_start_jlf))
 
 time_end=`date +%s`
 time_elapsed=$((time_end - time_start))
+
+#cleanup
+shopt -s extglob
+logCmd mv ${OUTPUT_PREFIX}SingleSubjectTemplate/ ${OUTPUT_PREFIX}
+logCmd rm ${OUTPUT_PREFIX}/mprage*
+logCmd rm ${OUTPUT_PREFIX}/tse*
+logCmd mkdir -p ${OUTPUT_PREFIX}/ASHS_and_templates
+logCmd mv ${OUTPUT_PREFIX}/!(ASHS_and_templates) ${OUTPUT_PREFIX}/ASHS_and_templates 
+logCmd mv ${OUTPUT_PREFIX}/ASHS_and_templates/LASHiS ${OUTPUT_PREFIX}
+
 
 echo
 echo "###########################################################################################"
