@@ -455,7 +455,7 @@ do
     BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
     BASENAME_ID=${BASENAME_ID/\.nii/}
     
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_PREFIX}/${BASENAME_ID}
     OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
     
     echo $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
@@ -690,7 +690,7 @@ do
     BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
     BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
     BASENAME_ID=${BASENAME_ID/\.nii/}
-    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+    OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_PREFIX}/${BASENAME_ID}
     OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
     
     echo $OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS
@@ -927,6 +927,12 @@ then
     echo "###########################################################################################"
     echo
     time_start_DL=`date +%s`
+    echo
+    echo "###########################################################################################"
+    echo "   Diet LASHiS is now deprecated. Please use LASHiS v1.0 if you wish to use Diet LASHiS    "
+    echo "###########################################################################################"
+    echo 
+    exit 1
     #first get the labels ready
     OUTPUT_DIRECTORY_FOR_DL=${OUTPUT_DIR}/Diet_LASHiS
     OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
@@ -1008,7 +1014,7 @@ echo
 
 time_start_jlf=`date +%s`
 OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE="${OUTPUT_PREFIX}SingleSubjectTemplate/"
-OUTPUT_DIRECTORY_FOR_LASHiS=${OUTPUT_DIR}/LASHiS
+OUTPUT_DIRECTORY_FOR_LASHiS=${OUTPUT_PREFIX}/LASHiS
 OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS=${OUTPUT_DIRECTORY_FOR_LASHiS}/posteriors
 OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS=${OUTPUT_DIRECTORY_FOR_LASHiS}/JLF_label_output
 XS_ASHS_DIR=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}
@@ -1037,7 +1043,7 @@ for side in left right ; do
         BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
         BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
         BASENAME_ID=${BASENAME_ID/\.nii/}
-        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_PREFIX}/${BASENAME_ID}
         OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${SUBJECT_COUNT}
         let SUBJECT_COUNT=${SUBJECT_COUNT}+1
         
@@ -1077,7 +1083,7 @@ for side in left right ; do
         BASENAME_ID=`basename ${ANATOMICAL_IMAGES[$i]}`
         BASENAME_ID=${BASENAME_ID/\.nii\.gz/}
         BASENAME_ID=${BASENAME_ID/\.nii/}
-        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIR}/${BASENAME_ID}
+        OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_PREFIX}/${BASENAME_ID}
         OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS=${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_ASHS}_${TIMEPOINTS_COUNT}
         
         #Reverse Norm
@@ -1148,8 +1154,8 @@ time_elapsed=$((time_end - time_start))
 #cleanup
 shopt -s extglob
 logCmd mv ${OUTPUT_PREFIX}SingleSubjectTemplate/ ${OUTPUT_PREFIX}
-logCmd rm ${OUTPUT_PREFIX}/mprage*
-logCmd rm ${OUTPUT_PREFIX}/tse*
+if [[ -e ${OUTPUT_PREFIX}/mprage* ]] ; then logCmd rm ${OUTPUT_PREFIX}/mprage* ; fi
+if [[ -e ${OUTPUT_PREFIX}/tse* ]] ; then logCmd rm ${OUTPUT_PREFIX}/tse* ; fi
 logCmd mkdir -p ${OUTPUT_PREFIX}/ASHS_and_templates
 logCmd mv ${OUTPUT_PREFIX}/!(ASHS_and_templates) ${OUTPUT_PREFIX}/ASHS_and_templates 
 logCmd mv ${OUTPUT_PREFIX}/ASHS_and_templates/LASHiS ${OUTPUT_PREFIX}
@@ -1161,5 +1167,4 @@ echo " Done with LASHiS pipeline! "
 echo " Script executed in $time_elapsed seconds"
 echo " $(( time_elapsed / 3600 ))h $(( time_elapsed %3600 / 60 ))m $(( time_elapsed % 60 ))s"
 echo "###########################################################################################"
-
 exit 0
