@@ -754,8 +754,8 @@ do
         ${OUTPUT_LOCAL_PREFIX}/tse_native_chunk_${side}_resliced_${SUBJECT_COUNT}_mask.nii.gz 1 0
         
         #copy the tse and mprage to out_dir for later when applying warps
-        logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_DIR}
-        logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage_SST_input_chunk_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_DIR}
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_PREFIX}/
+        logCmd cp ${OUTPUT_LOCAL_PREFIX}/mprage_SST_input_chunk_${side}_${SUBJECT_COUNT}.nii.gz ${OUTPUT_PREFIX}/
     done
 done
 
@@ -819,11 +819,11 @@ for side in left right ; do
         -s CC \
         -t GR \
         -y 1 \
-        ${OUTPUT_DIR}/tse_SST_input_${side}*.nii.gz
+        ${OUTPUT_PREFIX}/tse_SST_input_${side}*.nii.gz
         
     fi
-    if [[ -e ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz ]] ; then
-        logCmd rm ${OUTPUT_DIR}/tse_native_chunk_${side}_resliced_*.nii.gz
+    if [[ -e ${OUTPUT_PREFIX}/tse_native_chunk_${side}_resliced_*.nii.gz ]] ; then
+        logCmd rm ${OUTPUT_PREFIX}/tse_native_chunk_${side}_resliced_*.nii.gz
     fi
     if [[ ! -f ${SINGLE_SUBJECT_TEMPLATE} ]];
     then
