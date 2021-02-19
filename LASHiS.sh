@@ -658,8 +658,8 @@ for side in left right ; do
     ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced_mask.nii.gz 1 0
     
     #copy the tse and mprage to out_dir for later when applying warps
-    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz ${OUTPUT_DIR}/tse_SST_input_${side}_FromSST.nii.gz
-    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_SST_input_${side}_SST.nii.gz ${OUTPUT_DIR}/mprage_SST_input_${side}_FromSST.nii.gz
+    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/tse_native_chunk_${side}_resliced.nii.gz ${OUTPUT_PREFIX}/tse_SST_input_${side}_FromSST.nii.gz
+    logCmd cp ${OUTPUT_DIRECTORY_FOR_SINGLE_SUBJECT_TEMPLATE}SST_ASHS/mprage_SST_input_${side}_SST.nii.gz ${OUTPUT_PREFIX}/mprage_SST_input_${side}_FromSST.nii.gz
 done
 
 
@@ -775,7 +775,7 @@ echo
 #
 ################################################################################
 
-#the inputs are ${OUTPUT_DIR}/tse_SST_input_${side}_FromSST.nii.gz  and tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz mprage and tse
+#the inputs are ${OUTPUT_PREFIX}/tse_SST_input_${side}_FromSST.nii.gz  and tse_SST_input_${side}_${SUBJECT_COUNT}.nii.gz mprage and tse
 #create TSE only SST and label with both mprage and tse
 
 echo
