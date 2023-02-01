@@ -151,7 +151,7 @@ Labels values are copied from the atlas package to the LASHiS folder for each pa
 
 ## Subfield label stats
 The stats text file is in the LASHiS directory as well, and is arranged in the same order as ASHS:
-Columns: {side} {subfield name} {number of voxels containing the label} {volume in mm^3}
+Columns: {side} {subfield name} {extent along the z-axis} {volume in mm^3}
 for example: 
 ```
 cat LASHiS/{subjName}{side}SSTLabelsWarpedToTimePoint{timepoint}_stats.txt
