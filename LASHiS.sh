@@ -1070,6 +1070,7 @@ for side in left right ; do
         -o ${OUTPUT_DIRECTORY_FOR_LASHiS_JLF_OUTPUTS}/${side}_SST_ \
         -p  ${OUTPUT_DIRECTORY_FOR_LASHiS_POSTERIORS}/${i}_${side}%04d.nii.gz \
         -k 1 \
+	-x majorityvoting \
         -z $MEMORY_PARAM_jlf \
         -v $registration_memory_limit \
         -u $JLF_walltime_param \
