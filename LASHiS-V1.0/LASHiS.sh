@@ -1,4 +1,11 @@
 #!/bin/bash
+# DEPRECATED: this bash script is kept for backwards compatibility and will be
+# removed in v3.0. New users should install the `lashis` Python CLI:
+#     pip install -e .   # from this repo
+#     lashis --help
+# The CLI accepts the same flags (-a -o -c -d -e -g -j -n -b -q -z) plus the
+# anatomical positionals; see README.md for the full mapping.
+#
 # Longitudinal Automatic Segmentation of Hippocampus Subfields (LASHiS).
 #
 # Adapted from the ANTs Longitudinal Cortical Thickness pipeline https://github.com/ANTsX/ANTs/
@@ -26,6 +33,15 @@
 
 #load ants if using module
 module load ants
+
+cat >&2 <<'DEPRECATION'
+================================================================================
+WARNING: LASHiS.sh is deprecated. Use the `lashis` Python CLI instead:
+    pip install -e .   # one time
+    lashis -o ... -a ... t1_a.nii.gz t2_a.nii.gz t1_b.nii.gz t2_b.nii.gz ...
+The bash script will be removed in v3.0. See README.md for the flag mapping.
+================================================================================
+DEPRECATION
 
 # Check dependencies
 

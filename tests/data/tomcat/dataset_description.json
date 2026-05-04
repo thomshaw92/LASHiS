@@ -1,0 +1,12 @@
+{
+    "Name": "TOMCAT (subset for LASHiS smoke test)",
+    "BIDSVersion": "1.8.0",
+    "DatasetType": "raw",
+    "License": "See https://osf.io/bt4ez/",
+    "Authors": ["Shaw, Thomas B"],
+    "ReferencesAndLinks": [
+        "https://osf.io/bt4ez/",
+        "https://doi.org/10.1016/j.neuroimage.2020.116798"
+    ],
+    "Acknowledgements": "Acquired on the 7T MRI at the University of Queensland."
+}
