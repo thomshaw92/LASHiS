@@ -75,7 +75,7 @@ The smoke test also needs an ASHS atlas. Drop one (e.g.
 `ashs_atlas_umcutrecht_7t_20170810/` from
 <https://www.nitrc.org/projects/ashs/>) at `tests/data/ashs_atlas_*/` and
 export `ASHS_ATLAS=/full/path/to/ashs_atlas_*`. The atlas dir is gitignored
-(7 GB, license-restricted). The Docker image (`thomshaw92/lashis:2.0`) bakes
+(7 GB, license-restricted). The Docker image (`ghcr.io/thomshaw92/lashis:2.0`) bakes
 in the UMC Utrecht 7T atlas at `/opt/atlases/utrecht7t`.
 
 ## Outputs

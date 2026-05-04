@@ -32,8 +32,8 @@ workflow for multi-contrast MRI.
 ## Quick start
 
 ```bash
-docker pull thomshaw92/lashis:2.0     # bundled ANTs + ASHS + FSL + atlas
-docker run --rm -v /your/data:/data thomshaw92/lashis:2.0 \
+docker pull ghcr.io/thomshaw92/lashis:2.0     # bundled ANTs + ASHS + FSL + atlas
+docker run --rm -v /your/data:/data ghcr.io/thomshaw92/lashis:2.0 \
     lashis -o /data/sub01_out \
            -a /opt/atlases/utrecht7t \
            --plugin MultiProc --n-procs 8 \
@@ -72,10 +72,10 @@ Neurodesk conventions; it's intended for future contribution to
 
 ```bash
 # Pull pre-built (when published)
-docker pull thomshaw92/lashis:2.0
+docker pull ghcr.io/thomshaw92/lashis:2.0
 
 # Or build locally (~30 min, ~6 GB image)
-docker build --platform linux/amd64 -t thomshaw92/lashis:2.0 .
+docker build --platform linux/amd64 -t ghcr.io/thomshaw92/lashis:2.0 .
 ```
 
 > macOS / Apple Silicon: must pass `--platform linux/amd64` because FSL has
@@ -353,7 +353,7 @@ same algorithm but several improvements:
 | Fusion methods | majority voting only | `majority`, `jlf`, or both |
 | Jacobian-derived volumes | no | `jacobian_volumes.csv` + `consistency.csv` |
 | Jacobian-penalised segmentation | no | optional `labels/<method>_jacpen/` |
-| Container | yes (`caid/lashis_1.0`) | yes (`thomshaw92/lashis:2.0`, neurodocker recipe) |
+| Container | yes (`caid/lashis_1.0`) | yes (`ghcr.io/thomshaw92/lashis:2.0`, neurodocker recipe) |
 | AMTC2 chunk-template inputs | binarised + cropped chunks (intensity / FOV mismatch with JLF target) | raw `tse_native_chunk_<side>` (matches JLF target) |
 | AMTC script version | v1 (`antsMultivariateTemplateConstruction.sh`) | v2 (`…2.sh`) |
 
