@@ -30,7 +30,7 @@ def main() -> None:
             Timepoint(
                 index=i,
                 t1w=anat / f"sub-06_{ses}_T1w.nii.gz",
-                t2w=anat / f"sub-06_{ses}_T2w.nii.gz",
+                t2w=anat / f"sub-06_{ses}_acq-tse_desc-template_T2w.nii.gz",
             )
         )
 

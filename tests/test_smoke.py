@@ -46,13 +46,15 @@ def _discover_subject() -> tuple[str, list[Path], list[Path]] | None:
             if not t1w.is_file():
                 continue
             # Preference order:
-            #   1. canonical post-finalize BIDS T2w (averaged template moved
-            #      back into anat/ and run files deleted).
-            #   2. derivative template if preprocessing has run but not been
+            #   1. canonical post-finalize BIDS T2w with acq+desc entities
+            #      (current naming: averaged template promoted to BIDS dir).
+            #   2. legacy T2w name (pre-2026-05 finalize output).
+            #   3. derivative template if preprocessing has run but not been
             #      finalized.
-            #   3. raw run-1 (unprocessed; only useful for very-quick smoke
+            #   4. raw run-1 (unprocessed; only useful for very-quick smoke
             #      runs, won't exercise multi-run averaging).
             t2w_candidates = [
+                anat / f"{sub}_{ses}_acq-tse_desc-template_T2w.nii.gz",
                 anat / f"{sub}_{ses}_T2w.nii.gz",
                 DERIVS_TEMPLATES / sub / ses / "anat"
                     / f"{sub}_{ses}_desc-template_T2w.nii.gz",

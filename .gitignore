@@ -16,6 +16,9 @@ venv/
 *.swp
 *~
 
+# Claude Code per-project settings (permissions, hooks, etc. — local only)
+.claude/
+
 # pytest / coverage
 .pytest_cache/
 .coverage

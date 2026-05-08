@@ -8,8 +8,8 @@
 #
 # Final layout:
 #   tests/data/tomcat/<sub>/<ses>/anat/
-#       <sub>_<ses>_T1w.nii.gz       (unchanged)
-#       <sub>_<ses>_T2w.nii.gz       ← averaged template (raw runs deleted)
+#       <sub>_<ses>_T1w.nii.gz                              (unchanged)
+#       <sub>_<ses>_acq-tse_desc-template_T2w.nii.gz        ← averaged template (raw runs deleted)
 #
 # Refuses to run if any session is missing a template.
 
@@ -44,7 +44,7 @@ fi
 for SES_BASE in "${sessions[@]}"; do
     ANAT="${DATA_ROOT}/${SUB}/${SES_BASE}/anat"
     TEMPLATE="${TEMPLATE_ROOT}/${SUB}/${SES_BASE}/anat/${SUB}_${SES_BASE}_desc-template_T2w.nii.gz"
-    DEST="${ANAT}/${SUB}_${SES_BASE}_T2w.nii.gz"
+    DEST="${ANAT}/${SUB}_${SES_BASE}_acq-tse_desc-template_T2w.nii.gz"
 
     echo "==================== ${SES_BASE} ===================="
     echo "  promote: ${TEMPLATE}"
