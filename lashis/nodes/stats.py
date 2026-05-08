@@ -171,6 +171,7 @@ def _aggregate_long_csv(
     icv_volumes: list[float],
     consistency_threshold: float,
     output_path: str,
+    subject_id: str = "",
 ) -> tuple[str, str, str, str, str, str]:
     """Aggregate per-(method, side, timepoint) stats files into CSVs.
 
@@ -221,7 +222,12 @@ def _aggregate_long_csv(
                 parts = line.split()
                 if len(parts) != 5:
                     continue
-                subject, _side_in_file, subfield, z_extent, vol = parts
+                parsed_subj, _side_in_file, subfield, z_extent, vol = parts
+                # Override the per-timepoint ASHS subject id ("tp00" etc.)
+                # with the actual BIDS subject when the caller has it. The
+                # parsed value is kept as a fallback so older callers and
+                # ad-hoc invocations still produce something useful.
+                subject = subject_id or parsed_subj
                 try:
                     vol_f = float(vol)
                 except ValueError:
@@ -309,7 +315,8 @@ def _aggregate_long_csv(
                     parts = line.split()
                     if len(parts) != 5:
                         continue
-                    subj, _s, subfield, z_extent, vol = parts
+                    parsed_subj, _s, subfield, z_extent, vol = parts
+                    subj = subject_id or parsed_subj
                     jacpen_rows.append(
                         f"{subj},{tp_idx},{side},{method},{subfield},{z_extent},{vol}"
                     )
@@ -413,6 +420,7 @@ def build_aggregate_stats(config: LashisConfig) -> pe.Node:
                 "jacpen_left_jlf", "jacpen_right_jlf",
                 "jacpen_left_majority", "jacpen_right_majority",
                 "icv_volumes", "consistency_threshold", "output_path",
+                "subject_id",
             ],
             output_names=[
                 "csv_path", "asymmetry_path", "longitudinal_path",
@@ -425,6 +433,11 @@ def build_aggregate_stats(config: LashisConfig) -> pe.Node:
     )
     node.inputs.output_path = str(output_dir / "volumes.csv")
     node.inputs.consistency_threshold = config.jacobian_threshold
+    # The output dir's name is the BIDS subject (e.g. 'sub-01'). Without
+    # this, the per-line 'subject' parsed from the per-tp stats files is
+    # the per-tp ASHS id ('tp00'/'tp01'/'tp02'), which collapses every
+    # subject's tp00 into one row when downstream tools group by 'subject'.
+    node.inputs.subject_id = config.output_prefix.name
     # Default empties so unwired (method, side) inputs don't fail trait check.
     for slot in (
         "stats_left_jlf", "stats_right_jlf",
