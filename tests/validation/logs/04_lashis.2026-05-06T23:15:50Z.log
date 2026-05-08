@@ -1,0 +1,61 @@
+Subjects: sub-01 sub-02 sub-03 sub-04 sub-05 sub-06 sub-07
+Atlas:    /Users/uqtshaw/Desktop/LASHiS/tests/data/ashs_atlas_umcutrecht_7t_20170810
+Plugin:   MultiProc (n_procs=4)
+
+######################################################################
+# sub-01 -> /Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01  (n_sessions=3)
+######################################################################
+260507-09:15:52,562 nipype.workflow INFO:
+	 Workflow lashis settings: ['check', 'execution', 'logging', 'monitoring']
+2026-05-07 09:15:52,562 nipype.workflow INFO Workflow lashis settings: ['check', 'execution', 'logging', 'monitoring']
+260507-09:15:52,573 nipype.workflow INFO:
+	 Running in parallel.
+2026-05-07 09:15:52,573 nipype.workflow INFO Running in parallel.
+260507-09:15:52,575 nipype.workflow INFO:
+	 [MultiProc] Running 0 tasks, and 3 jobs ready. Free memory (GB): 32.40/32.40, Free processors: 4/4, Free GPU slot:0/0.
+2026-05-07 09:15:52,575 nipype.workflow INFO [MultiProc] Running 0 tasks, and 3 jobs ready. Free memory (GB): 32.40/32.40, Free processors: 4/4, Free GPU slot:0/0.
+260507-09:15:52,959 nipype.workflow INFO:
+	 [Node] Setting-up "lashis.convert_snaplabels" in "/Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01_nipype/lashis/convert_snaplabels".
+260507-09:15:52,959 nipype.workflow INFO:
+	 [Node] Setting-up "lashis.sst" in "/Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01_nipype/lashis/sst".
+260507-09:15:52,960 nipype.workflow INFO:
+	 [Node] Executing "convert_snaplabels" <nipype.interfaces.utility.wrappers.Function>
+260507-09:15:52,961 nipype.workflow INFO:
+	 [Node] Executing "sst" <lashis.nodes.sst._AntsMultivariateTemplateConstruction2>
+260507-09:15:52,975 nipype.workflow INFO:
+	 [Node] Finished "convert_snaplabels", elapsed time 0.001019s.
+260507-09:15:54,580 nipype.workflow INFO:
+	 [Job 2] Completed (lashis.convert_snaplabels).
+2026-05-07 09:15:54,580 nipype.workflow INFO [Job 2] Completed (lashis.convert_snaplabels).
+260507-09:15:54,581 nipype.workflow INFO:
+	 [MultiProc] Running 1 tasks, and 3 jobs ready. Free memory (GB): 32.20/32.40, Free processors: 3/4, Free GPU slot:0/0.
+                     Currently running:
+                       * lashis.sst
+2026-05-07 09:15:54,581 nipype.workflow INFO [MultiProc] Running 1 tasks, and 3 jobs ready. Free memory (GB): 32.20/32.40, Free processors: 3/4, Free GPU slot:0/0.
+                     Currently running:
+                       * lashis.sst
+260507-09:15:54,598 nipype.workflow INFO:
+	 [Node] Setting-up "_crosssectional_ashs0" in "/Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01_nipype/lashis/crosssectional_ashs/mapflow/_crosssectional_ashs0".
+260507-09:15:54,600 nipype.workflow INFO:
+	 [Node] Executing "_crosssectional_ashs0" <lashis.interfaces.ashs.ASHS>
+260507-09:15:55,9 nipype.workflow INFO:
+	 [Node] Setting-up "_crosssectional_ashs1" in "/Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01_nipype/lashis/crosssectional_ashs/mapflow/_crosssectional_ashs1".
+260507-09:15:55,9 nipype.workflow INFO:
+	 [Node] Setting-up "_crosssectional_ashs2" in "/Users/uqtshaw/Desktop/LASHiS/tests/output/sub-01_nipype/lashis/crosssectional_ashs/mapflow/_crosssectional_ashs2".
+260507-09:15:55,11 nipype.workflow INFO:
+	 [Node] Executing "_crosssectional_ashs1" <lashis.interfaces.ashs.ASHS>
+260507-09:15:55,11 nipype.workflow INFO:
+	 [Node] Executing "_crosssectional_ashs2" <lashis.interfaces.ashs.ASHS>
+260507-09:15:56,585 nipype.workflow INFO:
+	 [MultiProc] Running 4 tasks, and 0 jobs ready. Free memory (GB): 31.60/32.40, Free processors: 0/4, Free GPU slot:0/0.
+                     Currently running:
+                       * _crosssectional_ashs2
+                       * _crosssectional_ashs1
+                       * _crosssectional_ashs0
+                       * lashis.sst
+2026-05-07 09:15:56,585 nipype.workflow INFO [MultiProc] Running 4 tasks, and 0 jobs ready. Free memory (GB): 31.60/32.40, Free processors: 0/4, Free GPU slot:0/0.
+                     Currently running:
+                       * _crosssectional_ashs2
+                       * _crosssectional_ashs1
+                       * _crosssectional_ashs0
+                       * lashis.sst
