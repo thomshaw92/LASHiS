@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Claude Code per-project settings (permissions, hooks, etc. — local only)
+.claude/
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Nipype crashfiles
+crash-*.txt
+crash-*.pklz
+
+# LASHiS local outputs (large)
+tests/output/
+test_output/
+test_output.old_layout/
+scripts/*.log
+
+# ASHS atlas (multi-GB; user-supplied or pulled at install time)
+tests/data/ashs_atlas_*/
+tests/data/atlas/
+
+# Per-server local Docker server runs
+qc-server-*.log
+
+# Docker
+.dockerignore.bak
+Dockerfile.*.bak
+
+# TOMCAT BIDS data — large, fetch from https://osf.io/bt4ez/ and drop in
+# tests/data/tomcat/sub-*/ses-*/anat/. README in that dir documents the layout.
+tests/data/tomcat/sub-*/

@@ -1,0 +1,19 @@
+{
+    "Name": "TOMCAT (subset for the LASHiS cross-session validation)",
+    "BIDSVersion": "1.8.0",
+    "DatasetType": "raw",
+    "Authors": ["Sengupta, S.", "Tomcat consortium"],
+    "Acknowledgements": "Re-distributed from https://osf.io/bt4ez/ (TOMCAT_DIB).",
+    "License": "CC-BY-4.0",
+    "ReferencesAndLinks": [
+        "https://osf.io/bt4ez/",
+        "Towards Optimising MRI methods for ChAracterisation of Tissue (TOMCAT)"
+    ],
+    "DatasetDOI": "10.17605/OSF.IO/BT4EZ",
+    "GeneratedBy": [
+        {
+            "Name": "scripts/preprocess_t2w_runs.sh",
+            "Description": "Per-session T2w averaged from three TSE runs via antsMultivariateTemplateConstruction2.sh (-i 1 -q 30x20x4 -f 4x2x1 -s 2x1x0vox -n 1, no separate denoise). Output filename uses the BIDS entities acq-tse_desc-template."
+        }
+    ]
+}
